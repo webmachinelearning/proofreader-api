@@ -185,7 +185,7 @@ Aborting the creation process will reject the promise returned by `create()`, an
 
 ## Detailed design discussion
 
-### [Proofreading correction output]
+### Proofreading correction output
 
 For each input, the method `proofread()` returns a promise of `ProofreadResult`:
 
@@ -242,7 +242,7 @@ if (inputRenderIndex != input.length){
 }
 ```
 
-### [Full API surface in Web IDL]
+### Full API surface in Web IDL
 ```js
 [Exposed=(Window,Worker), SecureContext]
 interface ProofreaderFactory {
