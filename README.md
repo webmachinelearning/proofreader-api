@@ -1,8 +1,4 @@
-# Explainer for the TODO API
-
-**Instructions for the explainer author: Search for "todo" in this repository and update all the
-instances as appropriate. For the instances in `index.bs`, update the repository name, but you can
-leave the rest until you start the specification. Then delete the TODOs and this block of text.**
+# Proofreader API Explainer
 
 *This proposal is an early design sketch by ODML and Chrome built-in AI team to describe the problem below and solicit
 feedback on the proposed solution. It has not been approved to ship in Chrome.*
@@ -65,7 +61,7 @@ A created proofreader object can be used multiple times. **The only shared state
 ```js
 const proofreader = await Proofreader.create();
 
-editBoxEl.addEventListener("input", async (event) => {
+editBoxEl.addEventListener("onblur", async (event) => {
   const corrections = await proofreader.proofread(event.target.value);
 });
 ```
