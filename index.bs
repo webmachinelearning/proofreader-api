@@ -1,28 +1,19 @@
 <pre class='metadata'>
-Title: The TODO API
-Shortname: todo
+Title: Proofreader API
+Shortname: proofreader
 Level: None
 Status: w3c/UD
-Repository: explainers-by-googlers/todo-your-repo-name
-URL: https://explainers-by-googlers.github.io/todo-your-repo-name
-Editor: TODO: Your Name, Google https://google.com, TODO@google.com
-Abstract: TODO: A short description of your spec, one or two sentences.
+Repository: explainers-by-googlers/proofreader-api
+URL: https://explainers-by-googlers.github.io/proofreader-api
+Editor: Qianqia (Queenie) Zhang, Google https://google.com, queeniezhang@google.com
+Abstract: The proofreader API provides high-level interfaces to call on browser or operating system's built-in language model to help with proofreading tasks.
 Markup Shorthands: markdown yes, css no
 Complain About: accidental-2119 yes, missing-example-ids yes
 Assume Explicit For: yes
 Die On: warning
-WPT Path Prefix: TODO-API-LABEL
-WPT Display: closed
-Include MDN Panels: if possible
-Include Can I Use Panels: yes
 </pre>
 
 Introduction {#intro}
 =====================
 
 For now, see the [explainer]([REPOSITORYURL]).
-
-See [https://garykac.github.io/procspec/](https://garykac.github.io/procspec/),
-[https://dlaliberte.github.io/bikeshed-intro/index.html](https://dlaliberte.github.io/bikeshed-intro/index.html),
-and [https://speced.github.io/bikeshed/](https://speced.github.io/bikeshed/) to get started on your
-specification.
