@@ -3,9 +3,9 @@
 *This proposal is an early design sketch by ODML and Chrome built-in AI team to describe the problem below and solicit
 feedback on the proposed solution. It has not been approved to ship in Chrome.*
 
-Proofreading is the process of examining a text carefully to find and correct errors such as grammar, spelling, and punctuation to generate an error-free text before it is published or shared. Browsers and operating systems are increasingly offering proofreading capability to help their users compose (examples: [Example](https://chrome.googleblog.com/2013/03/oodles-of-improvements-to-chromes-spell.html), [Example](https://support.apple.com/guide/mac-help/use-writing-tools-mchldcd6c260/mac)). 
+Proofreading is the process of examining a text carefully to find and correct errors such as grammar, spelling, and punctuation to generate an error-free text before it is published or shared. Browsers and operating systems are increasingly offering proofreading capability to help their users compose (examples: [Example](https://chrome.googleblog.com/2013/03/oodles-of-improvements-to-chromes-spell.html), [Example](https://support.apple.com/guide/mac-help/use-writing-tools-mchldcd6c260/mac)).
 
-Web applications can also benefit from such proofreading capability. This proposal introduces a new JavaScript API which, by exposing high-level functionality of a language model, corrects and labels a variety of errors from user input. Specifically, the proposed proofreading API in this explainer exposes three specific higher-level functionalities for proofreading: 
+Web applications can also benefit from such proofreading capability. This proposal introduces a new JavaScript API which, by exposing high-level functionality of a language model, corrects and labels a variety of errors from user input. Specifically, the proposed proofreading API in this explainer exposes three specific higher-level functionalities for proofreading:
 
 
 1. Error Correction: Correct input text by the user
@@ -50,7 +50,7 @@ const proofreader = await Proofreader.create({
 const corrections = await proofreader.proofread("I seen him yesterday at the store, and he bought two loafs of bread.");
 ```
 
-`proofread()` corrects the input text and returns a list of corrections made. Additional proofreading features can be configured using includeCorrectionTypes and `includeCorrectionExplanations`. When `includeCorrectionTypes` is set to `true`, `proofread()` will provide an error type label for each correction made to each error. When `includeCorrectionExplanations` is set to `true`, `proofread()` will provide an annotation for each error with a plain language explanation. 
+`proofread()` corrects the input text and returns a list of corrections made. Additional proofreading features can be configured using includeCorrectionTypes and `includeCorrectionExplanations`. When `includeCorrectionTypes` is set to `true`, `proofread()` will provide an error type label for each correction made to each error. When `includeCorrectionExplanations` is set to `true`, `proofread()` will provide an annotation for each error with a plain language explanation.
 
 Detailed design for the corrections output is [discussed later](#proofreading-correction-output).
 
@@ -104,7 +104,7 @@ const proofreader = await proofreader.create({
 ```
 
 ### Testing available options before creation
-The proofreading API is customizable during the `create()` calls, with various options including the language option above. All options are given in more detail in the [later section](#full-api-surface-in-web-idl). 
+The proofreading API is customizable during the `create()` calls, with various options including the language option above. All options are given in more detail in the [later section](#full-api-surface-in-web-idl).
 
 However, not all models will necessarily support every language and it might require a download to get the appropriate fine-tuning or other collateral necessary on the first use.
 
@@ -132,7 +132,7 @@ if (supportsOurUseCase !== "unavailable") {
   console.log(await proofreader.proofread(editBoxEl.textContent));
 } else {
   // Either the API overall, or the combination of correction-with-labels with
-  // English input, is not available. 
+  // English input, is not available.
   // Handle the failure / run alternatives.
 }
 ```
@@ -200,7 +200,7 @@ dictionary ProofreadCorrection {
   unsigned long long endIndex;
   DOMString correction;
   CorrectionType type; // exists if proofreader.includeCorrectionTypes === true
-  DOMString explanation; // exists if proofreader.includeCorrectionExplanations === true 
+  DOMString explanation; // exists if proofreader.includeCorrectionExplanations === true
 }
 
 enum CorrectionType { "spelling", "punctuation", "capitalization", "preposition", "missing-words", "grammar" };
@@ -216,22 +216,24 @@ Example usage of the output to highlight error in input:
 
 ```js
 let inputRenderIndex = 0;
+
 for (const correction of corrections) {
-  // render part of input that has no error
-  if (startIndex > inputRenderIndex) {
+  // Render part of input that has no error.
+  if (correction.startIndex > inputRenderIndex) {
     const unchangedInput = document.createElement('span');
     unchangedInput.textContent = input.substring(inputRenderIndex, correction.startIndex);
     editBox.append(unchangedInput);
   }
-  // render part of input that is an error, highlight in red
+  // Render part of input that has an error and highlight as such.
   const errorInput = document.createElement('span');
   errorInput.textContent = input.substring(correction.startIndex, correction.endIndex);
-  errorInput.classList.add('red');
+  errorInput.classList.add('error');
   editBox.append(errorInput);
   inputRenderIndex = correction.endIndex;
 }
-// render rest of input that has no error
-if (inputRenderIndex != input.length){
+
+// Render rest of input that has no error.
+if (inputRenderIndex !== input.length){
   const unchangedInput = document.createElement('span');
   unchangedInput.textContent = input.substring(inputRenderIndex, input.length);
   editBox.append(unchangedInput);
@@ -246,7 +248,7 @@ interface ProofreaderFactory {
   static Promise<AIAvailability> availability(optional ProofreaderCreateCoreOptions options = {});
 
   Promise<ProofreadResult> proofread(DOMString input);
-  ReadableStream proofreadStreaming(DOMString input); 
+  ReadableStream proofreadStreaming(DOMString input);
 
   // whether to provide correction types for each correction as part of the proofreading result.
   readonly attribute boolean includeCorrectionTypes;
@@ -254,7 +256,7 @@ interface ProofreaderFactory {
   readonly attribute boolean includeCorrectionExplanations;
   readonly attribute DOMString? correctionExplanationLanguage;
   readonly attribute FrozenArray<DOMString>? expectedInputLanguages;
-  
+
   undefined destroy();
 };
 
@@ -283,13 +285,13 @@ dictionary ProofreadCorrection {
   DOMString explanation;
 }
 
-enum CorrectionType { 
-  "spelling", 
-  "punctuation", 
-  "capitalization", 
-  "preposition", 
-  "missing-words", 
-  "grammar" 
+enum CorrectionType {
+  "spelling",
+  "punctuation",
+  "capitalization",
+  "preposition",
+  "missing-words",
+  "grammar"
 };
 ```
 
@@ -311,8 +313,8 @@ The [spellcheck](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attrib
 For more sophisticated browser integrated proofreading features, it’s an open question how to address the potential conflicts. For example, for browser extensions, one option is for web developers to detect the presence of certain extensions and then decide the behavior of their own proofreading feature.
 
 ### Customization with user-mutable dictionary
-While the proposed Proofreading API corrects user input based on general knowledge, there could be cases where users would prefer to ignore correcting certain proper names, acronyms, etc. For example, the proposed [Dictionary API](https://github.com/Igalia/explainers/pull/37) allows users to add and remove words from the browser’s custom dictionary to address special use cases. 
+While the proposed Proofreading API corrects user input based on general knowledge, there could be cases where users would prefer to ignore correcting certain proper names, acronyms, etc. For example, the proposed [Dictionary API](https://github.com/Igalia/explainers/pull/37) allows users to add and remove words from the browser’s custom dictionary to address special use cases.
 
-The Proofreading API can potentially allow users to specify a custom dictionary, and avoid correcting any words included in the dictionary. 
+The Proofreading API can potentially allow users to specify a custom dictionary, and avoid correcting any words included in the dictionary.
 
 However, in cases where ignoring certain words for correction could potentially change the meaning/structure of a sentence, it could be a bit tricky to proofread with pre-trained language models. Therefore, we are moving forward without integration with custom dictionaries until further exploration and evaluation is done. Nevertheless, we invite discussion of all of these APIs within the Web Machine Learning Community Group.
