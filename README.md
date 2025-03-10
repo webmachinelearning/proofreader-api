@@ -61,7 +61,7 @@ A created proofreader object can be used multiple times. **The only shared state
 ```js
 const proofreader = await Proofreader.create();
 
-editBoxEl.addEventListener("onblur", async (event) => {
+editBoxEl.addEventListener("blur", async (event) => {
   const corrections = await proofreader.proofread(event.target.value);
 });
 ```
