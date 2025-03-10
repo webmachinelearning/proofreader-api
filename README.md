@@ -216,22 +216,24 @@ Example usage of the output to highlight error in input:
 
 ```js
 let inputRenderIndex = 0;
+
 for (const correction of corrections) {
-  // render part of input that has no error
-  if (startIndex > inputRenderIndex) {
+  // Render part of input that has no error.
+  if (correction.startIndex > inputRenderIndex) {
     const unchangedInput = document.createElement('span');
     unchangedInput.textContent = input.substring(inputRenderIndex, correction.startIndex);
     editBox.append(unchangedInput);
   }
-  // render part of input that is an error, highlight in red
+  // Render part of input that has an error and highlight as such.
   const errorInput = document.createElement('span');
   errorInput.textContent = input.substring(correction.startIndex, correction.endIndex);
-  errorInput.classList.add('red');
+  errorInput.classList.add('error');
   editBox.append(errorInput);
   inputRenderIndex = correction.endIndex;
 }
-// render rest of input that has no error
-if (inputRenderIndex != input.length){
+
+// Render rest of input that has no error.
+if (inputRenderIndex !== input.length){
   const unchangedInput = document.createElement('span');
   unchangedInput.textContent = input.substring(inputRenderIndex, input.length);
   editBox.append(unchangedInput);
