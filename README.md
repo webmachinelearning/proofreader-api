@@ -243,7 +243,7 @@ if (inputRenderIndex !== input.length){
 ### Full API surface in Web IDL
 ```js
 [Exposed=(Window,Worker), SecureContext]
-interface ProofreaderFactory {
+interface Proofreader {
   static Promise<Proofreader> create(optional ProofreaderCreateOptions options = {});
   static Promise<AIAvailability> availability(optional ProofreaderCreateCoreOptions options = {});
 
