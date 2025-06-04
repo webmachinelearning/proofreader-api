@@ -247,8 +247,14 @@ interface ProofreaderFactory {
   static Promise<Proofreader> create(optional ProofreaderCreateOptions options = {});
   static Promise<AIAvailability> availability(optional ProofreaderCreateCoreOptions options = {});
 
-  Promise<ProofreadResult> proofread(DOMString input);
-  ReadableStream proofreadStreaming(DOMString input);
+  Promise<ProofreadResult> proofread(
+    DOMString input,
+    optional ProofreaderProofreadOptions options = {}
+  );
+  ReadableStream proofreadStreaming(
+    DOMString input,
+    optional ProofreaderProofreadOptions options = {}
+  );
 
   // whether to provide correction types for each correction as part of the proofreading result.
   readonly attribute boolean includeCorrectionTypes;
@@ -265,17 +271,21 @@ dictionary ProofreaderCreateCoreOptions {
   boolean includeCorrectionExplanations = false;
   DOMString correctionExplanationLanguage;
   sequence<DOMString> expectedInputLanguages;
-}
+};
 
 dictionary ProofreaderCreateOptions : ProofreaderCreateCoreOptions {
   AbortSignal signal;
   AICreateMonitorCallback monitor;
 };
 
+dictionary ProofreaderProofreadOptions {
+  AbortSignal signal;
+};
+
 dictionary ProofreadResult {
   DOMString correctedInput;
   sequence<ProofreadCorrection> corrections;
-}
+};
 
 dictionary ProofreadCorrection {
   unsigned long long startIndex;
@@ -283,7 +293,7 @@ dictionary ProofreadCorrection {
   DOMString correction;
   CorrectionType type;
   DOMString explanation;
-}
+};
 
 enum CorrectionType {
   "spelling",
