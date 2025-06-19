@@ -100,7 +100,7 @@ When there are multiple languages in the proofreading input, developers could sp
 const proofreader = await Proofreader.create({
   includeCorrectionTypes: true,
   expectedInputLanguages: ["en", "ja"],
-})
+});
 ```
 
 ### Testing available options before creation
@@ -148,7 +148,7 @@ const proofreader = await Proofreader.create({
       console.log(`Downloaded ${e.loaded * 100}%`);
     });
   }
-};
+});
 ```
 
 If the download fails, then `downloadprogress` events will stop being fired, and the promise returned by `create()` will be rejected with a "`NetworkError`" `DOMException`.
@@ -177,15 +177,13 @@ Allowing such destruction provides a way to free up the memory used by the langu
 
 Aborting the creation process will reject the promise returned by `create()`, and will also stop signaling any ongoing download progress. (The browser may then abort the downloads, or may continue them. Either way, no further `downloadprogress` events will be fired.)
 
-
-
 ## Detailed design discussion
 
 ### Proofreading correction output
 
 For each input, the method `proofread()` returns a promise of `ProofreadResult`:
 
-```js
+```idl
 dictionary ProofreadResult {
   DOMString corrected;
   sequence<ProofreadCorrection> corrections;
@@ -194,7 +192,7 @@ dictionary ProofreadResult {
 
 `corrected` is the fully corrected version of the input, while `corrections` contains a list of corrections made, their locations in the original input (e.g. so web developers can create UI to highlight the error), and optionally labels/explanations.
 
-```js
+```idl
 dictionary ProofreadCorrection {
   unsigned long long startIndex;
   unsigned long long endIndex;
@@ -241,7 +239,7 @@ if (inputRenderIndex !== input.length){
 ```
 
 ### Full API surface in Web IDL
-```js
+```idl
 [Exposed=(Window,Worker), SecureContext]
 interface Proofreader {
   static Promise<Proofreader> create(optional ProofreaderCreateOptions options = {});
