@@ -3,7 +3,7 @@
 *This proposal is an early design sketch by ODML and Chrome built-in AI team to describe the problem below and solicit
 feedback on the proposed solution. It has not been approved to ship in Chrome.*
 
-Proofreading is the process of examining a text carefully to find and correct errors such as grammar, spelling, and punctuation to generate an error-free text before it is published or shared. Browsers and operating systems are increasingly offering proofreading capability to help their users compose (examples: [Example](https://chrome.googleblog.com/2013/03/oodles-of-improvements-to-chromes-spell.html), [Example](https://support.apple.com/guide/mac-help/use-writing-tools-mchldcd6c260/mac)).
+Proofreading is the process of examining a text carefully to find and correct errors such as grammar, spelling, and punctuation to generate an error-free text before it is published or shared. Browsers and operating systems are increasingly offering proofreading capability to help their users compose (examples: [Oodles of improvements to Chrome's Spell Checking](https://chrome.googleblog.com/2013/03/oodles-of-improvements-to-chromes-spell.html), [Use Writing Tools with Apple Intelligence on Mac](https://support.apple.com/guide/mac-help/use-writing-tools-mchldcd6c260/mac)).
 
 Web applications can also benefit from such proofreading capability. This proposal introduces a new JavaScript API which, by exposing high-level functionality of a language model, corrects and labels a variety of errors from user input. Specifically, the proposed proofreading API in this explainer exposes three specific higher-level functionalities for proofreading:
 
