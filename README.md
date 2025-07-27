@@ -83,7 +83,7 @@ const proofreader = await Proofreader.create({
 
 When explanations for corrections are requested for the proofreading result, the default behavior for the proofreader object assumes that the explanation language is unknown and will be the same as the input language.
 
-Similar to input languages, it’s better practice, if possible, to supply the create() method with the expected explanation languages.
+Similar to input languages, it’s better practice, if possible, to supply the `create()` method with the expected explanation languages.
 
 ```js
 const proofreader = await Proofreader.create({
