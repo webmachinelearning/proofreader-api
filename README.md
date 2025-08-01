@@ -9,7 +9,7 @@ Web applications can also benefit from such proofreading capability. This propos
 
 
 1. Error Correction: Correct input text by the user
-2. Error Labeling: For each correction made to each error in the input text, label the error type (e.g., spelling, punctuation, etc.)
+2. Error Labeling: For each correction made to each error in the input text, label the error type (e.g. spelling, punctuation, etc.)
 3. Error Explanation: Annotates each error with a plain language explanation
 
 Note that Labeling & Explanation are independent features that can be either added or dropped.
@@ -18,14 +18,14 @@ Note that Labeling & Explanation are independent features that can be either add
 
 Our goals are to:
 
-* Help web developers perform real-time proofreading (e.g., of user input) on short phrases/sentences/paragraphs of freeform text.
+* Help web developers perform real-time proofreading (e.g. of user input) on short phrases/sentences/paragraphs of freeform text.
 * Allow web developers to build flexible proofreading UI/UX.
-* Offer higher-level APIs with specific inputs and output formats that can support error labeling and explanations, abstracting away the underlying implementation (e.g., OS feature, language model, etc.).
+* Offer higher-level APIs with specific inputs and output formats that can support error labeling and explanations, abstracting away the underlying implementation (e.g. OS feature, language model, etc.).
 * Enable progressive enhancement, so web developers can gracefully handle varying levels of user agent support.
 
 The following are explicit non-goals:
 
-* Proofreading for markdown or other formats/syntaxes (e.g., not intended for JS code)
+* Proofreading for markdown or other formats/syntaxes (e.g. not intended for JS code)
 * Check for consistent style and formatting throughout a user-provided input
 
 ## Use cases
@@ -112,7 +112,7 @@ In the simple case, web developers should call `create()`, and handle failures g
 
 The method will return a promise that fulfills with one of the following availability values:
 “`unavailable`” means that the implementation does not support the requested options.
-“`downloadable`” means that the implementation supports the requested options, but it will have to download something (e.g., a machine learning model or fine-tuning) before it can do anything.
+“`downloadable`” means that the implementation supports the requested options, but it will have to download something (e.g. a machine learning model or fine-tuning) before it can do anything.
 “`downloading`” means that the implementation supports the requested options, but it will have to finish an ongoing download before it can do anything.
 “`available`” means that the implementation supports the requested options without requiring any new downloads.
 
@@ -138,7 +138,7 @@ if (supportsOurUseCase !== "unavailable") {
 ```
 
 ### Download progress
-For cases where using the API is only possible after a download, you can monitor the download progress (e.g., in order to show your users a progress bar) using code such as the following:
+For cases where using the API is only possible after a download, you can monitor the download progress (e.g. in order to show your users a progress bar) using code such as the following:
 
 ```js
 const proofreader = await Proofreader.create({
@@ -153,7 +153,7 @@ const proofreader = await Proofreader.create({
 
 If the download fails, then `downloadprogress` events will stop being fired, and the promise returned by `create()` will be rejected with a "`NetworkError`" `DOMException`.
 
-Note that some implementations might require multiple entities to be downloaded, e.g., a base model plus a LoRA fine-tuning. In such a case, web developers do not get the ability to monitor the individual downloads. All of them are bundled into the overall `downloadprogress` events, and the `create()` promise is not fulfilled until all downloads and loads are successful.
+Note that some implementations might require multiple entities to be downloaded, e.g. a base model plus a LoRA fine-tuning. In such a case, web developers do not get the ability to monitor the individual downloads. All of them are bundled into the overall `downloadprogress` events, and the `create()` promise is not fulfilled until all downloads and loads are successful.
 
 ### Destruction and aborting
 
@@ -192,7 +192,7 @@ dictionary ProofreadResult {
 }
 ```
 
-`corrected` is the fully corrected version of the input, while `corrections` contains a list of corrections made, their locations in the original input (e.g., so web developers can create UI to highlight the error), and optionally labels/explanations.
+`corrected` is the fully corrected version of the input, while `corrections` contains a list of corrections made, their locations in the original input (e.g. so web developers can create UI to highlight the error), and optionally labels/explanations.
 
 ```js
 dictionary ProofreadCorrection {
