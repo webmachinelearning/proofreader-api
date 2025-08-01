@@ -9,7 +9,7 @@ Web applications can also benefit from such proofreading capability. This propos
 
 
 1. Error Correction: Correct input text by the user
-2. Error Labeling: For each correction made to each error in the input text, label the error type (e.g., spelling, punctuation, etc).
+2. Error Labeling: For each correction made to each error in the input text, label the error type (e.g., spelling, punctuation, etc.)
 3. Error Explanation: Annotates each error with a plain language explanation
 
 Note that Labeling & Explanation are independent features that can be either added or dropped.
