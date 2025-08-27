@@ -26,7 +26,7 @@ Our goals are to:
 The following are explicit non-goals:
 
 * Proofreading for markdown or other formats/syntaxes (e.g. not intended for JS code)
-* Check for consistent style and formatting throughout a user provided input
+* Check for consistent style and formatting throughout a user-provided input
 
 ## Use cases
 
@@ -34,7 +34,7 @@ The following are explicit non-goals:
 * Proofread and help polish email drafting
 * Catch errors and provide corrections during note-taking
 * Proofread a comment to a forum/article/blog
-* Provide high quality interactive proofreading along with labeling & explanations for the correction when writing documents
+* Provide high-quality interactive proofreading, along with labeling & explanations for the correction when writing documents
 
 ## Examples
 
@@ -83,7 +83,7 @@ const proofreader = await Proofreader.create({
 
 When explanations for corrections are requested for the proofreading result, the default behavior for the proofreader object assumes that the explanation language is unknown and will be the same as the input language.
 
-Similar to input languages, it’s better practice, if possible, to supply the create() method with the expected explanation languages.
+Similar to input languages, it’s better practice, if possible, to supply the `create()` method with the expected explanation languages.
 
 ```js
 const proofreader = await Proofreader.create({
@@ -106,13 +106,13 @@ const proofreader = await Proofreader.create({
 ### Testing available options before creation
 The proofreading API is customizable during the `create()` calls, with various options including the language option above. All options are given in more detail in the [later section](#full-api-surface-in-web-idl).
 
-However, not all models will necessarily support every language and it might require a download to get the appropriate fine-tuning or other collateral necessary on the first use.
+However, not all models will necessarily support every language, and it might require a download to get the appropriate fine-tuning or other collateral necessary on the first use.
 
 In the simple case, web developers should call `create()`, and handle failures gracefully. However, if they want to provide a differentiated user experience, which lets users know ahead of time that the feature will not be possible or might require a download, they can use the API’s promise-returning `availability()` method. This method lets developers know, before calling `create()`, what is possible with the implementation.
 
 The method will return a promise that fulfills with one of the following availability values:
 “`unavailable`” means that the implementation does not support the requested options.
-“`downloadable`” means that the implementation supports the requested options, but it will have to download something (e.g. machine learning model or fine-tuning) before it can do anything.
+“`downloadable`” means that the implementation supports the requested options, but it will have to download something (e.g. a machine learning model or fine-tuning) before it can do anything.
 “`downloading`” means that the implementation supports the requested options, but it will have to finish an ongoing download before it can do anything.
 “`available`” means that the implementation supports the requested options without requiring any new downloads.
 
@@ -153,7 +153,7 @@ const proofreader = await Proofreader.create({
 
 If the download fails, then `downloadprogress` events will stop being fired, and the promise returned by `create()` will be rejected with a "`NetworkError`" `DOMException`.
 
-Note that some implementations might require multiple entities to be downloaded, e.g., a base model plus a LoRA fine-tuning. In such a case, web developers do not get the ability to monitor the individual downloads. All of them are bundled into the overall `downloadprogress` events, and the `create()` promise is not fulfilled until all downloads and loads are successful.
+Note that some implementations might require multiple entities to be downloaded, e.g. a base model plus a LoRA fine-tuning. In such a case, web developers do not get the ability to monitor the individual downloads. All of them are bundled into the overall `downloadprogress` events, and the `create()` promise is not fulfilled until all downloads and loads are successful.
 
 ### Destruction and aborting
 
@@ -210,7 +210,7 @@ Not all correction types here will be applicable to all languages, and in the fu
 
 To get an error in the input, use `input.substring(startIndex, endIndex)`. Corrections in the `corrections` list will be organized in ascending order based on the `startIndex` of the correction.
 
-Example usage of the output to highlight error in input:
+Example usage of the output to highlight an error in input:
 
 ```js
 let inputRenderIndex = 0;
@@ -230,7 +230,7 @@ for (const correction of corrections) {
   inputRenderIndex = correction.endIndex;
 }
 
-// Render rest of input that has no error.
+// Render the rest of the input that has no error.
 if (inputRenderIndex !== input.length){
   const unchangedInput = document.createElement('span');
   unchangedInput.textContent = input.substring(inputRenderIndex, input.length);
@@ -312,17 +312,17 @@ However, due to technical limitations of the on-device language model, generatin
 
 To address this, we propose to only offer **streaming explanations** asynchronously from the list of corrections (ProofreadCorrection) through a streaming API. Specifically, instead of returning explanations for all corrections at one time, we would return one correction’s explanation at a time as they become available. This way, web developers can provide sooner UI updates to the users to make the experience less jarring.
 
-### Interaction with other browser integrated proofreading feature
+### Interaction with other browser-integrated proofreading features
 
 As web developers implement UX around this proofreading API, if users’ browser supports other integrated proofreading features, the UX could get confusing with two features trying to help at once.
 
-The [spellcheck](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck) attribute from HTML available across browsers might help developers to signal to the browser to turn off its integrated spelling check if it has one. For example, when `spellcheck` is set to `false`, no red underlines/squiggly lines will appear to indicate a spelling error.
+The [spellcheck](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck) attribute from HTML available across browsers might help developers signal to the browser to turn off its integrated spelling check if it has one. For example, when `spellcheck` is set to `false`, no red underlines/squiggly lines will appear to indicate a spelling error.
 
-For more sophisticated browser integrated proofreading features, it’s an open question how to address the potential conflicts. For example, for browser extensions, one option is for web developers to detect the presence of certain extensions and then decide the behavior of their own proofreading feature.
+For more sophisticated browser-integrated proofreading features, it’s an open question how to address the potential conflicts. For example, for browser extensions, one option is for web developers to detect the presence of certain extensions and then decide the behavior of their own proofreading feature.
 
 ### Customization with user-mutable dictionary
 While the proposed Proofreading API corrects user input based on general knowledge, there could be cases where users would prefer to ignore correcting certain proper names, acronyms, etc. For example, the proposed [Dictionary API](https://github.com/Igalia/explainers/pull/37) allows users to add and remove words from the browser’s custom dictionary to address special use cases.
 
-The Proofreading API can potentially allow users to specify a custom dictionary, and avoid correcting any words included in the dictionary.
+The Proofreading API can potentially allow users to specify a custom dictionary and avoid correcting any words included in the dictionary.
 
-However, in cases where ignoring certain words for correction could potentially change the meaning/structure of a sentence, it could be a bit tricky to proofread with pre-trained language models. Therefore, we are moving forward without integration with custom dictionaries until further exploration and evaluation is done. Nevertheless, we invite discussion of all of these APIs within the Web Machine Learning Community Group.
+However, in cases where ignoring certain words for correction could potentially change the meaning/structure of a sentence, it could be a bit tricky to proofread with pre-trained language models. Therefore, we are moving forward without integration with custom dictionaries until further exploration and evaluation are done. Nevertheless, we invite discussion of all of these APIs within the Web Machine Learning Community Group.
