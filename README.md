@@ -321,7 +321,7 @@ The [spellcheck](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attrib
 For more sophisticated browser-integrated proofreading features, it’s an open question how to address the potential conflicts. For example, for browser extensions, one option is for web developers to detect the presence of certain extensions and then decide the behavior of their own proofreading feature.
 
 ### Customization with user-mutable dictionary
-While the proposed Proofreading API corrects user input based on general knowledge, there could be cases where users would prefer to ignore correcting certain proper names, acronyms, etc. For example, the proposed [Dictionary API](https://github.com/Igalia/explainers/pull/37) allows users to add and remove words from the browser’s custom dictionary to address special use cases.
+While the proposed Proofreading API corrects user input based on general knowledge, there could be cases where users would prefer to ignore correcting certain proper names, acronyms, etc. For example, the proposed [Dictionary API](https://github.com/Igalia/explainers/tree/main/dictionary-api) allows users to add and remove words from the browser’s custom dictionary to address special use cases.
 
 The Proofreading API can potentially allow users to specify a custom dictionary and avoid correcting any words included in the dictionary.
 
