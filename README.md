@@ -326,3 +326,10 @@ While the proposed Proofreading API corrects user input based on general knowled
 The Proofreading API can potentially allow users to specify a custom dictionary and avoid correcting any words included in the dictionary.
 
 However, in cases where ignoring certain words for correction could potentially change the meaning/structure of a sentence, it could be a bit tricky to proofread with pre-trained language models. Therefore, we are moving forward without integration with custom dictionaries until further exploration and evaluation are done. Nevertheless, we invite discussion of all of these APIs within the Web Machine Learning Community Group.
+
+## Privacy considerations
+This API follows the same structure as the Writing Assistance API, and thus shares the same privacy considerations as the Writing Assistance API. Please see [the specification](https://webmachinelearning.github.io/writing-assistance-apis/#privacy).
+
+## Security considerations
+
+This API also shares the same security considerations as the Writing Assistance API. Please see [the specification](https://webmachinelearning.github.io/writing-assistance-apis/#security).
