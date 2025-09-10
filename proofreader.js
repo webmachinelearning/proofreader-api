@@ -123,7 +123,8 @@ class Proofreader {
   _processCorrections(suggestions, originalText) {
     return suggestions.map((suggestion, index) => {
       // Find the position of the error in the original text
-      const startIndex = originalText.indexOf(suggestion.original) || 0;
+      let startIndex = originalText.indexOf(suggestion.original);
+      if (startIndex === -1) startIndex = 0;
       const endIndex = startIndex + (suggestion.original?.length || 0);
 
       const correction = {
