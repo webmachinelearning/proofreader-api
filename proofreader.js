@@ -121,30 +121,32 @@ class Proofreader {
   }
 
   _processCorrections(suggestions, originalText) {
-    return suggestions.map((suggestion, index) => {
-      // Find the position of the error in the original text
-      let startIndex = originalText.indexOf(suggestion.original);
-      if (startIndex === -1) startIndex = 0;
-      const endIndex = startIndex + (suggestion.original?.length || 0);
+    return suggestions
+      .map((suggestion, index) => {
+        // Find the position of the error in the original text
+        let startIndex = originalText.indexOf(suggestion.original);
+        if (startIndex === -1) return null; // Skip if not found
+        const endIndex = startIndex + (suggestion.original?.length || 0);
 
-      const correction = {
-        startIndex,
-        endIndex,
-        correction: suggestion.suggested || suggestion.correction || ''
-      };
+        const correction = {
+          startIndex,
+          endIndex,
+          correction: suggestion.suggested || suggestion.correction || ''
+        };
 
-      // Add type if requested
-      if (this.includeCorrectionTypes) {
-        correction.type = this._mapCorrectionType(suggestion.type);
-      }
+        // Add type if requested
+        if (this.includeCorrectionTypes) {
+          correction.type = this._mapCorrectionType(suggestion.type);
+        }
 
-      // Add explanation if requested
-      if (this.includeCorrectionExplanations) {
-        correction.explanation = suggestion.explanation || 'Grammatical improvement suggested';
-      }
+        // Add explanation if requested
+        if (this.includeCorrectionExplanations) {
+          correction.explanation = suggestion.explanation || 'Grammatical improvement suggested';
+        }
 
-      return correction;
-    });
+        return correction;
+      })
+      .filter(correction => correction !== null);
   }
 
   _mapCorrectionType(type) {
