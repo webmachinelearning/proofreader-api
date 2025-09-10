@@ -1,0 +1,77 @@
+{
+  "name": "Mathematical Verification Tools - Image Assets",
+  "version": "1.0.0",
+  "description": "Central image manifest for all mathematical verification tools - Ready for Google submission",
+  "submission_date": "2025-09-10",
+  "tools": {
+    "mathematic_verifier": {
+      "name": "Mathematical Verifier",
+      "logo": "mathematic verifer/readme-banner.png",
+      "og_image": "mathematic verifer/og-image.png",
+      "favicons": {
+        "ico": "mathematic verifer/Favicon/favicon_io/favicon.ico",
+        "16x16": "mathematic verifer/Favicon/favicon_io/favicon-16x16.png",
+        "32x32": "mathematic verifer/Favicon/favicon_io/favicon-32x32.png",
+        "180x180": "mathematic verifer/Favicon/favicon_io/apple-touch-icon.png",
+        "192x192": "mathematic verifer/Favicon/favicon_io/android-chrome-192x192.png",
+        "512x512": "mathematic verifer/Favicon/favicon_io/android-chrome-512x512.png"
+      },
+      "additional_icons": {
+        "android_chrome_192": "mathematic verifer/android-chrome-192x192.png",
+        "android_chrome_512": "mathematic verifer/android-chrome-512x512.png",
+        "apple_touch": "mathematic verifer/apple-touch-icon.png"
+      }
+    },
+    "mizz_a_r": {
+      "name": "MizZzA-r",
+      "logo": "MizZzA-r/MizZzA-r.png",
+      "favicons": {
+        "ico": "MizZzA-r/favicon_io/favicon.ico",
+        "16x16": "MizZzA-r/favicon_io/favicon-16x16.png",
+        "32x32": "MizZzA-r/favicon_io/favicon-32x32.png",
+        "180x180": "MizZzA-r/favicon_io/apple-touch-icon.png",
+        "192x192": "MizZzA-r/favicon_io/android-chrome-192x192.png",
+        "512x512": "MizZzA-r/favicon_io/android-chrome-512x512.png"
+      }
+    },
+    "quanthor": {
+      "name": "QuaNThoR",
+      "logo": "QuaNThoR/QuaNThoR.png",
+      "favicons": {
+        "ico": "QuaNThoR/favicon_io (1)/favicon.ico",
+        "16x16": "QuaNThoR/favicon_io (1)/favicon-16x16.png",
+        "32x32": "QuaNThoR/favicon_io (1)/favicon-32x32.png",
+        "180x180": "QuaNThoR/favicon_io (1)/apple-touch-icon.png",
+        "192x192": "QuaNThoR/favicon_io (1)/android-chrome-192x192.png",
+        "512x512": "QuaNThoR/favicon_io (1)/android-chrome-512x512.png"
+      }
+    }
+  },
+  "image_catalog": [
+    "mathematic verifer/Favicon/favicon_io/android-chrome-192x192.png",
+    "mathematic verifer/Favicon/favicon_io/android-chrome-512x512.png",
+    "mathematic verifer/Favicon/favicon_io/apple-touch-icon.png",
+    "mathematic verifer/Favicon/favicon_io/favicon-16x16.png",
+    "mathematic verifer/Favicon/favicon_io/favicon-32x32.png",
+    "mathematic verifer/Favicon/favicon_io/favicon.ico",
+    "mathematic verifer/android-chrome-192x192.png",
+    "mathematic verifer/android-chrome-512x512.png",
+    "mathematic verifer/apple-touch-icon.png",
+    "mathematic verifer/og-image.png",
+    "mathematic verifer/readme-banner.png",
+    "MizZzA-r/MizZzA-r.png",
+    "MizZzA-r/favicon_io/android-chrome-192x192.png",
+    "MizZzA-r/favicon_io/android-chrome-512x512.png",
+    "MizZzA-r/favicon_io/apple-touch-icon.png",
+    "MizZzA-r/favicon_io/favicon-16x16.png",
+    "MizZzA-r/favicon_io/favicon-32x32.png",
+    "MizZzA-r/favicon_io/favicon.ico",
+    "QuaNThoR/QuaNThoR.png",
+    "QuaNThoR/favicon_io (1)/android-chrome-192x192.png",
+    "QuaNThoR/favicon_io (1)/android-chrome-512x512.png",
+    "QuaNThoR/favicon_io (1)/apple-touch-icon.png",
+    "QuaNThoR/favicon_io (1)/favicon-16x16.png",
+    "QuaNThoR/favicon_io (1)/favicon-32x32.png",
+    "QuaNThoR/favicon_io (1)/favicon.ico"
+  ]
+}

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Proofreader API Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #3367d6;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .corrected-text {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #4caf50;
+        }
+        .corrections {
+            margin-top: 15px;
+        }
+        .correction {
+            background: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #ff9800;
+        }
+        .correction-type {
+            background: #2196f3;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        .options {
+            margin: 15px 0;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #f44336;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Google Proofreader API Demo</h1>
+    <p>Test the Google Proofreader API implementation based on the official specification.</p>
+
+    <div class="container">
+        <h3>Input Text</h3>
+        <textarea id="inputText" placeholder="Enter some text with potential errors... For example: 'I seen him yesterday at the store, and he bought two loafs of bread.'">I seen him yesterday at the store, and he bought two loafs of bread.</textarea>
+        
+        <div class="options">
+            <label>
+                <input type="checkbox" id="includeCorrectionTypes" checked> Include correction types
+            </label>
+            <label>
+                <input type="checkbox" id="includeCorrectionExplanations" checked> Include explanations
+            </label>
+        </div>
+        
+        <button onclick="proofreadText()" id="proofreadBtn">Proofread Text</button>
+        <button onclick="testAvailability()" id="availabilityBtn">Check Availability</button>
+    </div>
+
+    <div id="results" class="results" style="display: none;">
+        <h3>Results</h3>
+        <div id="correctedText" class="corrected-text"></div>
+        <div id="corrections" class="corrections"></div>
+    </div>
+
+    <div id="error" class="error" style="display: none;"></div>
+    <div id="loading" class="loading" style="display: none;">Processing...</div>
+
+    <script src="proofreader.js"></script>
+    <script>
+        let proofreader = null;
+
+        async function initializeProofreader() {
+            try {
+                const options = {
+                    includeCorrectionTypes: document.getElementById('includeCorrectionTypes').checked,
+                    includeCorrectionExplanations: document.getElementById('includeCorrectionExplanations').checked,
+                    expectedInputLanguages: ['en'],
+                    correctionExplanationLanguage: 'en',
+                    apiEndpoint: '/api/proofreader/proofread'
+                };
+
+                proofreader = await Proofreader.create(options);
+                return true;
+            } catch (error) {
+                showError(`Failed to initialize proofreader: ${error.message}`);
+                return false;
+            }
+        }
+
+        async function proofreadText() {
+            const inputText = document.getElementById('inputText').value.trim();
+            if (!inputText) {
+                showError('Please enter some text to proofread.');
+                return;
+            }
+
+            showLoading(true);
+            hideError();
+            hideResults();
+
+            try {
+                // Initialize proofreader with current options
+                const initialized = await initializeProofreader();
+                if (!initialized) return;
+
+                const result = await proofreader.proofread(inputText);
+                displayResults(result, inputText);
+            } catch (error) {
+                showError(`Proofreading failed: ${error.message}`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function testAvailability() {
+            showLoading(true);
+            hideError();
+            
+            try {
+                const options = {
+                    includeCorrectionTypes: document.getElementById('includeCorrectionTypes').checked,
+                    includeCorrectionExplanations: document.getElementById('includeCorrectionExplanations').checked,
+                    expectedInputLanguages: ['en']
+                };
+
+                const availability = await Proofreader.availability(options);
+                showError(`Availability: ${availability}`, false); // Show as info, not error
+            } catch (error) {
+                showError(`Availability check failed: ${error.message}`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayResults(result, originalText) {
+            const correctedTextEl = document.getElementById('correctedText');
+            const correctionsEl = document.getElementById('corrections');
+            
+            // Show corrected text
+            correctedTextEl.innerHTML = `<strong>Corrected Text:</strong><br>${escapeHtml(result.correctedInput)}`;
+            
+            // Show corrections
+            if (result.corrections && result.corrections.length > 0) {
+                let correctionsHtml = '<h4>Corrections Made:</h4>';
+                
+                result.corrections.forEach((correction, index) => {
+                    const originalWord = originalText.substring(correction.startIndex, correction.endIndex);
+                    correctionsHtml += `
+                        <div class="correction">
+                            ${correction.type ? `<span class="correction-type">${correction.type}</span>` : ''}
+                            <strong>Original:</strong> "${escapeHtml(originalWord)}" → 
+                            <strong>Corrected:</strong> "${escapeHtml(correction.correction)}"
+                            ${correction.explanation ? `<br><em>${escapeHtml(correction.explanation)}</em>` : ''}
+                        </div>
+                    `;
+                });
+                
+                correctionsEl.innerHTML = correctionsHtml;
+            } else {
+                correctionsEl.innerHTML = '<p><em>No corrections needed - text looks good!</em></p>';
+            }
+            
+            showResults();
+        }
+
+        function showResults() {
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function hideResults() {
+            document.getElementById('results').style.display = 'none';
+        }
+
+        function showError(message, isError = true) {
+            const errorEl = document.getElementById('error');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            errorEl.className = isError ? 'error' : 'corrected-text';
+        }
+
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+            document.getElementById('proofreadBtn').disabled = show;
+            document.getElementById('availabilityBtn').disabled = show;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Google Proofreader API Demo loaded');
+        });
+    </script>
+</body>
+</html>
