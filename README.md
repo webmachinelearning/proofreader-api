@@ -187,12 +187,12 @@ For each input, the method `proofread()` returns a promise of `ProofreadResult`:
 
 ```js
 dictionary ProofreadResult {
-  DOMString corrected;
+  DOMString correctedInput;
   sequence<ProofreadCorrection> corrections;
 }
 ```
 
-`corrected` is the fully corrected version of the input, while `corrections` contains a list of corrections made, their locations in the original input (e.g. so web developers can create UI to highlight the error), and optionally labels/explanations.
+`correctedInput` is the fully corrected version of the input, while `corrections` contains a list of corrections made, their locations in the original input (e.g. so web developers can create UI to highlight the error), and optionally labels/explanations.
 
 ```js
 dictionary ProofreadCorrection {
