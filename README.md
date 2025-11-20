@@ -9,7 +9,7 @@ Web applications can also benefit from such proofreading capability. This propos
 
 
 1. Error Correction: Correct input text by the user
-2. Error Labeling: For each correction made to each error in the input text, label the error type (e.g. spelling, punctuation, etc.)
+2. Error Labeling: For each correction made to each error in the input text, label the error type(s) (e.g. spelling, punctuation, etc.)
 3. Error Explanation: Annotates each error with a plain language explanation
 
 Note that Labeling & Explanation are independent features that can be either added or dropped.
@@ -50,7 +50,7 @@ const proofreader = await Proofreader.create({
 const corrections = await proofreader.proofread("I seen him yesterday at the store, and he bought two loafs of bread.");
 ```
 
-`proofread()` corrects the input text and returns a list of corrections made. Additional proofreading features can be configured using includeCorrectionTypes and `includeCorrectionExplanations`. When `includeCorrectionTypes` is set to `true`, `proofread()` will provide an error type label for each correction made to each error. When `includeCorrectionExplanations` is set to `true`, `proofread()` will provide an annotation for each error with a plain language explanation.
+`proofread()` corrects the input text and returns a list of corrections made. Additional proofreading features can be configured using includeCorrectionTypes and `includeCorrectionExplanations`. When `includeCorrectionTypes` is set to `true`, `proofread()` will provide the error type labels associated for each correction made to each error. When `includeCorrectionExplanations` is set to `true`, `proofread()` will provide an annotation for each error with a plain language explanation.
 
 Detailed design for the corrections output is [discussed later](#proofreading-correction-output).
 
@@ -197,7 +197,7 @@ dictionary ProofreadCorrection {
   unsigned long long startIndex;
   unsigned long long endIndex;
   DOMString correction;
-  CorrectionType type; // exists if proofreader.includeCorrectionTypes === true
+  sequence<CorrectionType> type; // exists if proofreader.includeCorrectionTypes === true
   DOMString explanation; // exists if proofreader.includeCorrectionExplanations === true
 }
 
@@ -205,6 +205,14 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "preposition"
 ```
 
 `type` only exists when the proofreader object is configured with `includeCorrectionTypes = true`, while `explanation` only exists when the proofreader object is configured with `includeCorrectionExplanations = true`.
+
+Each correction could be associated with mutliple correction type labels. For example:
+
+```js
+const original_text = "`thatd` a good amt of time!!! !" // `thatd` is the text to be corrected
+const proofread_text = "`That's` a good amount of time!" // `That's` is the corrected text
+```
+where the correction from "thatd" to "That's" contains three types of correction - "Captilization", "Spelling" and "Punctuation". When there's only one label, the sequence will be of size 1.
 
 Not all correction types here will be applicable to all languages, and in the future we might propose more specific correction types. The generic catch-all type, if no more-specific type matches, is `"grammar"`.
 
