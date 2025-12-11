@@ -206,7 +206,7 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "preposition"
 
 `type` only exists when the proofreader object is configured with `includeCorrectionTypes = true`, while `explanation` only exists when the proofreader object is configured with `includeCorrectionExplanations = true`.
 
-Each correction could be associated with mutliple correction type labels. For example:
+Each correction could be associated with multiple correction type labels. For example:
 
 ```js
 const original_text = "`thatd` a good amt of time!!! !" // `thatd` is the text to be corrected
