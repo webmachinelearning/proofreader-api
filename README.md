@@ -212,7 +212,7 @@ Each correction could be associated with multiple correction type labels. For ex
 const original_text = "`thatd` a good amt of time!!! !" // `thatd` is the text to be corrected
 const proofread_text = "`That's` a good amount of time!" // `That's` is the corrected text
 ```
-where the correction from "thatd" to "That's" contains three types of correction - "Captilization", "Spelling" and "Punctuation". When there's only one label, the sequence will be of size 1.
+where the correction from "thatd" to "That's" contains three types of correction - "Capitalization", "Spelling" and "Punctuation". When there's only one label, the sequence will be of size 1.
 
 Not all correction types here will be applicable to all languages, and in the future we might propose more specific correction types. The generic catch-all type, if no more-specific type matches, is `"grammar"`.
 
