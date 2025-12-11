@@ -3,9 +3,10 @@ Title: Proofreader API
 Shortname: proofreader
 Level: None
 Status: w3c/UD
-Repository: explainers-by-googlers/proofreader-api
-URL: https://explainers-by-googlers.github.io/proofreader-api
+Repository: webmachinelearning/proofreader-api
+URL: https://webmachinelearning.github.io/proofreader-api
 Editor: Qianqia (Queenie) Zhang, Google https://google.com, queeniezhang@google.com
+Editor: Reilly Grant 83788, Google https://www.google.com, reillyg@google.com
 Abstract: The proofreader API provides high-level interfaces to call on browser or operating system's built-in language model to help with proofreading tasks.
 Markup Shorthands: markdown yes, css no
 Complain About: accidental-2119 yes, missing-example-ids yes
@@ -16,4 +17,4 @@ Die On: warning
 Introduction {#intro}
 =====================
 
-For now, see the [explainer](https://github.com/explainers-by-googlers/proofreader-api).
+For now, see the [explainer](https://github.com/webmachinelearning/proofreader-api).
