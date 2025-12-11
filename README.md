@@ -297,7 +297,7 @@ dictionary ProofreadCorrection {
   unsigned long long startIndex;
   unsigned long long endIndex;
   DOMString correction;
-  CorrectionType type;
+  sequence<CorrectionType> type;
   DOMString explanation;
 };
 
