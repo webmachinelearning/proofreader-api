@@ -6,11 +6,14 @@ on:
 jobs:
   main:
     name: Build, Validate and Deploy
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
