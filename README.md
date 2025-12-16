@@ -197,14 +197,14 @@ dictionary ProofreadCorrection {
   unsigned long long startIndex;
   unsigned long long endIndex;
   DOMString correction;
-  sequence<CorrectionType> type; // exists if proofreader.includeCorrectionTypes === true
+  sequence<CorrectionType> types; // exists if proofreader.includeCorrectionTypes === true
   DOMString explanation; // exists if proofreader.includeCorrectionExplanations === true
 }
 
 enum CorrectionType { "spelling", "punctuation", "capitalization", "preposition", "missing-words", "grammar" };
 ```
 
-`type` only exists when the proofreader object is configured with `includeCorrectionTypes = true`, while `explanation` only exists when the proofreader object is configured with `includeCorrectionExplanations = true`.
+`types` only exists when the proofreader object is configured with `includeCorrectionTypes = true`, while `explanation` only exists when the proofreader object is configured with `includeCorrectionExplanations = true`.
 
 Each correction could be associated with multiple correction type labels. For example:
 
@@ -297,7 +297,7 @@ dictionary ProofreadCorrection {
   unsigned long long startIndex;
   unsigned long long endIndex;
   DOMString correction;
-  sequence<CorrectionType> type;
+  sequence<CorrectionType> types;
   DOMString explanation;
 };
 
