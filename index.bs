@@ -83,7 +83,7 @@ dictionary ProofreaderProofreadOptions {
 dictionary ProofreadResult {
   DOMString correctedInput;
   sequence<ProofreadCorrection> corrections;
-}
+};
 
 dictionary ProofreadCorrection {
   unsigned long long startIndex;
@@ -91,7 +91,7 @@ dictionary ProofreadCorrection {
   DOMString correction;
   sequence<CorrectionType> type;
   DOMString explanation;
-}
+};
 
 enum CorrectionType { "spelling", "punctuation", "capitalization", "preposition", "missing-words", "grammar" };
 </xmp>
