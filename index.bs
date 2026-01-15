@@ -3,6 +3,7 @@ Title: Proofreader API
 Shortname: proofreader
 Level: None
 Status: CG-DRAFT
+Goupr: webmachinelearning
 Repository: webmachinelearning/proofreader-api
 URL: https://webmachinelearning.github.io/proofreader-api
 Editor: Qianqia (Queenie) Zhang, Google https://google.com, queeniezhang@google.com
@@ -16,17 +17,17 @@ Die On: warning
 
 <pre class="anchors">
 urlPrefix: https://tc39.es/ecma402/; spec: ECMA-402
-  type: dfn
+    type: dfn
     text: [[AvailableLocales]]; url: sec-internal-slots
     text: Unicode canonicalized locale identifier; url: sec-language-tags
-  type: abstract-op
+    type: abstract-op
     text: LookupMatchingLocaleByBestFit; url: sec-lookupmatchinglocalebybestfit
     text: IsStructurallyValidLanguageTag; url: sec-isstructurallyvalidlanguagetag
     text: CanonicalizeUnicodeLocaleId; url: sec-canonicalizeunicodelocaleid
 urlPrefix: https://tc39.es/ecma262/; spec: ECMA-262
-  type: abstract-op
+    type: abstract-op
     text: floor; url: eqn-floor
-  type: dfn
+    type: dfn
     text: current realm; url: current-realm
 </pre>
 
@@ -94,4 +95,24 @@ dictionary ProofreadCorrection {
 };
 
 enum CorrectionType { "spelling", "punctuation", "capitalization", "preposition", "missing-words", "grammar" };
+</xmp>
+
+<h2 id="supporting">Shared infrastructure</h2>
+
+<h3 id="shared-apis">Common APIs</h3>
+
+<xmp class="idl">
+[Exposed=Window, SecureContext]
+interface CreateMonitor : EventTarget {
+  attribute EventHandler ondownloadprogress;
+};
+
+callback CreateMonitorCallback = undefined (CreateMonitor monitor);
+
+enum Availability {
+  "unavailable",
+  "downloadable",
+  "downloading",
+  "available"
+};
 </xmp>
