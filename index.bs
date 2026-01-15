@@ -3,7 +3,7 @@ Title: Proofreader API
 Shortname: proofreader
 Level: None
 Status: CG-DRAFT
-Group: webmachinelearning
+Group: webml
 Repository: webmachinelearning/proofreader-api
 URL: https://webmachinelearning.github.io/proofreader-api
 Editor: Qianqia (Queenie) Zhang, Google https://google.com, queeniezhang@google.com
