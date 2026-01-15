@@ -14,7 +14,84 @@ Assume Explicit For: yes
 Die On: warning
 </pre>
 
-Introduction {#intro}
-=====================
+<pre class="anchors">
+urlPrefix: https://tc39.es/ecma402/; spec: ECMA-402
+  type: dfn
+    text: [[AvailableLocales]]; url: sec-internal-slots
+    text: Unicode canonicalized locale identifier; url: sec-language-tags
+  type: abstract-op
+    text: LookupMatchingLocaleByBestFit; url: sec-lookupmatchinglocalebybestfit
+    text: IsStructurallyValidLanguageTag; url: sec-isstructurallyvalidlanguagetag
+    text: CanonicalizeUnicodeLocaleId; url: sec-canonicalizeunicodelocaleid
+urlPrefix: https://tc39.es/ecma262/; spec: ECMA-262
+  type: abstract-op
+    text: floor; url: eqn-floor
+  type: dfn
+    text: current realm; url: current-realm
+</pre>
 
-For now, see the [explainer](https://github.com/webmachinelearning/proofreader-api).
+<style>
+dl.props { display: grid; grid-template-columns: max-content auto; row-gap: 0.25em; column-gap: 1em; }
+dl.props > dt { grid-column-start: 1; margin: 0; }
+dl.props > dd { grid-column-start: 2; margin: 0; }
+p + dl.props { margin-top: -0.5em; }
+
+.enum-table tbody th { white-space: nowrap; }
+</style>
+
+<h2 id="intro">Introduction</h2>
+
+For now, see the [explainer](https://github.com/webmachinelearning/proofreader-api/blob/main/README.md).
+
+<h2 id="proofreader-api">The proofreader API</h2>
+
+<xmp class="idl">
+[Exposed=Window, SecureContext]
+interface Proofreader {
+  static Promise<Proofreader> create(optional ProofreaderCreateOptions options = {});
+  static Promise<Availability> availability(optional ProofreaderCreateCoreOptions options = {});
+
+  Promise<ProofreadResult> proofread(
+    DOMString input,
+    optional ProofreaderProofreadOptions options = {}
+  );
+
+  readonly attribute boolean includeCorrectionTypes;
+  readonly attribute boolean includeCorrectionExplanations;
+
+  readonly attribute FrozenArray<DOMString>? expectedInputLanguages;
+  readonly attribute DOMString? outputLanguage;
+};
+
+dictionary ProofreaderCreateCoreOptions {
+  boolean includeCorrectionTypes = false;
+  boolean includeCorrectionExplanations = false;
+
+  sequence<DOMString> expectedInputLanguages;
+  DOMString outputLanguage;
+};
+
+dictionary ProofreaderCreateOptions : ProofreaderCreateCoreOptions {
+  AbortSignal signal;
+  CreateMonitorCallback monitor;
+};
+
+dictionary ProofreaderProofreadOptions {
+  AbortSignal signal;
+};
+
+dictionary ProofreadResult {
+  DOMString correctedInput;
+  sequence<ProofreadCorrection> corrections;
+}
+
+dictionary ProofreadCorrection {
+  unsigned long long startIndex;
+  unsigned long long endIndex;
+  DOMString correction;
+  sequence<CorrectionType> type;
+  DOMString explanation;
+}
+
+enum CorrectionType { "spelling", "punctuation", "capitalization", "preposition", "missing-words", "grammar" };
+</xmp>
