@@ -86,11 +86,11 @@ dictionary ProofreadCorrection {
     unsigned long long startIndex;
     unsigned long long endIndex;
     DOMString correction;
-    sequence<CorrectionType> type;
+    sequence<CorrectionType> types;
     DOMString explanation;
 };
 
-enum CorrectionType { "spelling", "punctuation", "capitalization", "preposition", "missing-words", "grammar" };
+enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
 </xmp>
 
 <h2 id="supporting">Shared infrastructure</h2>
