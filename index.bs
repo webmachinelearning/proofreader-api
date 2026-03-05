@@ -157,7 +157,7 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
       : correction explanation language
       :: |options|["{{ProofreaderCreateCoreOptions/correctionExplanationLanguage}}"] if it [=map/exists=]; otherwise null
         </dl>
-    </div>
+        </div>
 
 <h3 id="proofreader-availability">Availability</h3>
 
@@ -165,7 +165,7 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
   The static <dfn method for="Proofreader">availability(|options|)</dfn> method steps are:
 
   1. Return the result of [=computing AI model availability=] given |options|, "{{Proofreader}}", [=validate and canonicalize proofreader options=], and [=compute proofreader options availability=].
-</div>
+    </div>
 
 <div algorithm>
   To <dfn>compute proofreader options availability</dfn> given a {{ProofreaderCreateCoreOptions}} |options|, perform the following steps. They return either an {{Availability}} value or null, and they mutate |options| in place to update language tags to their best-fit matches.
@@ -186,8 +186,8 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
 
   1. Set |options|["{{ProofreaderCreateCoreOptions/correctionExplanationLanguage}}"] to |correctionExplanationLanguagesList|[0].
 
-  1. Return the [=Availability/minimum availability=] given « |availability|, |inputLanguageAvailability|, |contextLanguagesAvailability|, |correctionExplanationLanguageAvailability| ».
-</div>
+  1. Return the [=Availability/minimum availability=] given « |availability|, |inputLanguageAvailability|, |correctionExplanationLanguageAvailability| ».
+    </div>
 
 <div algorithm>
   The <dfn>proofreader non-language options availability</dfn>, given a boolean |includeCorrectionTypes| and a boolean |includeCorrectionExplanations|, is given by the following steps. They return an {{Availability}} value or null.
@@ -203,7 +203,7 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
   1. If the user agent believes it will be able to [=model availability/support=] proofreading text according to |includeCorrectionTypes| and |includeCorrectionExplanations|, but only after performing a not-currently-ongoing download, then return "{{Availability/downloadable}}".
 
   1. Otherwise, return "{{Availability/unavailable}}".
-</div>
+    </div>
 
 <div algorithm>
   The <dfn>proofreader language availabilities double</dfn> is given by the following steps. They return a [=language availabilities double=] or null.
@@ -220,8 +220,8 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
 
       : [=language availabilities double/correction explanation languages=]
       :: the result of [=getting the language availabilities partition=] given the purpose of producing text explanations of proofreading corrections in that language
-    </dl>
-</div>
+        </dl>
+    </div>
 
 <div class="example" id="example-subtags-chinese">
   A common setup seen in today's software is to support two types of written Chinese: "traditional Chinese" and "simplified Chinese". Let's suppose that the user agent supports summarizing text written in traditional Chinese with no downloads, and simplified Chinese after a download.
@@ -247,8 +247,77 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
 
   await a("zh-BR") === "downloadable";   // zh-BR will best-fit to zh
   await a("zh-Kana") === "downloadable"; // zh-Kana will best-fit to zh
-  </xmp>
-</div>
+      </xmp>
+    </div>
+
+<h3 id="supporting-language-availability">Language availability</h3>
+
+A <dfn>language availabilities partition</dfn> is a [=map=] whose [=map/keys=] are "{{Availability/downloading}}", "{{Availability/downloadable}}", or "{{Availability/available}}", and whose [=map/values=] are [=sets=] of strings representing [=Unicode canonicalized locale identifiers=]. [[!ECMA-402]]
+
+A <dfn>language availabilities double</dfn> is a [=struct=] with the following [=struct/items=]:
+
+* <dfn for="language availabilities double">input languages</dfn>, a [=language availabilities partition=]
+* <dfn for="language availabilities double">correction explanation languages</dfn>, a [=language availabilities partition=]
+
+<div algorithm>
+  To <dfn export>get the language availabilities partition</dfn> given a description |purpose| of the purpose for which we're checking language availability:
+
+  1. Let |partition| be «[ "{{Availability/available}}" → an empty [=set=], "{{Availability/downloading}}" → an empty [=set=], "{{Availability/downloadable}}" → an empty [=set=] ]».
+
+  1. [=list/For each=] human language |languageTag|, represented as a [=Unicode canonicalized locale identifier=], for which the user agent [=model availability/currently supports=] |purpose|:
+
+    1. [=set/Append=] |languageTag| to |partition|["{{Availability/available}}"].
+
+  1. [=list/For each=] human language |languageTag|, represented as a [=Unicode canonicalized locale identifier=], for which the user agent believes it will be able to [=model availability/support=] |purpose|, but only after finishing a download that is already ongoing:
+
+    1. [=set/Append=] |languageTag| to |partition|["{{Availability/downloading}}"].
+
+  1. [=list/For each=] human language |languageTag|, represented as a [=Unicode canonicalized locale identifier=], for which the user agent believes it will be able to [=model availability/support=] |purpose|, but only after performing a not-currently-ongoing download:
+
+    1. [=set/Append=] |languageTag| to |partition|["{{Availability/downloadable}}"].
+
+  1. [=Assert=]: |partition|["{{Availability/available}}"], |partition|["{{Availability/downloading}}"], and |partition|["{{Availability/downloadable}}"] are disjoint.
+
+  1. If the [=set/union=] of |partition|["{{Availability/available}}"], |partition|["{{Availability/downloading}}"], and |partition|["{{Availability/downloadable}}"] does not meet the [=language tag set completeness rules=], then:
+
+    1. Let |missingLanguageTags| be the [=set=] of missing language tags necessary for that union to meet the [=language tag set completeness rules=].
+
+    1. [=set/For each=] |languageTag| of |missingLanguageTags|:
+
+      1. <span id="language-tag-completeness-implementation-defined"></span> [=set/Append=] |languageTag| to one of the three sets. Which of the sets to append to is [=implementation-defined=], and should be guided by considerations similar to that of [$LookupMatchingLocaleByBestFit$] in terms of keeping "best fallback languages" together.
+
+    1. Return |partition|.
+    </div>
+
+<div algorithm>
+  To <dfn export>compute language availability</dfn> given an [=ordered set=] of strings |requestedLanguages| and a  [=language availabilities partition=] |partition|, perform the following steps. They return an {{Availability}} value, and they mutate |requestedLanguages| in place to update language tags to their best-fit matches.
+
+  1. Let |availability| be "{{Availability/available}}".
+
+  1. [=set/For each=] |language| of |requestedLanguages|:
+
+    1. Let |unavailable| be true.
+
+    1. [=list/For each=] |availabilityToCheck| of « "{{Availability/available}}", "{{Availability/downloading}}", "{{Availability/downloadable}}" »:
+
+      1. Let |languagesWithThisAvailability| be |partition|[|availabilityToCheck|].
+
+      1. Let |bestMatch| be [$LookupMatchingLocaleByBestFit$](|languagesWithThisAvailability|, « |language| »).
+
+      1. If |bestMatch| is not undefined, then:
+
+        1. [=list/Replace=] |language| with |bestMatch|.\[[locale]] in |requestedLanguages|.
+
+        1. Set |availability| to the [=Availability/minimum availability=] given |availability| and |availabilityToCheck|.
+
+        1. Set |unavailable| to false.
+
+        1. [=iteration/Break=].
+
+    1. If |unavailable| is true, then return "{{Availability/unavailable}}".
+
+  1. Return |availability|.
+    </div>
 
 <h2 id="supporting">Shared infrastructure</h2>
 
