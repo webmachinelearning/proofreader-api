@@ -355,6 +355,175 @@ The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter 
   1. Return the result of [=measuring AI model input usage=] given [=this=], |options|, and |measureUsage|.
     </div>
 
+<h3 id="proofreader-proofreading">Proofreading</h3>
+
+<h4 id="proofreader-algorithm">The algorithm</h4>
+
+<div algorithm>
+  To <dfn>proofreader</dfn> given:
+
+  * a [=string=] |input|,
+  * a [=boolean=] |includeCorrectionTypes|,
+  * a [=boolean=] |includeCorrectionExplanations|,
+  * a [=string=]-or-null |correctionExplanationLanguage|,
+  * an algorithm |chunkProduced| that takes a [=string=] and returns nothing,
+  * an algorithm |done| that takes no arguments and returns nothing,
+  * an algorithm |error| that takes [=error information=] and returns nothing, and
+  * an algorithm |stopProducing| that takes no arguments and returns a boolean,
+
+  perform the following steps:
+
+  1. [=Assert=]: this algorithm is running [=in parallel=].
+
+  1. Let |requested| be the result of [=measuring proofreader input usage=] given |input|, |includeCorrectionTypes|, |correctionExplanationLanguage|, |correctionExplanationLanguage|, and |stopProducing|.
+
+  1. If |requested| is null, then return.
+
+  1. If |requested| is an [=error information=], then:
+
+    1. Perform |error| given |requested|.
+
+    1. Return.
+
+  1. [=Assert=]: |requested| is a number.
+
+  1. In an [=implementation-defined=] manner, subject to the following guidelines, begin the process of proofreading |input| into a {{ProofreadResult}} with a [=string=] |correctedInput| as the proofread text and a {{ProofreadCorrections}} |corrections| detailing all the corrections made to |input| to form |correctedInput|.
+
+     If |input| is the empty string, or otherwise consists of no proofreadable content (e.g., only contains whitespace, or control characters), then the resulting proofread text should be the empty string. In such cases, |includeCorrectionTypes|, |includeCorrectionExplanations|, and |correctionExplanationLanguage| should be ignored.
+
+     The proofreading should conform to the guidance given by |includeCorrectionTypes| and |includeCorrectionExplanations|.
+
+     The proofreading process must conform to the guidance given in [[#privacy]] and [[#security]], notably including (but not limited to) [[#privacy-user-input]] and [[#security-runtime]].
+
+     If |correctionExplanationLanguage| is non-null, the proofreading should be in that language. Otherwise, it should be in the language of |input|. If |input| contains multiple languages, or the language of |input| cannot be detected, then either the correction explanation language is [=implementation-defined=], or the implementation may treat this as an error, per the guidance in [[#proofreader-errors]].
+
+     Implementers should do their utmost to ensure that the result is an actual proofread result of |input|, and is not arbitrary output prompted by |input|.
+
+     <p class="example" id="example-bad-proofread-question-answering">For example, if |input| is "`what is capital of France`", then it would be incorrect to answer this question, e.g. by outputting "`Paris is the capital of France.`" A more correct output would be, e.g., "`What is the capital of France?`".
+
+    1. Wait for the next chunk of proofreading data to be produced, for the proofreading process to finish, or for the result of calling |stopProducing| to become true.
+
+    1. If such a chunk is successfully produced:
+
+      1. Let it be represented as a [=string=] |chunk|.
+
+      1. Perform |chunkProduced| given |chunk|.
+
+    1. Otherwise, if the proofreading process has finished:
+
+      1. Perform |done|.
+
+      1. [=iteration/Break=].
+
+    1. Otherwise, if |stopProducing| returns true, then [=iteration/break=].
+
+    1. Otherwise, if an error occurred during proofreading:
+
+      1. Let the error be represented as [=error information=] |errorInfo| according to the guidance in [[#proofreader-errors]].
+
+      1. Perform |error| given |errorInfo|.
+
+      1. [=iteration/Break=].
+    </div>
+
+<h4 id="proofreader-usage">Usage</h4>
+
+<div algorithm>
+  To <dfn>measure proofreader input usage</dfn>, given:
+
+  * a [=string=] |input|,
+  * a [=boolean=] |includeCorrectionTypes|,
+  * a [=boolean=] |includeCorrectionExplanations|,
+  * a [=string=]-or-null |correctionExplanationLanguage|, and
+  * an algorithm |stopMeasuring| that takes no arguments and returns a boolean,
+
+  perform the following steps:
+
+  1. [=Assert=]: this algorithm is running [=in parallel=].
+
+  1. Let |inputToModel| be the [=implementation-defined=] string that would be sent to the underlying model in order to [=proofread=] given |input|, |includeCorrectionTypes|, |includeCorrectionExplanations|, and |correctionExplanationLanguage|.
+
+    If during this process |stopMeasuring| starts returning true, then return null.
+
+    If an error occurs during this process, then return an appropriate [=DOMException error information=] according to the guidance in [[#proofreader-errors]].
+
+  1. Return the amount of input usage needed to represent |inputToModel| when given to the underlying model. The exact calculation procedure is [=implementation-defined=], subject to the following constraints.
+
+    The returned input usage must be nonnegative and finite. It must be 0, if there are no usage quotas for the proofreading process. Otherwise, it must be positive and should be roughly proportional to the [=string/length=] of |inputToModel|.
+
+    <p class="note" id="note-proofreader-input-usage">This might be the number of tokens needed to represent |input| in a <a href="https://arxiv.org/abs/2404.08335">language model tokenization scheme</a>, or it might be |input|'s [=string/length=]. It could also be some variation of these which also counts the usage of any prefixes or suffixes necessary to give to the model.
+
+    If during this process |stopMeasuring| starts returning true, then instead return null.
+
+    If an error occurs during this process, then instead return an appropriate [=DOMException error information=] according to the guidance in [[#proofreader-errors]].
+    </div>
+
+<h4 id="proofreader-options">Options</h4>
+
+The [=proofread=] algorithm's details are [=implementation-defined=], as they are expected to be powered by an AI model. However, it is intended to be controllable by the web developer through the |includeCorrectionTypes| and |includeCorrectionExplanations| flags.
+
+This section gives normative guidance on how the implementation of [=proofread=] should use each boolean flag to guide the proofreading process.
+
+<table class="data enum-table">
+  <caption>|includeCorrectionTypes| values</caption>
+  <thead>
+    <tr>
+      <th>Value
+      <th>Meaning
+  <tbody>
+    <tr>
+      <th>"<dfn boolean-value for="includeCorrectionTypes">true</dfn>"
+      <td>
+        <p>The proofread result should contain a list of corrections where each {{ProofreadCorrection}}, defined by its range from |startIndex| to |endIndex|, should describe the types of errors that are corrected according to the {{CorrectionType}} enumeration.
+    <tr>
+      <th>"<dfn boolean-value for="includeCorrectionTypes">false</dfn>"
+      <td>
+        <p>The proofread result should contain a list of corrections where each {{ProofreadCorrection}}, defined by its range from |startIndex| to |endIndex|, does not provide the types of errors that are corrected.
+    <tr>
+      <th>"<dfn boolean-value for="includeCorrectionExplanations">true</dfn>"
+      <td>
+        <p>The proofread result should contain a list of corrections where each {{ProofreadCorrection}}, defined by its range from |startIndex| to |endIndex|, should provide a text explanation for the errors corrected.
+    <tr>
+      <th>"<dfn boolean-value for="includeCorrectionTypes">false</dfn>"
+      <td>
+        <p>The proofread result should contain a list of corrections where each {{ProofreadCorrection}}, defined by its range from |startIndex| to |endIndex|, does not provide the text explanation for the errors corrected.
+    </table>
+
+<p class="note">As with all "<span class="allow-2119">should</span>"-level guidance, user agents might not conform perfectly to these. Especially in the case of providing correction types for all corrections, it's expected that language models might not conform perfectly.
+
+<h4 id="proofreader-errors">Errors</h4>
+
+When proofreading fails, the following possible reasons may be surfaced to the web developer. This table lists the possible {{DOMException}} [=DOMException/names=] and the cases in which an implementation should use them:
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>{{DOMException}} [=DOMException/name=]
+      <th>Scenarios
+  <tbody>
+    <tr>
+      <td>"{{NotAllowedError}}"
+      <td>
+        <p>Proofreading is disabled by user choice or user agent policy.
+    <tr>
+      <td>"{{NotSupportedError}}"
+      <td>
+        <p>The input to be proofread, or the context to be provided, was in a language that the user agent does not support, or was not provided properly in the call to {{Proofreader/create()}}.
+
+        <p>The proofreading correction explanation language ended up being in a language that the user agent does not support (e.g., because the user agent has not performed sufficient quality control tests on that output language), or was not provided properly in the call to {{Proofreader/create()}}.
+
+        <p>The |includeCorrectionExplanations| is set to true, the {{ProofreaderCreateCoreOptions/correctionExplanationLanguage}} option was not set, and the language of the input text could not be determined, so the user agent did not have a good correction explanation language default available.
+    <tr>
+      <td>"{{UnknownError}}"
+      <td>
+        <p>All other scenarios, including if the user agent believes it cannot proofread and also meet the requirements given in [[#privacy]] or [[#security]]. Or, if the user agent would prefer not to disclose the failure reason.
+</table>
+
+<p class="note">This table does not give the complete list of exceptions that can be surfaced by the proofreader API. It only contains those which can come from certain [=implementation-defined=] steps.
+
+<h3 id="proofreader-permissions-policy">Permissions policy integration</h3>
+
+Access to the proofreader API is gated behind the [=policy-controlled feature=] "<dfn permission>proofreader</dfn>", which has a [=policy-controlled feature/default allowlist=] of <code>[=default allowlist/'self'=]</code>.
 
 <h2 id="supporting">Shared infrastructure</h2>
 
@@ -375,3 +544,12 @@ enum Availability {
     "available"
 };
 </xmp>
+
+<h2 id="privacy">Privacy considerations</h2>
+
+<h3 id="privacy-user-input">User input</h3>
+
+<h2 id="security">Security considerations</h2>
+
+<h3 id="security-runtime">Runtime shared resources</h3>
+
