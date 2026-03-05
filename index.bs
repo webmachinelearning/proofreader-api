@@ -57,7 +57,7 @@ interface Proofreader {
     readonly attribute boolean includeCorrectionExplanations;
 
     readonly attribute FrozenArray<DOMString>? expectedInputLanguages;
-    readonly attribute DOMString? outputLanguage;
+    readonly attribute DOMString? correctionExplanationLanguage;
 };
 
 dictionary ProofreaderCreateCoreOptions {
@@ -65,7 +65,7 @@ dictionary ProofreaderCreateCoreOptions {
     boolean includeCorrectionExplanations = false;
 
     sequence<DOMString> expectedInputLanguages;
-    DOMString outputLanguage;
+    DOMString correctionExplanationLanguage;
 };
 
 dictionary ProofreaderCreateOptions : ProofreaderCreateCoreOptions {
@@ -98,8 +98,8 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
 <div algorithm>
   The static <dfn method for="Proofreader">create(|options|)</dfn> method steps are:
 
-  1. Return the result of [=creating an AI model object=] given |options|, "{{proofreader}}", [=validate and canonicalize proofreader options=], [=computing proofreader options availability=], [=download the proofreader model=], [=initialize the proofreader model=], [=create a proofreader object=], and false.
-</div>
+  1. Return the result of [=creating an AI model object=] given |options|, "{{Proofreader}}", [=validate and canonicalize proofreader options=], [=compute proofreader options availability=], [=download the proofreader model=], [=initialize the proofreader model=], [=create a proofreader object=], and false.
+    </div>
 
 <div algorithm>
   To <dfn>validate and canonicalize proofreader options</dfn> given a {{ProofreaderCreateCoreOptions}} |options|, perform the following steps. They mutate |options| in place to canonicalize and deduplicate language tags, and throw an exception if any are invalid.
@@ -107,7 +107,7 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
   1. [=Validate and canonicalize language tags=] given |options| and "{{ProofreaderCreateCoreOptions/expectedInputLanguages}}".
 
   1. [=Validate and canonicalize language tags=] given |options| and "{{ProofreaderCreateCoreOptions/correctionExplanationLanguage}}".
-</div>
+    </div>
 
 <div algorithm>
   To <dfn>download the proofreader model</dfn>, given a {{ProofreaderCreateCoreOptions}} |options|:
@@ -119,7 +119,7 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
   1. If the download process cannot be started for any reason, then return false.
 
   1. Return true.
-</div>
+    </div>
 
 <div algorithm>
   To <dfn>initialize the proofreader model</dfn>, given a {{ProofreaderCreateOptions}} |options|:
@@ -133,30 +133,121 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
   1. If initialization failed for any other reason, then return a [=DOMException error information=] whose [=DOMException error information/name=] is "{{OperationError}}" and whose [=DOMException error information/details=] contain appropriate detail.
 
   1. Return null.
-</div>
+    </div>
 
 <div algorithm>
-  To <dfn>create a proofreader object</dfn>, given a [=ECMAScript/realm=] |realm| and a {{ProofreadererCreateOptions}} |options|:
+  To <dfn>create a proofreader object</dfn>, given a [=ECMAScript/realm=] |realm| and a {{ProofreaderCreateOptions}} |options|:
 
   1. [=Assert=]: these steps are running on |realm|'s [=ECMAScript/surrounding agent=]'s [=agent/event loop=].
 
   1. Return a new {{Proofreader}} object, created in |realm|, with
 
     <dl class="props">
- boolean includeCorrectionTypes = false;
+     boolean includeCorrectionTypes = false;
     boolean includeCorrectionExplanations = false;
-      : [=Proofreader/whether to include correction types=]
+      : whether to include correction types
       :: |options|["{{ProofreaderCreateCoreOptions/includeCorrectionTypes}}"] default to false
 
-      : [=Proofreader/whether to include correction explanations=]
+      : Proofreader/whether to include correction explanations
       :: |options|["{{ProofreaderCreateCoreOptions/includeCorrectionExplanations}}"] default to false
 
-      : [=Proofreader/expected input languages=]
+      : expected input languages
       :: the result of [=creating a frozen array=] given |options|["{{ProofreaderCreateCoreOptions/expectedInputLanguages}}"] if it [=set/is empty|is not empty=]; otherwise null
 
-      : [=Proofreader/output language=]
-      :: |options|["{{ProofreaderCreateCoreOptions/outputLanguage}}"] if it [=map/exists=]; otherwise null
+      : correction explanation language
+      :: |options|["{{ProofreaderCreateCoreOptions/correctionExplanationLanguage}}"] if it [=map/exists=]; otherwise null
+        </dl>
+    </div>
+
+<h3 id="proofreader-availability">Availability</h3>
+
+<div algorithm>
+  The static <dfn method for="Proofreader">availability(|options|)</dfn> method steps are:
+
+  1. Return the result of [=computing AI model availability=] given |options|, "{{Proofreader}}", [=validate and canonicalize proofreader options=], and [=compute proofreader options availability=].
+</div>
+
+<div algorithm>
+  To <dfn>compute proofreader options availability</dfn> given a {{ProofreaderCreateCoreOptions}} |options|, perform the following steps. They return either an {{Availability}} value or null, and they mutate |options| in place to update language tags to their best-fit matches.
+
+  1. [=Assert=]: this algorithm is running [=in parallel=].
+
+  1. Let |availability| be the [=proofreader non-language options availability=] given |options|["{{ProofreaderCreateCoreOptions/includeCorrectionTypes}}"], |options|["{{ProofreaderCreateCoreOptions/includeCorrectionExplanations}}"].
+
+  1. Let |double| be the [=proofreader language availabilities double=].
+
+  1. If |double| is null, then return null.
+
+  1. Let |inputLanguageAvailability| be the result of [=computing language availability=] given |options|["{{ProofreaderCreateCoreOptions/expectedInputLanguages}}"] and |double|'s [=language availabilities double/input languages=].
+
+  1. Let |correctionExplanationLanguagesList| be « |options|["{{ProofreaderCreateCoreOptions/correctionExplanationLanguage}}"] ».
+
+  1. Let |correctionExplanationLanguageAvailability| be the result of [=computing language availability=] given |correctionExplanationLanguagesList| and |double|'s [=language availabilities double/correction explanation languages=].
+
+  1. Set |options|["{{ProofreaderCreateCoreOptions/correctionExplanationLanguage}}"] to |correctionExplanationLanguagesList|[0].
+
+  1. Return the [=Availability/minimum availability=] given « |availability|, |inputLanguageAvailability|, |contextLanguagesAvailability|, |correctionExplanationLanguageAvailability| ».
+</div>
+
+<div algorithm>
+  The <dfn>proofreader non-language options availability</dfn>, given a boolean |includeCorrectionTypes| and a boolean |includeCorrectionExplanations|, is given by the following steps. They return an {{Availability}} value or null.
+
+  1. [=Assert=]: this algorithm is running [=in parallel=].
+
+  1. If there is some error attempting to determine whether the user agent [=model availability/can support=] proofreading text, which the user agent believes to be transient (such that re-querying could stop producing such an error), then return null.
+
+  1. If the user agent [=model availability/currently supports=] proofreading text with/without correction types as described by |includeCorrectionTypes| and with/without correction explanations as described by |includeCorrectionExplanations|, then return "{{Availability/available}}".
+
+  1. If the user agent believes it will be able to [=model availability/support=] proofreading text according to |includeCorrectionTypes| and |includeCorrectionExplanations|, but only after finishing a download that is already ongoing, then return "{{Availability/downloading}}".
+
+  1. If the user agent believes it will be able to [=model availability/support=] proofreading text according to |includeCorrectionTypes| and |includeCorrectionExplanations|, but only after performing a not-currently-ongoing download, then return "{{Availability/downloadable}}".
+
+  1. Otherwise, return "{{Availability/unavailable}}".
+</div>
+
+<div algorithm>
+  The <dfn>proofreader language availabilities double</dfn> is given by the following steps. They return a [=language availabilities double=] or null.
+
+  1. [=Assert=]: this algorithm is running [=in parallel=].
+
+  1. If there is some error attempting to determine whether the user agent [=model availability/can support=] proofreading text, which the user agent believes to be transient (such that re-querying could stop producing such an error), then return null.
+
+  1. Return a [=language availabilities double=] with:
+
+    <dl class="props">
+      : [=language availabilities double/input languages=]
+      :: the result of [=getting the language availabilities partition=] given the purpose of proofreading text written in that language
+
+      : [=language availabilities double/correction explanation languages=]
+      :: the result of [=getting the language availabilities partition=] given the purpose of producing text explanations of proofreading corrections in that language
     </dl>
+</div>
+
+<div class="example" id="example-subtags-chinese">
+  A common setup seen in today's software is to support two types of written Chinese: "traditional Chinese" and "simplified Chinese". Let's suppose that the user agent supports summarizing text written in traditional Chinese with no downloads, and simplified Chinese after a download.
+
+  One way this could be implemented would be for [=proofreader language availabilities double=] to return that "`zh-Hant`" is in the [=language availabilities double/input languages=]["{{Availability/available}}"] set, and "`zh`" and "`zh-Hans`" are in the [=language availabilities double/input languages=]["{{Availability/downloadable}}"] set. This return value conforms to the requirements of the [=language tag set completeness rules=], in ensuring that "`zh`" is present. Per <a class="allow-2119" href="#language-tag-completeness-implementation-defined">the "should"-level guidance</a>, the implementation has determined that "`zh`" belongs in the set of downloadable input languages, with "`zh-Hans`", instead of in the set of available input languages, with "`zh-Hant`".
+
+  Combined with the use of [$LookupMatchingLocaleByBestFit$], this means {{Proofreader/availability()}} will give the following answers:
+
+  <xmp class="language-js">
+  function a(languageTag) {
+    return Proofreader.availability({
+      expectedInputLanguages: [languageTag]
+    });
+  }
+
+  await a("zh") === "downloadable";
+  await a("zh-Hant") === "available";
+  await a("zh-Hans") === "downloadable";
+
+  await a("zh-TW") === "available";      // zh-TW will best-fit to zh-Hant
+  await a("zh-HK") === "available";      // zh-HK will best-fit to zh-Hant
+  await a("zh-CN") === "downloadable";   // zh-CN will best-fit to zh-Hans
+
+  await a("zh-BR") === "downloadable";   // zh-BR will best-fit to zh
+  await a("zh-Kana") === "downloadable"; // zh-Kana will best-fit to zh
+  </xmp>
 </div>
 
 <h2 id="supporting">Shared infrastructure</h2>
