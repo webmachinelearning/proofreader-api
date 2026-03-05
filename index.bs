@@ -342,7 +342,7 @@ The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter 
 <div algorithm>
   The <dfn method for="Proofreader">proofread(|input|, |options|)</dfn> method steps are:
 
-  1. Let |operation| be an algorithm step which takes arguments |chunkProduced|, |done|, |error|, and |stopProducing|, and [=proofreads=] |input| given [=this=]'s [=Proofreader/include correction types=], [=this=]'s [=Proofreader/include correction explanations=], [=this=]'s [=Proofreader/correction explanation language=], |chunkProduced|, |done|, |error|, and |stopProducing|.
+  1. Let |operation| be an algorithm step which takes arguments |chunkProduced|, |done|, |error|, and |stopProducing|, and proofreads |input| given [=this=]'s [=Proofreader/include correction types=], [=this=]'s [=Proofreader/include correction explanations=], [=this=]'s [=Proofreader/correction explanation language=], |chunkProduced|, |done|, |error|, and |stopProducing|.
 
   1. Return the result of [=getting an aggregated AI model result=] given [=this=], |options|, and |operation|.
     </div>
@@ -350,7 +350,7 @@ The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter 
 <div algorithm>
   The <dfn method for="Proofreader">measureInputUsage(|input|, |options|)</dfn> method steps are:
 
-  1. Let |measureUsage| be an algorithm step which takes argument |stopMeasuring|, and returns the result of [=measuring proofreader input usage=] given |input|, [=this=]'s [=Proofreader/include correction types=], [=this=]'s [=Proofreader/include correction explanationse=], [=this=]'s [=Proofreader/correction explanation language=], and |stopMeasuring|.
+  1. Let |measureUsage| be an algorithm step which takes argument |stopMeasuring|, and returns the result of measuring proofreader input usage given |input|, [=this=]'s [=Proofreader/include correction types=], [=this=]'s [=Proofreader/include correction explanations=], [=this=]'s [=Proofreader/correction explanation language=], and |stopMeasuring|.
 
   1. Return the result of [=measuring AI model input usage=] given [=this=], |options|, and |measureUsage|.
     </div>
