@@ -8,7 +8,7 @@
   <meta content="Bikeshed version 0ef803fdf, updated Tue Jan 6 11:59:39 2026 -0800" name="generator">
   <link href="https://webmachinelearning.github.io/proofreader-api" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="166b34df5e88a70aa675723e0257588138cc608b" name="revision">
+  <meta content="3d85366691a6dbb7e040b2ee87f45a4afa71700c" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -825,11 +825,11 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long-long" id="ref-for-idl-unsigned-long-long"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreadCorrection" data-dfn-type="dict-member" data-export data-type="unsigned long long" id="dom-proofreadcorrection-startindex"><code><c- g>startIndex</c-></code></dfn>;
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long-long" id="ref-for-idl-unsigned-long-long①"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreadCorrection" data-dfn-type="dict-member" data-export data-type="unsigned long long" id="dom-proofreadcorrection-endindex"><code><c- g>endIndex</c-></code></dfn>;
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑥"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreadCorrection" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-proofreadcorrection-correction"><code><c- g>correction</c-></code></dfn>;
-    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence②"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-correctiontype" id="ref-for-enumdef-correctiontype"><c- n>CorrectionType</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreadCorrection" data-dfn-type="dict-member" data-export data-type="sequence<CorrectionType>" id="dom-proofreadcorrection-type"><code><c- g>type</c-></code></dfn>;
+    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence②"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-correctiontype" id="ref-for-enumdef-correctiontype"><c- n>CorrectionType</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreadCorrection" data-dfn-type="dict-member" data-export data-type="sequence<CorrectionType>" id="dom-proofreadcorrection-types"><code><c- g>types</c-></code></dfn>;
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑦"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreadCorrection" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-proofreadcorrection-explanation"><code><c- g>explanation</c-></code></dfn>;
 };
 
-<c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-correctiontype"><code><c- g>CorrectionType</c-></code></dfn> { <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-spelling"><code><c- s>"spelling"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-punctuation"><code><c- s>"punctuation"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-capitalization"><code><c- s>"capitalization"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-preposition"><code><c- s>"preposition"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-missing-words"><code><c- s>"missing-words"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-grammar"><code><c- s>"grammar"</c-></code></dfn> };
+<c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-correctiontype"><code><c- g>CorrectionType</c-></code></dfn> { <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-spelling"><code><c- s>"spelling"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-punctuation"><code><c- s>"punctuation"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-capitalization"><code><c- s>"capitalization"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-grammar"><code><c- s>"grammar"</c-></code></dfn> };
 </pre>
    <h2 class="heading settled" data-level="3" id="supporting"><span class="secno">3. </span><span class="content">Shared infrastructure</span><a class="self-link" href="#supporting"></a></h2>
    <h3 class="heading settled" data-level="3.1" id="shared-apis"><span class="secno">3.1. </span><span class="content">Common APIs</span><a class="self-link" href="#shared-apis"></a></h3>
@@ -925,7 +925,6 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <li><a href="#dom-proofreader-includecorrectiontypes">attribute for Proofreader</a><span>, in § 2</span>
      <li><a href="#dom-proofreadercreatecoreoptions-includecorrectiontypes">dict-member for ProofreaderCreateCoreOptions</a><span>, in § 2</span>
     </ul>
-   <li><a href="#dom-correctiontype-missing-words">"missing-words"</a><span>, in § 2</span>
    <li><a href="#dom-proofreadercreateoptions-monitor">monitor</a><span>, in § 2</span>
    <li><a href="#dom-createmonitor-ondownloadprogress">ondownloadprogress</a><span>, in § 3.1</span>
    <li>
@@ -934,7 +933,6 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <li><a href="#dom-proofreader-outputlanguage">attribute for Proofreader</a><span>, in § 2</span>
      <li><a href="#dom-proofreadercreatecoreoptions-outputlanguage">dict-member for ProofreaderCreateCoreOptions</a><span>, in § 2</span>
     </ul>
-   <li><a href="#dom-correctiontype-preposition">"preposition"</a><span>, in § 2</span>
    <li><a href="#dictdef-proofreadcorrection">ProofreadCorrection</a><span>, in § 2</span>
    <li><a href="#proofreader">Proofreader</a><span>, in § 2</span>
    <li><a href="#dictdef-proofreadercreatecoreoptions">ProofreaderCreateCoreOptions</a><span>, in § 2</span>
@@ -952,7 +950,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     </ul>
    <li><a href="#dom-correctiontype-spelling">"spelling"</a><span>, in § 2</span>
    <li><a href="#dom-proofreadcorrection-startindex">startIndex</a><span>, in § 2</span>
-   <li><a href="#dom-proofreadcorrection-type">type</a><span>, in § 2</span>
+   <li><a href="#dom-proofreadcorrection-types">types</a><span>, in § 2</span>
    <li><a href="#dom-availability-unavailable">"unavailable"</a><span>, in § 3.1</span>
   </ul>
   <h3 class="heading no-num no-ref settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -1038,11 +1036,11 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long-long"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a> <a data-type="unsigned long long" href="#dom-proofreadcorrection-startindex"><code><c- g>startIndex</c-></code></a>;
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long-long"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a> <a data-type="unsigned long long" href="#dom-proofreadcorrection-endindex"><code><c- g>endIndex</c-></code></a>;
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-proofreadcorrection-correction"><code><c- g>correction</c-></code></a>;
-    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-correctiontype"><c- n>CorrectionType</c-></a>> <a data-type="sequence<CorrectionType>" href="#dom-proofreadcorrection-type"><code><c- g>type</c-></code></a>;
+    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-correctiontype"><c- n>CorrectionType</c-></a>> <a data-type="sequence<CorrectionType>" href="#dom-proofreadcorrection-types"><code><c- g>types</c-></code></a>;
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-proofreadcorrection-explanation"><code><c- g>explanation</c-></code></a>;
 };
 
-<c- b>enum</c-> <a href="#enumdef-correctiontype"><code><c- g>CorrectionType</c-></code></a> { <a href="#dom-correctiontype-spelling"><code><c- s>"spelling"</c-></code></a>, <a href="#dom-correctiontype-punctuation"><code><c- s>"punctuation"</c-></code></a>, <a href="#dom-correctiontype-capitalization"><code><c- s>"capitalization"</c-></code></a>, <a href="#dom-correctiontype-preposition"><code><c- s>"preposition"</c-></code></a>, <a href="#dom-correctiontype-missing-words"><code><c- s>"missing-words"</c-></code></a>, <a href="#dom-correctiontype-grammar"><code><c- s>"grammar"</c-></code></a> };
+<c- b>enum</c-> <a href="#enumdef-correctiontype"><code><c- g>CorrectionType</c-></code></a> { <a href="#dom-correctiontype-spelling"><code><c- s>"spelling"</c-></code></a>, <a href="#dom-correctiontype-punctuation"><code><c- s>"punctuation"</c-></code></a>, <a href="#dom-correctiontype-capitalization"><code><c- s>"capitalization"</c-></code></a>, <a href="#dom-correctiontype-grammar"><code><c- s>"grammar"</c-></code></a> };
 
 [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
 <c- b>interface</c-> <a href="#createmonitor"><code><c- g>CreateMonitor</c-></code></a> : <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#eventtarget"><c- n>EventTarget</c-></a> {
@@ -1282,8 +1280,6 @@ let dfnPanelData = {
 "dom-availability-unavailable": {"dfnID":"dom-availability-unavailable","dfnText":"\"unavailable\"","external":false,"refSections":[],"url":"#dom-availability-unavailable"},
 "dom-correctiontype-capitalization": {"dfnID":"dom-correctiontype-capitalization","dfnText":"\"capitalization\"","external":false,"refSections":[],"url":"#dom-correctiontype-capitalization"},
 "dom-correctiontype-grammar": {"dfnID":"dom-correctiontype-grammar","dfnText":"\"grammar\"","external":false,"refSections":[],"url":"#dom-correctiontype-grammar"},
-"dom-correctiontype-missing-words": {"dfnID":"dom-correctiontype-missing-words","dfnText":"\"missing-words\"","external":false,"refSections":[],"url":"#dom-correctiontype-missing-words"},
-"dom-correctiontype-preposition": {"dfnID":"dom-correctiontype-preposition","dfnText":"\"preposition\"","external":false,"refSections":[],"url":"#dom-correctiontype-preposition"},
 "dom-correctiontype-punctuation": {"dfnID":"dom-correctiontype-punctuation","dfnText":"\"punctuation\"","external":false,"refSections":[],"url":"#dom-correctiontype-punctuation"},
 "dom-correctiontype-spelling": {"dfnID":"dom-correctiontype-spelling","dfnText":"\"spelling\"","external":false,"refSections":[],"url":"#dom-correctiontype-spelling"},
 "dom-createmonitor-ondownloadprogress": {"dfnID":"dom-createmonitor-ondownloadprogress","dfnText":"ondownloadprogress","external":false,"refSections":[],"url":"#dom-createmonitor-ondownloadprogress"},
@@ -1292,7 +1288,7 @@ let dfnPanelData = {
 "dom-proofreadcorrection-endindex": {"dfnID":"dom-proofreadcorrection-endindex","dfnText":"endIndex","external":false,"refSections":[],"url":"#dom-proofreadcorrection-endindex"},
 "dom-proofreadcorrection-explanation": {"dfnID":"dom-proofreadcorrection-explanation","dfnText":"explanation","external":false,"refSections":[],"url":"#dom-proofreadcorrection-explanation"},
 "dom-proofreadcorrection-startindex": {"dfnID":"dom-proofreadcorrection-startindex","dfnText":"startIndex","external":false,"refSections":[],"url":"#dom-proofreadcorrection-startindex"},
-"dom-proofreadcorrection-type": {"dfnID":"dom-proofreadcorrection-type","dfnText":"type","external":false,"refSections":[],"url":"#dom-proofreadcorrection-type"},
+"dom-proofreadcorrection-types": {"dfnID":"dom-proofreadcorrection-types","dfnText":"types","external":false,"refSections":[],"url":"#dom-proofreadcorrection-types"},
 "dom-proofreader-availability": {"dfnID":"dom-proofreader-availability","dfnText":"availability","external":false,"refSections":[],"url":"#dom-proofreader-availability"},
 "dom-proofreader-availability-options-options": {"dfnID":"dom-proofreader-availability-options-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-proofreader-availability-options-options"},
 "dom-proofreader-create": {"dfnID":"dom-proofreader-create","dfnText":"create","external":false,"refSections":[],"url":"#dom-proofreader-create"},
