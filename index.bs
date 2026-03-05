@@ -40,6 +40,10 @@ p + dl.props { margin-top: -0.5em; }
 
 For now, see the [explainer](https://github.com/webmachinelearning/proofreader-api/blob/main/README.md).
 
+<h2 id="dependencies">Dependencies</h2>
+
+These APIs are part of a family of APIs expected to be powered by machine learning models, which share common API surface idioms and specification patterns. Currently, the specification text for these shared parts lives in [[WRITING-ASSISTANCE-APIS#supporting]], and the common privacy and security considerations are discussed in [[WRITING-ASSISTANCE-APIS#privacy]] and [[WRITING-ASSISTANCE-APIS#security]]. Implementing these APIs requires implementing that shared infrastructure, and conforming to those privacy and security considerations. But it does not require implementing or exposing the actual writing assistance APIs. [[!WRITING-ASSISTANCE-APIS]]
+
 <h2 id="proofreader-api">The proofreader API</h2>
 
 <xmp class="idl">
@@ -393,7 +397,7 @@ The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter 
 
      The proofreading should conform to the guidance given by |includeCorrectionTypes| and |includeCorrectionExplanations|.
 
-     The proofreading process must conform to the guidance given in [[#privacy]] and [[#security]], notably including (but not limited to) [[#privacy-user-input]] and [[#security-runtime]].
+     The proofreading process must conform to the guidance given in [[#privacy]] and [[#security]], notably including (but not limited to) [[WRITING-ASSISTANCE-APIS#privacy-user-input]] and [[WRITING-ASSISTANCE-APIS#security-runtime]].
 
      If |correctionExplanationLanguage| is non-null, the proofreading should be in that language. Otherwise, it should be in the language of |input|. If |input| contains multiple languages, or the language of |input| cannot be detected, then either the correction explanation language is [=implementation-defined=], or the implementation may treat this as an error, per the guidance in [[#proofreader-errors]].
 
@@ -534,31 +538,11 @@ When proofreading fails, the following possible reasons may be surfaced to the w
 
 Access to the proofreader API is gated behind the [=policy-controlled feature=] "<dfn permission>proofreader</dfn>", which has a [=policy-controlled feature/default allowlist=] of <code>[=default allowlist/'self'=]</code>.
 
-<h2 id="supporting">Shared infrastructure</h2>
-
-<h3 id="shared-apis">Common APIs</h3>
-
-<xmp class="idl">
-[Exposed=Window, SecureContext]
-interface CreateMonitor : EventTarget {
-    attribute EventHandler ondownloadprogress;
-};
-
-callback CreateMonitorCallback = undefined (CreateMonitor monitor);
-
-enum Availability {
-    "unavailable",
-    "downloadable",
-    "downloading",
-    "available"
-};
-</xmp>
-
 <h2 id="privacy">Privacy considerations</h2>
 
-<h3 id="privacy-user-input">User input</h3>
+Please see [[WRITING-ASSISTANCE-APIS#privacy]] for a discussion of privacy considerations for the translator and language detector APIs. That text was written to apply to all APIs sharing the same infrastructure, as noted in [[#dependencies]].
 
 <h2 id="security">Security considerations</h2>
 
-<h3 id="security-runtime">Runtime shared resources</h3>
+Please see [[WRITING-ASSISTANCE-APIS#security]] for a discussion of security considerations for the translator and language detector APIs. That text was written to apply to all APIs sharing the same infrastructure, as noted in [[#dependencies]].
 
