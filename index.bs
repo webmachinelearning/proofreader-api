@@ -360,7 +360,7 @@ The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter 
 <h4 id="proofreader-algorithm">The algorithm</h4>
 
 <div algorithm>
-  To <dfn>proofreade</dfn> given:
+  To <dfn>proofread</dfn> given:
 
   * a [=string=] |input|,
   * a [=boolean=] |includeCorrectionTypes|,
