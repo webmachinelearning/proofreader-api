@@ -222,7 +222,7 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
         </div>
 
 <div class="example" id="example-subtags-chinese">
-  A common setup seen in today's software is to support two types of written Chinese: "traditional Chinese" and "simplified Chinese". Let's suppose that the user agent supports summarizing text written in traditional Chinese with no downloads, and simplified Chinese after a download.
+  A common setup seen in today's software is to support two types of written Chinese: "traditional Chinese" and "simplified Chinese". Let's suppose that the user agent supports proofreading text written in traditional Chinese with no downloads, and simplified Chinese after a download.
 
   One way this could be implemented would be for [=proofreader language availabilities double=] to return that "`zh-Hant`" is in the [=language availabilities double/input languages=]["{{Availability/available}}"] set, and "`zh`" and "`zh-Hans`" are in the [=language availabilities double/input languages=]["{{Availability/downloadable}}"] set. This return value conforms to the requirements of the language tag set completeness rules, in ensuring that "`zh`" is present. Per <a class="allow-2119" href="#language-tag-completeness-implementation-defined">the "should"-level guidance</a>, the implementation has determined that "`zh`" belongs in the set of downloadable input languages, with "`zh-Hans`", instead of in the set of available input languages, with "`zh-Hant`".
 
@@ -360,7 +360,7 @@ The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter 
 <h4 id="proofreader-algorithm">The algorithm</h4>
 
 <div algorithm>
-  To <dfn>proofreader</dfn> given:
+  To <dfn>proofreade</dfn> given:
 
   * a [=string=] |input|,
   * a [=boolean=] |includeCorrectionTypes|,
@@ -387,7 +387,7 @@ The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter 
 
   1. [=Assert=]: |requested| is a number.
 
-  1. In an [=implementation-defined=] manner, subject to the following guidelines, begin the process of proofreading |input| into a {{ProofreadResult}} with a [=string=] |correctedInput| as the proofread text and a {{ProofreadCorrections}} |corrections| detailing all the corrections made to |input| to form |correctedInput|.
+  1. In an [=implementation-defined=] manner, subject to the following guidelines, begin the process of proofreading |input| into a {{ProofreadResult}} with a [=string=] |correctedInput| as the proofread text and a {{ProofreadCorrection}} corrections detailing all the corrections made to |input| to form |correctedInput|.
 
      If |input| is the empty string, or otherwise consists of no proofreadable content (e.g., only contains whitespace, or control characters), then the resulting proofread text should be the empty string. In such cases, |includeCorrectionTypes|, |includeCorrectionExplanations|, and |correctionExplanationLanguage| should be ignored.
 
@@ -424,7 +424,7 @@ The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter 
       1. Perform |error| given |errorInfo|.
 
       1. [=iteration/Break=].
-    </div>
+        </div>
 
 <h4 id="proofreader-usage">Usage</h4>
 
@@ -472,19 +472,28 @@ This section gives normative guidance on how the implementation of [=proofread=]
       <th>Meaning
   <tbody>
     <tr>
-      <th>"<dfn boolean-value for="includeCorrectionTypes">true</dfn>"
+      <th>"true"
       <td>
         <p>The proofread result should contain a list of corrections where each {{ProofreadCorrection}}, defined by its range from |startIndex| to |endIndex|, should describe the types of errors that are corrected according to the {{CorrectionType}} enumeration.
     <tr>
-      <th>"<dfn boolean-value for="includeCorrectionTypes">false</dfn>"
+      <th>"false"
       <td>
         <p>The proofread result should contain a list of corrections where each {{ProofreadCorrection}}, defined by its range from |startIndex| to |endIndex|, does not provide the types of errors that are corrected.
+    </table>
+
+<table class="data enum-table">
+  <caption>|includeCorrectionExplanations| values</caption>
+  <thead>
     <tr>
-      <th>"<dfn boolean-value for="includeCorrectionExplanations">true</dfn>"
+      <th>Value
+      <th>Meaning
+  <tbody>
+    <tr>
+      <th>"true"
       <td>
         <p>The proofread result should contain a list of corrections where each {{ProofreadCorrection}}, defined by its range from |startIndex| to |endIndex|, should provide a text explanation for the errors corrected.
     <tr>
-      <th>"<dfn boolean-value for="includeCorrectionTypes">false</dfn>"
+      <th>"false"
       <td>
         <p>The proofread result should contain a list of corrections where each {{ProofreadCorrection}}, defined by its range from |startIndex| to |endIndex|, does not provide the text explanation for the errors corrected.
     </table>
