@@ -221,12 +221,12 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
       : [=language availabilities double/correction explanation languages=]
       :: the result of [=getting the language availabilities partition=] given the purpose of producing text explanations of proofreading corrections in that language
         </dl>
-    </div>
+        </div>
 
 <div class="example" id="example-subtags-chinese">
   A common setup seen in today's software is to support two types of written Chinese: "traditional Chinese" and "simplified Chinese". Let's suppose that the user agent supports summarizing text written in traditional Chinese with no downloads, and simplified Chinese after a download.
 
-  One way this could be implemented would be for [=proofreader language availabilities double=] to return that "`zh-Hant`" is in the [=language availabilities double/input languages=]["{{Availability/available}}"] set, and "`zh`" and "`zh-Hans`" are in the [=language availabilities double/input languages=]["{{Availability/downloadable}}"] set. This return value conforms to the requirements of the [=language tag set completeness rules=], in ensuring that "`zh`" is present. Per <a class="allow-2119" href="#language-tag-completeness-implementation-defined">the "should"-level guidance</a>, the implementation has determined that "`zh`" belongs in the set of downloadable input languages, with "`zh-Hans`", instead of in the set of available input languages, with "`zh-Hant`".
+  One way this could be implemented would be for [=proofreader language availabilities double=] to return that "`zh-Hant`" is in the [=language availabilities double/input languages=]["{{Availability/available}}"] set, and "`zh`" and "`zh-Hans`" are in the [=language availabilities double/input languages=]["{{Availability/downloadable}}"] set. This return value conforms to the requirements of the language tag set completeness rules, in ensuring that "`zh`" is present. Per <a class="allow-2119" href="#language-tag-completeness-implementation-defined">the "should"-level guidance</a>, the implementation has determined that "`zh`" belongs in the set of downloadable input languages, with "`zh-Hans`", instead of in the set of available input languages, with "`zh-Hant`".
 
   Combined with the use of [$LookupMatchingLocaleByBestFit$], this means {{Proofreader/availability()}} will give the following answers:
 
@@ -278,16 +278,16 @@ A <dfn>language availabilities double</dfn> is a [=struct=] with the following [
 
   1. [=Assert=]: |partition|["{{Availability/available}}"], |partition|["{{Availability/downloading}}"], and |partition|["{{Availability/downloadable}}"] are disjoint.
 
-  1. If the [=set/union=] of |partition|["{{Availability/available}}"], |partition|["{{Availability/downloading}}"], and |partition|["{{Availability/downloadable}}"] does not meet the [=language tag set completeness rules=], then:
+  1. If the [=set/union=] of |partition|["{{Availability/available}}"], |partition|["{{Availability/downloading}}"], and |partition|["{{Availability/downloadable}}"] does not meet the language tag set completeness rules, then:
 
-    1. Let |missingLanguageTags| be the [=set=] of missing language tags necessary for that union to meet the [=language tag set completeness rules=].
+    1. Let |missingLanguageTags| be the [=set=] of missing language tags necessary for that union to meet the language tag set completeness rules.
 
     1. [=set/For each=] |languageTag| of |missingLanguageTags|:
 
       1. <span id="language-tag-completeness-implementation-defined"></span> [=set/Append=] |languageTag| to one of the three sets. Which of the sets to append to is [=implementation-defined=], and should be guided by considerations similar to that of [$LookupMatchingLocaleByBestFit$] in terms of keeping "best fallback languages" together.
 
     1. Return |partition|.
-    </div>
+        </div>
 
 <div algorithm>
   To <dfn export>compute language availability</dfn> given an [=ordered set=] of strings |requestedLanguages| and a  [=language availabilities partition=] |partition|, perform the following steps. They return an {{Availability}} value, and they mutate |requestedLanguages| in place to update language tags to their best-fit matches.
