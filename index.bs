@@ -143,18 +143,16 @@ enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
   1. Return a new {{Proofreader}} object, created in |realm|, with
 
     <dl class="props">
-     boolean includeCorrectionTypes = false;
-    boolean includeCorrectionExplanations = false;
-      : whether to include correction types
+      : [=Proofreader/include correction types=]
       :: |options|["{{ProofreaderCreateCoreOptions/includeCorrectionTypes}}"] default to false
 
-      : Proofreader/whether to include correction explanations
+      : [=Proofreader/include correction explanations=]
       :: |options|["{{ProofreaderCreateCoreOptions/includeCorrectionExplanations}}"] default to false
 
-      : expected input languages
+      : [=Proofreader/expected input languages=]
       :: the result of [=creating a frozen array=] given |options|["{{ProofreaderCreateCoreOptions/expectedInputLanguages}}"] if it [=set/is empty|is not empty=]; otherwise null
 
-      : correction explanation language
+      : [=Proofreader/correction explanation language=]
       :: |options|["{{ProofreaderCreateCoreOptions/correctionExplanationLanguage}}"] if it [=map/exists=]; otherwise null
         </dl>
         </div>
@@ -318,6 +316,45 @@ A <dfn>language availabilities double</dfn> is a [=struct=] with the following [
 
   1. Return |availability|.
     </div>
+
+<h3 id="the-proofreader-class">The {{Proofreader}} class</h3>
+
+Every {{Proofreader}} has a <dfn for="Proofreader">include correction type</dfn>, a [=boolean=] or default to false, set during creation.
+
+Every {{Proofreader}} has a <dfn for="Proofreader">include correction explanations</dfn>, a [=boolean=] or default to false, set during creation.
+
+Every {{Proofreader}} has an <dfn for="Proofreader">expected input languages</dfn>, a <code>{{FrozenArray}}&lt;{{DOMString}}></code> or null, set during creation.
+
+Every {{Proofreader}} has an <dfn for="Proofreader">correction explanation language</dfn>, a [=string=] or null, set during creation.
+
+<hr>
+
+The <dfn attribute for="Proofreader">includeCorrectionTypes</dfn> getter steps are to return [=this=]'s [=Proofreader/include correction types=].
+
+The <dfn attribute for="Proofreader">type</dfn> getter steps are to return [=this=]'s [=Proofreader/include correction explanations=].
+
+The <dfn attribute for="Proofreader">expectedInputLanguages</dfn> getter steps are to return [=this=]'s [=Proofreader/expected input languages=].
+
+The <dfn attribute for="Proofreader">correctionExplanationLanguage</dfn> getter steps are to return [=this=]'s [=Proofreader/correction explanation language=].
+
+<hr>
+
+<div algorithm>
+  The <dfn method for="Proofreader">proofread(|input|, |options|)</dfn> method steps are:
+
+  1. Let |operation| be an algorithm step which takes arguments |chunkProduced|, |done|, |error|, and |stopProducing|, and [=proofreads=] |input| given [=this=]'s [=Proofreader/include correction types=], [=this=]'s [=Proofreader/include correction explanations=], [=this=]'s [=Proofreader/correction explanation language=], |chunkProduced|, |done|, |error|, and |stopProducing|.
+
+  1. Return the result of [=getting an aggregated AI model result=] given [=this=], |options|, and |operation|.
+    </div>
+
+<div algorithm>
+  The <dfn method for="Proofreader">measureInputUsage(|input|, |options|)</dfn> method steps are:
+
+  1. Let |measureUsage| be an algorithm step which takes argument |stopMeasuring|, and returns the result of [=measuring proofreader input usage=] given |input|, [=this=]'s [=Proofreader/include correction types=], [=this=]'s [=Proofreader/include correction explanationse=], [=this=]'s [=Proofreader/correction explanation language=], and |stopMeasuring|.
+
+  1. Return the result of [=measuring AI model input usage=] given [=this=], |options|, and |measureUsage|.
+    </div>
+
 
 <h2 id="supporting">Shared infrastructure</h2>
 
