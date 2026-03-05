@@ -93,6 +93,72 @@ dictionary ProofreadCorrection {
 enum CorrectionType { "spelling", "punctuation", "capitalization", "grammar" };
 </xmp>
 
+<h3 id="proofreader-creation">Creation</h3>
+
+<div algorithm>
+  The static <dfn method for="Proofreader">create(|options|)</dfn> method steps are:
+
+  1. Return the result of [=creating an AI model object=] given |options|, "{{proofreader}}", [=validate and canonicalize proofreader options=], [=computing proofreader options availability=], [=download the proofreader model=], [=initialize the proofreader model=], [=create a proofreader object=], and false.
+</div>
+
+<div algorithm>
+  To <dfn>validate and canonicalize proofreader options</dfn> given a {{ProofreaderCreateCoreOptions}} |options|, perform the following steps. They mutate |options| in place to canonicalize and deduplicate language tags, and throw an exception if any are invalid.
+
+  1. [=Validate and canonicalize language tags=] given |options| and "{{ProofreaderCreateCoreOptions/expectedInputLanguages}}".
+
+  1. [=Validate and canonicalize language tags=] given |options| and "{{ProofreaderCreateCoreOptions/correctionExplanationLanguage}}".
+</div>
+
+<div algorithm>
+  To <dfn>download the proofreader model</dfn>, given a {{ProofreaderCreateCoreOptions}} |options|:
+
+  1. [=Assert=]: these steps are running [=in parallel=].
+
+  1. Initiate the download process for everything the user agent needs to proofread text according to |options|. This could include a base AI model, fine-tunings for specific languages or option values, or other resources.
+
+  1. If the download process cannot be started for any reason, then return false.
+
+  1. Return true.
+</div>
+
+<div algorithm>
+  To <dfn>initialize the proofreader model</dfn>, given a {{ProofreaderCreateOptions}} |options|:
+
+  1. [=Assert=]: these steps are running [=in parallel=].
+
+  1. Perform any necessary initialization operations for the AI model backing the user agent's proofreading capabilities.
+
+    This could include loading the model into memory, or loading any fine-tunings necessary to support the other options expressed by |options|.
+
+  1. If initialization failed for any other reason, then return a [=DOMException error information=] whose [=DOMException error information/name=] is "{{OperationError}}" and whose [=DOMException error information/details=] contain appropriate detail.
+
+  1. Return null.
+</div>
+
+<div algorithm>
+  To <dfn>create a proofreader object</dfn>, given a [=ECMAScript/realm=] |realm| and a {{ProofreadererCreateOptions}} |options|:
+
+  1. [=Assert=]: these steps are running on |realm|'s [=ECMAScript/surrounding agent=]'s [=agent/event loop=].
+
+  1. Return a new {{Proofreader}} object, created in |realm|, with
+
+    <dl class="props">
+ boolean includeCorrectionTypes = false;
+    boolean includeCorrectionExplanations = false;
+      : [=Proofreader/whether to include correction types=]
+      :: |options|["{{ProofreaderCreateCoreOptions/includeCorrectionTypes}}"] default to false
+
+      : [=Proofreader/whether to include correction explanations=]
+      :: |options|["{{ProofreaderCreateCoreOptions/includeCorrectionExplanations}}"] default to false
+
+      : [=Proofreader/expected input languages=]
+      :: the result of [=creating a frozen array=] given |options|["{{ProofreaderCreateCoreOptions/expectedInputLanguages}}"] if it [=set/is empty|is not empty=]; otherwise null
+
+      : [=Proofreader/output language=]
+      :: |options|["{{ProofreaderCreateCoreOptions/outputLanguage}}"] if it [=map/exists=]; otherwise null
+    </dl>
+</div>
+
 <h2 id="supporting">Shared infrastructure</h2>
 
 <h3 id="shared-apis">Common APIs</h3>
