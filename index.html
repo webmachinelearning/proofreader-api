@@ -8,7 +8,7 @@
   <meta content="Bikeshed version 0ef803fdf, updated Tue Jan 6 11:59:39 2026 -0800" name="generator">
   <link href="https://webmachinelearning.github.io/proofreader-api" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="3d85366691a6dbb7e040b2ee87f45a4afa71700c" name="revision">
+  <meta content="d7c600d3a45c7c69511b933b41e24b4b4450f5a0" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -700,6 +700,49 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
 }
 </style>
+<style>/* Boilerplate: style-var-click-highlighting */
+/*
+Colors were chosen in Lab using https://nixsensor.com/free-color-converter/
+D50 2deg illuminant, L in [0,100], a and b in [-128, 128]
+0 = lab(85,0,85)
+1 = lab(85,80,30)
+2 = lab(85,-40,40)
+3 = lab(85,-50,0)
+4 = lab(85,5,15)
+5 = lab(85,-10,-50)
+6 = lab(85,35,-15)
+
+For darkmode:
+0 = oklab(50%   0%  108%)
+1 = oklab(50% -51%   51%)
+2 = oklab(50% -64%  -20%)
+3 = oklab(50%   6%   19%)
+4 = oklab(50% -12%  -64%)
+5 = oklab(50%  44%  -19%)  
+6 = oklab(50% 102%   38%)
+*/
+
+[data-algorithm] var { cursor: pointer; }
+var[data-var-color] { background-color: var(--var-bg); box-shadow: 0 0 0 2px var(--var-bg); }
+
+var[data-var-color] { --var-bg: #F4D200; }
+var[data-var-color="1"] { --var-bg: #FF87A2; }
+var[data-var-color="2"] { --var-bg: #96E885; }
+var[data-var-color="3"] { --var-bg: #3EEED2; }
+var[data-var-color="4"] { --var-bg: #EACFB6; }
+var[data-var-color="5"] { --var-bg: #82DDFF; }
+var[data-var-color="6"] { --var-vg: #FFBCF2; }
+
+@media (prefers-color-scheme: dark) {
+	var[data-var-color] { --var-bg: #bc1a00; }
+	var[data-var-color="1"] { --var-bg: #007f00; }
+	var[data-var-color="2"] { --var-bg: #008698; }
+	var[data-var-color="3"] { --var-bg: #7f5b2b; }
+	var[data-var-color="4"] { --var-bg: #004df3; }
+	var[data-var-color="5"] { --var-bg: #a1248a; }
+	var[data-var-color="6"] { --var-vg: #ff0000; }
+}
+</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://webmachinelearning.github.io/">
@@ -753,7 +796,14 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    <h2 class="no-num no-ref no-toc" id="contents">Table of Contents</h2>
    <ol class="toc">
     <li><a href="#intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
-    <li><a href="#proofreader-api"><span class="secno">2</span> <span class="content">The proofreader API</span></a>
+    <li>
+     <a href="#proofreader-api"><span class="secno">2</span> <span class="content">The proofreader API</span></a>
+     <ol class="toc">
+      <li><a href="#proofreader-creation"><span class="secno">2.1</span> <span class="content">Creation</span></a>
+      <li><a href="#proofreader-availability"><span class="secno">2.2</span> <span class="content">Availability</span></a>
+      <li><a href="#supporting-language-availability"><span class="secno">2.3</span> <span class="content">Language availability</span></a>
+      <li><a href="#the-proofreader-class"><span class="secno">2.4</span> <span class="content">The <code class="idl"><span>Proofreader</span></code> class</span></a>
+     </ol>
     <li>
      <a href="#supporting"><span class="secno">3</span> <span class="content">Shared infrastructure</span></a>
      <ol class="toc">
@@ -784,19 +834,19 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    <h2 class="heading settled" data-level="2" id="proofreader-api"><span class="secno">2. </span><span class="content">The proofreader API</span><a class="self-link" href="#proofreader-api"></a></h2>
 <pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext"><c- g>SecureContext</c-></a>]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="proofreader"><code><c- g>Proofreader</c-></code></dfn> {
-    <c- b>static</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#proofreader" id="ref-for-proofreader"><c- n>Proofreader</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="method" data-export data-lt="create(options)|create()" id="dom-proofreader-create"><code><c- g>create</c-></code></dfn>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreadercreateoptions" id="ref-for-dictdef-proofreadercreateoptions"><c- n>ProofreaderCreateOptions</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader/create(options), Proofreader/create()" data-dfn-type="argument" data-export id="dom-proofreader-create-options-options"><code><c- g>options</c-></code></dfn> = {});
-    <c- b>static</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-availability" id="ref-for-enumdef-availability"><c- n>Availability</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="method" data-export data-lt="availability(options)|availability()" id="dom-proofreader-availability"><code><c- g>availability</c-></code></dfn>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreadercreatecoreoptions" id="ref-for-dictdef-proofreadercreatecoreoptions"><c- n>ProofreaderCreateCoreOptions</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader/availability(options), Proofreader/availability()" data-dfn-type="argument" data-export id="dom-proofreader-availability-options-options"><code><c- g>options</c-></code></dfn> = {});
+    <c- b>static</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#proofreader" id="ref-for-proofreader"><c- n>Proofreader</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-proofreader-create" id="ref-for-dom-proofreader-create"><c- g>create</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreadercreateoptions" id="ref-for-dictdef-proofreadercreateoptions"><c- n>ProofreaderCreateOptions</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader/create(options), Proofreader/create()" data-dfn-type="argument" data-export id="dom-proofreader-create-options-options"><code><c- g>options</c-></code></dfn> = {});
+    <c- b>static</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-availability" id="ref-for-enumdef-availability"><c- n>Availability</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-proofreader-availability" id="ref-for-dom-proofreader-availability"><c- g>availability</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreadercreatecoreoptions" id="ref-for-dictdef-proofreadercreatecoreoptions"><c- n>ProofreaderCreateCoreOptions</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader/availability(options), Proofreader/availability()" data-dfn-type="argument" data-export id="dom-proofreader-availability-options-options"><code><c- g>options</c-></code></dfn> = {});
 
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise②"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-proofreadresult" id="ref-for-dictdef-proofreadresult"><c- n>ProofreadResult</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="method" data-export data-lt="proofread(input, options)|proofread(input)" id="dom-proofreader-proofread"><code><c- g>proofread</c-></code></dfn>(
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise②"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-proofreadresult" id="ref-for-dictdef-proofreadresult"><c- n>ProofreadResult</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-proofreader-proofread" id="ref-for-dom-proofreader-proofread"><c- g>proofread</c-></a>(
         <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader/proofread(input, options), Proofreader/proofread(input)" data-dfn-type="argument" data-export id="dom-proofreader-proofread-input-options-input"><code><c- g>input</c-></code></dfn>,
         <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreaderproofreadoptions" id="ref-for-dictdef-proofreaderproofreadoptions"><c- n>ProofreaderProofreadOptions</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader/proofread(input, options), Proofreader/proofread(input)" data-dfn-type="argument" data-export id="dom-proofreader-proofread-input-options-options"><code><c- g>options</c-></code></dfn> = {}
     );
 
-    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="attribute" data-export data-readonly data-type="boolean" id="dom-proofreader-includecorrectiontypes"><code><c- g>includeCorrectionTypes</c-></code></dfn>;
+    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="boolean" href="#dom-proofreader-includecorrectiontypes" id="ref-for-dom-proofreader-includecorrectiontypes"><c- g>includeCorrectionTypes</c-></a>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean①"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="attribute" data-export data-readonly data-type="boolean" id="dom-proofreader-includecorrectionexplanations"><code><c- g>includeCorrectionExplanations</c-></code></dfn>;
 
-    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-frozen-array" id="ref-for-idl-frozen-array"><c- b>FrozenArray</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>>? <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="attribute" data-export data-readonly data-type="FrozenArray<DOMString>?" id="dom-proofreader-expectedinputlanguages"><code><c- g>expectedInputLanguages</c-></code></dfn>;
-    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="attribute" data-export data-readonly data-type="DOMString?" id="dom-proofreader-outputlanguage"><code><c- g>outputLanguage</c-></code></dfn>;
+    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-frozen-array" id="ref-for-idl-frozen-array"><c- b>FrozenArray</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="FrozenArray<DOMString>?" href="#dom-proofreader-expectedinputlanguages" id="ref-for-dom-proofreader-expectedinputlanguages"><c- g>expectedInputLanguages</c-></a>;
+    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="DOMString?" href="#dom-proofreader-correctionexplanationlanguage" id="ref-for-dom-proofreader-correctionexplanationlanguage"><c- g>correctionExplanationLanguage</c-></a>;
 };
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-proofreadercreatecoreoptions"><code><c- g>ProofreaderCreateCoreOptions</c-></code></dfn> {
@@ -804,7 +854,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean③"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-default="false" data-dfn-for="ProofreaderCreateCoreOptions" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-proofreadercreatecoreoptions-includecorrectionexplanations"><code><c- g>includeCorrectionExplanations</c-></code></dfn> = <c- b>false</c->;
 
     <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③"><c- b>DOMString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreaderCreateCoreOptions" data-dfn-type="dict-member" data-export data-type="sequence<DOMString>" id="dom-proofreadercreatecoreoptions-expectedinputlanguages"><code><c- g>expectedInputLanguages</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreaderCreateCoreOptions" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-proofreadercreatecoreoptions-outputlanguage"><code><c- g>outputLanguage</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ProofreaderCreateCoreOptions" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-proofreadercreatecoreoptions-correctionexplanationlanguage"><code><c- g>correctionExplanationLanguage</c-></code></dfn>;
 };
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-proofreadercreateoptions"><code><c- g>ProofreaderCreateOptions</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-proofreadercreatecoreoptions" id="ref-for-dictdef-proofreadercreatecoreoptions①"><c- n>ProofreaderCreateCoreOptions</c-></a> {
@@ -831,6 +881,316 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
 
 <c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-correctiontype"><code><c- g>CorrectionType</c-></code></dfn> { <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-spelling"><code><c- s>"spelling"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-punctuation"><code><c- s>"punctuation"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-capitalization"><code><c- s>"capitalization"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="CorrectionType" data-dfn-type="enum-value" data-export id="dom-correctiontype-grammar"><code><c- s>"grammar"</c-></code></dfn> };
 </pre>
+   <h3 class="heading settled" data-level="2.1" id="proofreader-creation"><span class="secno">2.1. </span><span class="content">Creation</span><a class="self-link" href="#proofreader-creation"></a></h3>
+   <div class="algorithm" data-algorithm="create(options)" data-algorithm-for="Proofreader">
+    
+  The static <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="method" data-export data-lt="create(options)|create()" id="dom-proofreader-create"><code>create(<var>options</var>)</code></dfn> method steps are:
+
+
+    <ol>
+     <li data-md>
+      <p>Return the result of <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#create-an-ai-model-object" id="ref-for-create-an-ai-model-object">creating an AI model object</a> given <var>options</var>, "<code class="idl"><a data-link-type="idl" href="#proofreader" id="ref-for-proofreader①">Proofreader</a></code>", <a data-link-type="dfn" href="#validate-and-canonicalize-proofreader-options" id="ref-for-validate-and-canonicalize-proofreader-options">validate and canonicalize proofreader options</a>, <a data-link-type="dfn" href="#compute-proofreader-options-availability" id="ref-for-compute-proofreader-options-availability">compute proofreader options availability</a>, <a data-link-type="dfn" href="#download-the-proofreader-model" id="ref-for-download-the-proofreader-model">download the proofreader model</a>, <a data-link-type="dfn" href="#initialize-the-proofreader-model" id="ref-for-initialize-the-proofreader-model">initialize the proofreader model</a>, <a data-link-type="dfn" href="#create-a-proofreader-object" id="ref-for-create-a-proofreader-object">create a proofreader object</a>, and false.</p>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="validate and canonicalize proofreader options">
+    
+  To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="validate-and-canonicalize-proofreader-options">validate and canonicalize proofreader options</dfn> given a <code class="idl"><a data-link-type="idl" href="#dictdef-proofreadercreatecoreoptions" id="ref-for-dictdef-proofreadercreatecoreoptions②">ProofreaderCreateCoreOptions</a></code> <var>options</var>, perform the following steps. They mutate <var>options</var> in place to canonicalize and deduplicate language tags, and throw an exception if any are invalid.
+
+
+    <ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#validate-and-canonicalize-language-tags" id="ref-for-validate-and-canonicalize-language-tags">Validate and canonicalize language tags</a> given <var>options</var> and "<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-expectedinputlanguages" id="ref-for-dom-proofreadercreatecoreoptions-expectedinputlanguages">expectedInputLanguages</a></code>".</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#validate-and-canonicalize-language-tags" id="ref-for-validate-and-canonicalize-language-tags①">Validate and canonicalize language tags</a> given <var>options</var> and "<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-correctionexplanationlanguage" id="ref-for-dom-proofreadercreatecoreoptions-correctionexplanationlanguage">correctionExplanationLanguage</a></code>".</p>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="download the proofreader model">
+    
+  To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="download-the-proofreader-model">download the proofreader model</dfn>, given a <code class="idl"><a data-link-type="idl" href="#dictdef-proofreadercreatecoreoptions" id="ref-for-dictdef-proofreadercreatecoreoptions③">ProofreaderCreateCoreOptions</a></code> <var>options</var>:
+
+
+    <ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert">Assert</a>: these steps are running <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel">in parallel</a>.</p>
+     <li data-md>
+      <p>Initiate the download process for everything the user agent needs to proofread text according to <var>options</var>. This could include a base AI model, fine-tunings for specific languages or option values, or other resources.</p>
+     <li data-md>
+      <p>If the download process cannot be started for any reason, then return false.</p>
+     <li data-md>
+      <p>Return true.</p>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="initialize the proofreader model">
+    
+  To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="initialize-the-proofreader-model">initialize the proofreader model</dfn>, given a <code class="idl"><a data-link-type="idl" href="#dictdef-proofreadercreateoptions" id="ref-for-dictdef-proofreadercreateoptions①">ProofreaderCreateOptions</a></code> <var>options</var>:
+
+
+    <ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert①">Assert</a>: these steps are running <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①">in parallel</a>.</p>
+     <li data-md>
+      <p>Perform any necessary initialization operations for the AI model backing the user agent’s proofreading capabilities.</p>
+      <p>This could include loading the model into memory, or loading any fine-tunings necessary to support the other options expressed by <var>options</var>.</p>
+     <li data-md>
+      <p>If initialization failed for any other reason, then return a <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information" id="ref-for-domexception-error-information">DOMException error information</a> whose <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information-name" id="ref-for-domexception-error-information-name">name</a> is "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#operationerror" id="ref-for-operationerror">OperationError</a></code>" and whose <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information-details" id="ref-for-domexception-error-information-details">details</a> contain appropriate detail.</p>
+     <li data-md>
+      <p>Return null.</p>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="create a proofreader object">
+    
+  To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="create-a-proofreader-object">create a proofreader object</dfn>, given a <a data-link-type="dfn" href="https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#realm" id="ref-for-realm">realm</a> <var>realm</var> and a <code class="idl"><a data-link-type="idl" href="#dictdef-proofreadercreateoptions" id="ref-for-dictdef-proofreadercreateoptions②">ProofreaderCreateOptions</a></code> <var>options</var>:
+
+
+    <ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert②">Assert</a>: these steps are running on <var>realm</var>’s <a data-link-type="dfn" href="https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#surrounding-agent" id="ref-for-surrounding-agent">surrounding agent</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop" id="ref-for-concept-agent-event-loop">event loop</a>.</p>
+     <li data-md>
+      <p>Return a new <code class="idl"><a data-link-type="idl" href="#proofreader" id="ref-for-proofreader②">Proofreader</a></code> object, created in <var>realm</var>, with</p>
+      <dl class="props">
+       <dt data-md><a data-link-type="dfn" href="#proofreader-include-correction-type" id="ref-for-proofreader-include-correction-type">include correction types</a>
+       <dd data-md>
+        <p><var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-includecorrectiontypes" id="ref-for-dom-proofreadercreatecoreoptions-includecorrectiontypes">includeCorrectionTypes</a></code>"] default to false</p>
+       <dt data-md><a data-link-type="dfn" href="#proofreader-include-correction-explanations" id="ref-for-proofreader-include-correction-explanations">include correction explanations</a>
+       <dd data-md>
+        <p><var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-includecorrectionexplanations" id="ref-for-dom-proofreadercreatecoreoptions-includecorrectionexplanations">includeCorrectionExplanations</a></code>"] default to false</p>
+       <dt data-md><a data-link-type="dfn" href="#proofreader-expected-input-languages" id="ref-for-proofreader-expected-input-languages">expected input languages</a>
+       <dd data-md>
+        <p>the result of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-create-frozen-array" id="ref-for-dfn-create-frozen-array">creating a frozen array</a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-expectedinputlanguages" id="ref-for-dom-proofreadercreatecoreoptions-expectedinputlanguages①">expectedInputLanguages</a></code>"] if it <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-is-empty" id="ref-for-list-is-empty">is not empty</a>; otherwise null</p>
+       <dt data-md><a data-link-type="dfn" href="#proofreader-correction-explanation-language" id="ref-for-proofreader-correction-explanation-language">correction explanation language</a>
+       <dd data-md>
+        <p><var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-correctionexplanationlanguage" id="ref-for-dom-proofreadercreatecoreoptions-correctionexplanationlanguage①">correctionExplanationLanguage</a></code>"] if it <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exists</a>; otherwise null</p>
+      </dl>
+    </ol>
+   </div>
+   <h3 class="heading settled" data-level="2.2" id="proofreader-availability"><span class="secno">2.2. </span><span class="content">Availability</span><a class="self-link" href="#proofreader-availability"></a></h3>
+   <div class="algorithm" data-algorithm="availability(options)" data-algorithm-for="Proofreader">
+    
+  The static <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="method" data-export data-lt="availability(options)|availability()" id="dom-proofreader-availability"><code>availability(<var>options</var>)</code></dfn> method steps are:
+
+
+    <ol>
+     <li data-md>
+      <p>Return the result of <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#compute-ai-model-availability" id="ref-for-compute-ai-model-availability">computing AI model availability</a> given <var>options</var>, "<code class="idl"><a data-link-type="idl" href="#proofreader" id="ref-for-proofreader③">Proofreader</a></code>", <a data-link-type="dfn" href="#validate-and-canonicalize-proofreader-options" id="ref-for-validate-and-canonicalize-proofreader-options①">validate and canonicalize proofreader options</a>, and <a data-link-type="dfn" href="#compute-proofreader-options-availability" id="ref-for-compute-proofreader-options-availability①">compute proofreader options availability</a>.</p>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="compute proofreader options availability">
+    
+  To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="compute-proofreader-options-availability">compute proofreader options availability</dfn> given a <code class="idl"><a data-link-type="idl" href="#dictdef-proofreadercreatecoreoptions" id="ref-for-dictdef-proofreadercreatecoreoptions④">ProofreaderCreateCoreOptions</a></code> <var>options</var>, perform the following steps. They return either an <code class="idl"><a data-link-type="idl" href="#enumdef-availability" id="ref-for-enumdef-availability①">Availability</a></code> value or null, and they mutate <var>options</var> in place to update language tags to their best-fit matches.
+
+
+    <ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert③">Assert</a>: this algorithm is running <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②">in parallel</a>.</p>
+     <li data-md>
+      <p>Let <var>availability</var> be the <a data-link-type="dfn" href="#proofreader-non-language-options-availability" id="ref-for-proofreader-non-language-options-availability">proofreader non-language options availability</a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-includecorrectiontypes" id="ref-for-dom-proofreadercreatecoreoptions-includecorrectiontypes①">includeCorrectionTypes</a></code>"], <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-includecorrectionexplanations" id="ref-for-dom-proofreadercreatecoreoptions-includecorrectionexplanations①">includeCorrectionExplanations</a></code>"].</p>
+     <li data-md>
+      <p>Let <var>double</var> be the <a data-link-type="dfn" href="#proofreader-language-availabilities-double" id="ref-for-proofreader-language-availabilities-double">proofreader language availabilities double</a>.</p>
+     <li data-md>
+      <p>If <var>double</var> is null, then return null.</p>
+     <li data-md>
+      <p>Let <var>inputLanguageAvailability</var> be the result of <a data-link-type="dfn" href="#compute-language-availability" id="ref-for-compute-language-availability">computing language availability</a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-expectedinputlanguages" id="ref-for-dom-proofreadercreatecoreoptions-expectedinputlanguages②">expectedInputLanguages</a></code>"] and <var>double</var>’s <a data-link-type="dfn" href="#language-availabilities-double-input-languages" id="ref-for-language-availabilities-double-input-languages">input languages</a>.</p>
+     <li data-md>
+      <p>Let <var>correctionExplanationLanguagesList</var> be « <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-correctionexplanationlanguage" id="ref-for-dom-proofreadercreatecoreoptions-correctionexplanationlanguage②">correctionExplanationLanguage</a></code>"] ».</p>
+     <li data-md>
+      <p>Let <var>correctionExplanationLanguageAvailability</var> be the result of <a data-link-type="dfn" href="#compute-language-availability" id="ref-for-compute-language-availability①">computing language availability</a> given <var>correctionExplanationLanguagesList</var> and <var>double</var>’s <a data-link-type="dfn" href="#language-availabilities-double-correction-explanation-languages" id="ref-for-language-availabilities-double-correction-explanation-languages">correction explanation languages</a>.</p>
+     <li data-md>
+      <p>Set <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-proofreadercreatecoreoptions-correctionexplanationlanguage" id="ref-for-dom-proofreadercreatecoreoptions-correctionexplanationlanguage③">correctionExplanationLanguage</a></code>"] to <var>correctionExplanationLanguagesList</var>[0].</p>
+     <li data-md>
+      <p>Return the <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#availability-minimum-availability" id="ref-for-availability-minimum-availability">minimum availability</a> given « <var>availability</var>, <var>inputLanguageAvailability</var>, <var>correctionExplanationLanguageAvailability</var> ».</p>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="proofreader non-language options availability">
+    
+  The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="proofreader-non-language-options-availability">proofreader non-language options availability</dfn>, given a boolean <var>includeCorrectionTypes</var> and a boolean <var>includeCorrectionExplanations</var>, is given by the following steps. They return an <code class="idl"><a data-link-type="idl" href="#enumdef-availability" id="ref-for-enumdef-availability②">Availability</a></code> value or null.
+
+
+    <ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert④">Assert</a>: this algorithm is running <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>.</p>
+     <li data-md>
+      <p>If there is some error attempting to determine whether the user agent <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports" id="ref-for-model-availability-currently-supports">can support</a> proofreading text, which the user agent believes to be transient (such that re-querying could stop producing such an error), then return null.</p>
+     <li data-md>
+      <p>If the user agent <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports" id="ref-for-model-availability-currently-supports①">currently supports</a> proofreading text with/without correction types as described by <var>includeCorrectionTypes</var> and with/without correction explanations as described by <var>includeCorrectionExplanations</var>, then return "<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available">available</a></code>".</p>
+     <li data-md>
+      <p>If the user agent believes it will be able to <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports" id="ref-for-model-availability-currently-supports②">support</a> proofreading text according to <var>includeCorrectionTypes</var> and <var>includeCorrectionExplanations</var>, but only after finishing a download that is already ongoing, then return "<code class="idl"><a data-link-type="idl" href="#dom-availability-downloading" id="ref-for-dom-availability-downloading">downloading</a></code>".</p>
+     <li data-md>
+      <p>If the user agent believes it will be able to <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports" id="ref-for-model-availability-currently-supports③">support</a> proofreading text according to <var>includeCorrectionTypes</var> and <var>includeCorrectionExplanations</var>, but only after performing a not-currently-ongoing download, then return "<code class="idl"><a data-link-type="idl" href="#dom-availability-downloadable" id="ref-for-dom-availability-downloadable">downloadable</a></code>".</p>
+     <li data-md>
+      <p>Otherwise, return "<code class="idl"><a data-link-type="idl" href="#dom-availability-unavailable" id="ref-for-dom-availability-unavailable">unavailable</a></code>".</p>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="proofreader language availabilities double">
+    
+  The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="proofreader-language-availabilities-double">proofreader language availabilities double</dfn> is given by the following steps. They return a <a data-link-type="dfn" href="#language-availabilities-double" id="ref-for-language-availabilities-double">language availabilities double</a> or null.
+
+
+    <ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑤">Assert</a>: this algorithm is running <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel④">in parallel</a>.</p>
+     <li data-md>
+      <p>If there is some error attempting to determine whether the user agent <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports" id="ref-for-model-availability-currently-supports④">can support</a> proofreading text, which the user agent believes to be transient (such that re-querying could stop producing such an error), then return null.</p>
+     <li data-md>
+      <p>Return a <a data-link-type="dfn" href="#language-availabilities-double" id="ref-for-language-availabilities-double①">language availabilities double</a> with:</p>
+      <dl class="props">
+       <dt data-md><a data-link-type="dfn" href="#language-availabilities-double-input-languages" id="ref-for-language-availabilities-double-input-languages①">input languages</a>
+       <dd data-md>
+        <p>the result of <a data-link-type="dfn" href="#get-the-language-availabilities-partition" id="ref-for-get-the-language-availabilities-partition">getting the language availabilities partition</a> given the purpose of proofreading text written in that language</p>
+       <dt data-md><a data-link-type="dfn" href="#language-availabilities-double-correction-explanation-languages" id="ref-for-language-availabilities-double-correction-explanation-languages①">correction explanation languages</a>
+       <dd data-md>
+        <p>the result of <a data-link-type="dfn" href="#get-the-language-availabilities-partition" id="ref-for-get-the-language-availabilities-partition①">getting the language availabilities partition</a> given the purpose of producing text explanations of proofreading corrections in that language</p>
+      </dl>
+    </ol>
+   </div>
+   <div class="example" id="example-subtags-chinese">
+    <a class="self-link" href="#example-subtags-chinese"></a>
+  A common setup seen in today’s software is to support two types of written Chinese: "traditional Chinese" and "simplified Chinese". Let’s suppose that the user agent supports summarizing text written in traditional Chinese with no downloads, and simplified Chinese after a download.
+
+
+    <p>One way this could be implemented would be for <a data-link-type="dfn" href="#proofreader-language-availabilities-double" id="ref-for-proofreader-language-availabilities-double①">proofreader language availabilities double</a> to return that "<code>zh-Hant</code>" is in the <a data-link-type="dfn" href="#language-availabilities-double-input-languages" id="ref-for-language-availabilities-double-input-languages②">input languages</a>["<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available①">available</a></code>"] set, and "<code>zh</code>" and "<code>zh-Hans</code>" are in the <a data-link-type="dfn" href="#language-availabilities-double-input-languages" id="ref-for-language-availabilities-double-input-languages③">input languages</a>["<code class="idl"><a data-link-type="idl" href="#dom-availability-downloadable" id="ref-for-dom-availability-downloadable①">downloadable</a></code>"] set. This return value conforms to the requirements of the language tag set completeness rules, in ensuring that "<code>zh</code>" is present. Per <a class="allow-2119" href="#language-tag-completeness-implementation-defined">the "should"-level guidance</a>, the implementation has determined that "<code>zh</code>" belongs in the set of downloadable input languages, with "<code>zh-Hans</code>", instead of in the set of available input languages, with "<code>zh-Hant</code>".</p>
+    <p>Combined with the use of <a data-link-type="abstract-op" href="https://tc39.es/ecma402/#sec-lookupmatchinglocalebybestfit" id="ref-for-sec-lookupmatchinglocalebybestfit">LookupMatchingLocaleByBestFit</a>, this means <code class="idl"><a data-link-type="idl" href="#dom-proofreader-availability" id="ref-for-dom-proofreader-availability①">availability()</a></code> will give the following answers:</p>
+<pre class="highlight language-js"><c- a>function</c-> a<c- p>(</c->languageTag<c- p>)</c-> <c- p>{</c->
+  <c- k>return</c-> Proofreader<c- p>.</c->availability<c- p>({</c->
+    expectedInputLanguages<c- o>:</c-> <c- p>[</c->languageTag<c- p>]</c->
+  <c- p>});</c->
+<c- p>}</c->
+
+<c- k>await</c-> a<c- p>(</c-><c- u>"zh"</c-><c- p>)</c-> <c- o>===</c-> <c- u>"downloadable"</c-><c- p>;</c->
+<c- k>await</c-> a<c- p>(</c-><c- u>"zh-Hant"</c-><c- p>)</c-> <c- o>===</c-> <c- u>"available"</c-><c- p>;</c->
+<c- k>await</c-> a<c- p>(</c-><c- u>"zh-Hans"</c-><c- p>)</c-> <c- o>===</c-> <c- u>"downloadable"</c-><c- p>;</c->
+
+<c- k>await</c-> a<c- p>(</c-><c- u>"zh-TW"</c-><c- p>)</c-> <c- o>===</c-> <c- u>"available"</c-><c- p>;</c->      <c- c1>// zh-TW will best-fit to zh-Hant</c->
+<c- k>await</c-> a<c- p>(</c-><c- u>"zh-HK"</c-><c- p>)</c-> <c- o>===</c-> <c- u>"available"</c-><c- p>;</c->      <c- c1>// zh-HK will best-fit to zh-Hant</c->
+<c- k>await</c-> a<c- p>(</c-><c- u>"zh-CN"</c-><c- p>)</c-> <c- o>===</c-> <c- u>"downloadable"</c-><c- p>;</c->   <c- c1>// zh-CN will best-fit to zh-Hans</c->
+
+<c- k>await</c-> a<c- p>(</c-><c- u>"zh-BR"</c-><c- p>)</c-> <c- o>===</c-> <c- u>"downloadable"</c-><c- p>;</c->   <c- c1>// zh-BR will best-fit to zh</c->
+<c- k>await</c-> a<c- p>(</c-><c- u>"zh-Kana"</c-><c- p>)</c-> <c- o>===</c-> <c- u>"downloadable"</c-><c- p>;</c-> <c- c1>// zh-Kana will best-fit to zh</c->
+</pre>
+   </div>
+   <h3 class="heading settled" data-level="2.3" id="supporting-language-availability"><span class="secno">2.3. </span><span class="content">Language availability</span><a class="self-link" href="#supporting-language-availability"></a></h3>
+   <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="language-availabilities-partition">language availabilities partition</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">map</a> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-keys" id="ref-for-map-getting-the-keys">keys</a> are "<code class="idl"><a data-link-type="idl" href="#dom-availability-downloading" id="ref-for-dom-availability-downloading①">downloading</a></code>", "<code class="idl"><a data-link-type="idl" href="#dom-availability-downloadable" id="ref-for-dom-availability-downloadable②">downloadable</a></code>", or "<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available②">available</a></code>", and whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values">values</a> are <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">sets</a> of strings representing <a data-link-type="dfn" href="https://tc39.es/ecma402/#sec-language-tags" id="ref-for-sec-language-tags">Unicode canonicalized locale identifiers</a>. <a data-link-type="biblio" href="#biblio-ecma-402" title="ECMAScript Internationalization API Specification">[ECMA-402]</a></p>
+   <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="language-availabilities-double">language availabilities double</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> with the following <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a>:</p>
+   <ul>
+    <li data-md>
+     <p><dfn class="dfn-paneled" data-dfn-for="language availabilities double" data-dfn-type="dfn" data-noexport id="language-availabilities-double-input-languages">input languages</dfn>, a <a data-link-type="dfn" href="#language-availabilities-partition" id="ref-for-language-availabilities-partition">language availabilities partition</a></p>
+    <li data-md>
+     <p><dfn class="dfn-paneled" data-dfn-for="language availabilities double" data-dfn-type="dfn" data-noexport id="language-availabilities-double-correction-explanation-languages">correction explanation languages</dfn>, a <a data-link-type="dfn" href="#language-availabilities-partition" id="ref-for-language-availabilities-partition①">language availabilities partition</a></p>
+   </ul>
+   <div class="algorithm" data-algorithm="get the language availabilities partition">
+    
+  To <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="get-the-language-availabilities-partition">get the language availabilities partition</dfn> given a description <var>purpose</var> of the purpose for which we’re checking language availability:
+
+
+    <ol>
+     <li data-md>
+      <p>Let <var>partition</var> be «[ "<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available③">available</a></code>" → an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set①">set</a>, "<code class="idl"><a data-link-type="idl" href="#dom-availability-downloading" id="ref-for-dom-availability-downloading②">downloading</a></code>" → an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set②">set</a>, "<code class="idl"><a data-link-type="idl" href="#dom-availability-downloadable" id="ref-for-dom-availability-downloadable③">downloadable</a></code>" → an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set③">set</a> ]».</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate">For each</a> human language <var>languageTag</var>, represented as a <a data-link-type="dfn" href="https://tc39.es/ecma402/#sec-language-tags" id="ref-for-sec-language-tags①">Unicode canonicalized locale identifier</a>, for which the user agent <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports" id="ref-for-model-availability-currently-supports⑤">currently supports</a> <var>purpose</var>:</p>
+      <ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>languageTag</var> to <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available④">available</a></code>"].</p>
+      </ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">For each</a> human language <var>languageTag</var>, represented as a <a data-link-type="dfn" href="https://tc39.es/ecma402/#sec-language-tags" id="ref-for-sec-language-tags②">Unicode canonicalized locale identifier</a>, for which the user agent believes it will be able to <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports" id="ref-for-model-availability-currently-supports⑥">support</a> <var>purpose</var>, but only after finishing a download that is already ongoing:</p>
+      <ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append①">Append</a> <var>languageTag</var> to <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-downloading" id="ref-for-dom-availability-downloading③">downloading</a></code>"].</p>
+      </ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">For each</a> human language <var>languageTag</var>, represented as a <a data-link-type="dfn" href="https://tc39.es/ecma402/#sec-language-tags" id="ref-for-sec-language-tags③">Unicode canonicalized locale identifier</a>, for which the user agent believes it will be able to <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports" id="ref-for-model-availability-currently-supports⑦">support</a> <var>purpose</var>, but only after performing a not-currently-ongoing download:</p>
+      <ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append②">Append</a> <var>languageTag</var> to <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-downloadable" id="ref-for-dom-availability-downloadable④">downloadable</a></code>"].</p>
+      </ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑥">Assert</a>: <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available⑤">available</a></code>"], <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-downloading" id="ref-for-dom-availability-downloading④">downloading</a></code>"], and <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-downloadable" id="ref-for-dom-availability-downloadable⑤">downloadable</a></code>"] are disjoint.</p>
+     <li data-md>
+      <p>If the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-union" id="ref-for-set-union">union</a> of <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available⑥">available</a></code>"], <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-downloading" id="ref-for-dom-availability-downloading⑤">downloading</a></code>"], and <var>partition</var>["<code class="idl"><a data-link-type="idl" href="#dom-availability-downloadable" id="ref-for-dom-availability-downloadable⑥">downloadable</a></code>"] does not meet the language tag set completeness rules, then:</p>
+      <ol>
+       <li data-md>
+        <p>Let <var>missingLanguageTags</var> be the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set④">set</a> of missing language tags necessary for that union to meet the language tag set completeness rules.</p>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> <var>languageTag</var> of <var>missingLanguageTags</var>:</p>
+       <li data-md>
+        <p><span id="language-tag-completeness-implementation-defined"></span> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append③">Append</a> <var>languageTag</var> to one of the three sets. Which of the sets to append to is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#implementation-defined" id="ref-for-implementation-defined">implementation-defined</a>, and should be guided by considerations similar to that of <a data-link-type="abstract-op" href="https://tc39.es/ecma402/#sec-lookupmatchinglocalebybestfit" id="ref-for-sec-lookupmatchinglocalebybestfit①">LookupMatchingLocaleByBestFit</a> in terms of keeping "best fallback languages" together.</p>
+       <li data-md>
+        <p>Return <var>partition</var>.</p>
+      </ol>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="compute language availability">
+    
+  To <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="compute-language-availability">compute language availability</dfn> given an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set⑤">ordered set</a> of strings <var>requestedLanguages</var> and a  <a data-link-type="dfn" href="#language-availabilities-partition" id="ref-for-language-availabilities-partition②">language availabilities partition</a> <var>partition</var>, perform the following steps. They return an <code class="idl"><a data-link-type="idl" href="#enumdef-availability" id="ref-for-enumdef-availability③">Availability</a></code> value, and they mutate <var>requestedLanguages</var> in place to update language tags to their best-fit matches.
+
+
+    <ol>
+     <li data-md>
+      <p>Let <var>availability</var> be "<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available⑦">available</a></code>".</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate④">For each</a> <var>language</var> of <var>requestedLanguages</var>:</p>
+      <ol>
+       <li data-md>
+        <p>Let <var>unavailable</var> be true.</p>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑤">For each</a> <var>availabilityToCheck</var> of « "<code class="idl"><a data-link-type="idl" href="#dom-availability-available" id="ref-for-dom-availability-available⑧">available</a></code>", "<code class="idl"><a data-link-type="idl" href="#dom-availability-downloading" id="ref-for-dom-availability-downloading⑥">downloading</a></code>", "<code class="idl"><a data-link-type="idl" href="#dom-availability-downloadable" id="ref-for-dom-availability-downloadable⑦">downloadable</a></code>" »:</p>
+       <li data-md>
+        <p>Let <var>languagesWithThisAvailability</var> be <var>partition</var>[<var>availabilityToCheck</var>].</p>
+       <li data-md>
+        <p>Let <var>bestMatch</var> be <a data-link-type="abstract-op" href="https://tc39.es/ecma402/#sec-lookupmatchinglocalebybestfit" id="ref-for-sec-lookupmatchinglocalebybestfit②">LookupMatchingLocaleByBestFit</a>(<var>languagesWithThisAvailability</var>, « <var>language</var> »).</p>
+       <li data-md>
+        <p>If <var>bestMatch</var> is not undefined, then:</p>
+        <ol>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-replace" id="ref-for-list-replace">Replace</a> <var>language</var> with <var>bestMatch</var>.[[locale]] in <var>requestedLanguages</var>.</p>
+         <li data-md>
+          <p>Set <var>availability</var> to the <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#availability-minimum-availability" id="ref-for-availability-minimum-availability①">minimum availability</a> given <var>availability</var> and <var>availabilityToCheck</var>.</p>
+         <li data-md>
+          <p>Set <var>unavailable</var> to false.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-break" id="ref-for-iteration-break">Break</a>.</p>
+        </ol>
+       <li data-md>
+        <p>If <var>unavailable</var> is true, then return "<code class="idl"><a data-link-type="idl" href="#dom-availability-unavailable" id="ref-for-dom-availability-unavailable①">unavailable</a></code>".</p>
+      </ol>
+     <li data-md>
+      <p>Return <var>availability</var>.</p>
+    </ol>
+   </div>
+   <h3 class="heading settled" data-level="2.4" id="the-proofreader-class"><span class="secno">2.4. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="#proofreader" id="ref-for-proofreader④">Proofreader</a></code> class</span><a class="self-link" href="#the-proofreader-class"></a></h3>
+   <p>Every <code class="idl"><a data-link-type="idl" href="#proofreader" id="ref-for-proofreader⑤">Proofreader</a></code> has a <dfn class="dfn-paneled" data-dfn-for="Proofreader" data-dfn-type="dfn" data-noexport id="proofreader-include-correction-type">include correction type</dfn>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean">boolean</a> or default to false, set during creation.</p>
+   <p>Every <code class="idl"><a data-link-type="idl" href="#proofreader" id="ref-for-proofreader⑥">Proofreader</a></code> has a <dfn class="dfn-paneled" data-dfn-for="Proofreader" data-dfn-type="dfn" data-noexport id="proofreader-include-correction-explanations">include correction explanations</dfn>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean①">boolean</a> or default to false, set during creation.</p>
+   <p>Every <code class="idl"><a data-link-type="idl" href="#proofreader" id="ref-for-proofreader⑦">Proofreader</a></code> has an <dfn class="dfn-paneled" data-dfn-for="Proofreader" data-dfn-type="dfn" data-noexport id="proofreader-expected-input-languages">expected input languages</dfn>, a <code><code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-frozen-array" id="ref-for-idl-frozen-array①">FrozenArray</a></code>&lt;<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑧">DOMString</a></code>></code> or null, set during creation.</p>
+   <p>Every <code class="idl"><a data-link-type="idl" href="#proofreader" id="ref-for-proofreader⑧">Proofreader</a></code> has an <dfn class="dfn-paneled" data-dfn-for="Proofreader" data-dfn-type="dfn" data-noexport id="proofreader-correction-explanation-language">correction explanation language</dfn>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string">string</a> or null, set during creation.</p>
+   <hr>
+   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="attribute" data-export id="dom-proofreader-includecorrectiontypes"><code>includeCorrectionTypes</code></dfn> getter steps are to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>’s <a data-link-type="dfn" href="#proofreader-include-correction-type" id="ref-for-proofreader-include-correction-type①">include correction types</a>.</p>
+   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="attribute" data-export id="dom-proofreader-type"><code>type</code></dfn> getter steps are to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①">this</a>’s <a data-link-type="dfn" href="#proofreader-include-correction-explanations" id="ref-for-proofreader-include-correction-explanations①">include correction explanations</a>.</p>
+   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="attribute" data-export id="dom-proofreader-expectedinputlanguages"><code>expectedInputLanguages</code></dfn> getter steps are to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②">this</a>’s <a data-link-type="dfn" href="#proofreader-expected-input-languages" id="ref-for-proofreader-expected-input-languages①">expected input languages</a>.</p>
+   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="attribute" data-export id="dom-proofreader-correctionexplanationlanguage"><code>correctionExplanationLanguage</code></dfn> getter steps are to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③">this</a>’s <a data-link-type="dfn" href="#proofreader-correction-explanation-language" id="ref-for-proofreader-correction-explanation-language①">correction explanation language</a>.</p>
+   <hr>
+   <div class="algorithm" data-algorithm="proofread(input, options)" data-algorithm-for="Proofreader">
+    
+  The <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="method" data-export data-lt="proofread(input, options)|proofread(input)" id="dom-proofreader-proofread"><code>proofread(<var>input</var>, <var>options</var>)</code></dfn> method steps are:
+
+
+    <ol>
+     <li data-md>
+      <p>Let <var>operation</var> be an algorithm step which takes arguments <var>chunkProduced</var>, <var>done</var>, <var>error</var>, and <var>stopProducing</var>, and proofreads <var>input</var> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④">this</a>’s <a data-link-type="dfn" href="#proofreader-include-correction-type" id="ref-for-proofreader-include-correction-type②">include correction types</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤">this</a>’s <a data-link-type="dfn" href="#proofreader-include-correction-explanations" id="ref-for-proofreader-include-correction-explanations②">include correction explanations</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥">this</a>’s <a data-link-type="dfn" href="#proofreader-correction-explanation-language" id="ref-for-proofreader-correction-explanation-language②">correction explanation language</a>, <var>chunkProduced</var>, <var>done</var>, <var>error</var>, and <var>stopProducing</var>.</p>
+     <li data-md>
+      <p>Return the result of <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#get-an-aggregated-ai-model-result" id="ref-for-get-an-aggregated-ai-model-result">getting an aggregated AI model result</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦">this</a>, <var>options</var>, and <var>operation</var>.</p>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="measureInputUsage(input, options)" data-algorithm-for="Proofreader">
+    
+  The <dfn class="dfn-paneled idl-code" data-dfn-for="Proofreader" data-dfn-type="method" data-export id="dom-proofreader-measureinputusage"><code>measureInputUsage(<var>input</var>, <var>options</var>)</code></dfn> method steps are:
+
+
+    <ol>
+     <li data-md>
+      <p>Let <var>measureUsage</var> be an algorithm step which takes argument <var>stopMeasuring</var>, and returns the result of measuring proofreader input usage given <var>input</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧">this</a>’s <a data-link-type="dfn" href="#proofreader-include-correction-type" id="ref-for-proofreader-include-correction-type③">include correction types</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨">this</a>’s <a data-link-type="dfn" href="#proofreader-include-correction-explanations" id="ref-for-proofreader-include-correction-explanations③">include correction explanations</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪">this</a>’s <a data-link-type="dfn" href="#proofreader-correction-explanation-language" id="ref-for-proofreader-correction-explanation-language③">correction explanation language</a>, and <var>stopMeasuring</var>.</p>
+     <li data-md>
+      <p>Return the result of <a data-link-type="dfn" href="https://webmachinelearning.github.io/writing-assistance-apis/#measure-ai-model-input-usage" id="ref-for-measure-ai-model-input-usage">measuring AI model input usage</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①">this</a>, <var>options</var>, and <var>measureUsage</var>.</p>
+    </ol>
+   </div>
    <h2 class="heading settled" data-level="3" id="supporting"><span class="secno">3. </span><span class="content">Shared infrastructure</span><a class="self-link" href="#supporting"></a></h2>
    <h3 class="heading settled" data-level="3.1" id="shared-apis"><span class="secno">3.1. </span><span class="content">Common APIs</span><a class="self-link" href="#shared-apis"></a></h3>
 <pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext①"><c- g>SecureContext</c-></a>]
@@ -890,56 +1250,73 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
   <h3 class="heading no-num no-ref settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
    <li><a href="#enumdef-availability">Availability</a><span>, in § 3.1</span>
-   <li><a href="#dom-proofreader-availability">availability()</a><span>, in § 2</span>
-   <li><a href="#dom-proofreader-availability">availability(options)</a><span>, in § 2</span>
+   <li><a href="#dom-proofreader-availability">availability()</a><span>, in § 2.2</span>
+   <li><a href="#dom-proofreader-availability">availability(options)</a><span>, in § 2.2</span>
    <li><a href="#dom-availability-available">"available"</a><span>, in § 3.1</span>
    <li><a href="#dom-correctiontype-capitalization">"capitalization"</a><span>, in § 2</span>
+   <li><a href="#compute-language-availability">compute language availability</a><span>, in § 2.3</span>
+   <li><a href="#compute-proofreader-options-availability">compute proofreader options availability</a><span>, in § 2.2</span>
    <li><a href="#dom-proofreadresult-correctedinput">correctedInput</a><span>, in § 2</span>
    <li><a href="#dom-proofreadcorrection-correction">correction</a><span>, in § 2</span>
+   <li><a href="#proofreader-correction-explanation-language">correction explanation language</a><span>, in § 2.4</span>
+   <li>
+    correctionExplanationLanguage
+    <ul>
+     <li><a href="#dom-proofreader-correctionexplanationlanguage">attribute for Proofreader</a><span>, in § 2.4</span>
+     <li><a href="#dom-proofreadercreatecoreoptions-correctionexplanationlanguage">dict-member for ProofreaderCreateCoreOptions</a><span>, in § 2</span>
+    </ul>
+   <li><a href="#language-availabilities-double-correction-explanation-languages">correction explanation languages</a><span>, in § 2.3</span>
    <li><a href="#dom-proofreadresult-corrections">corrections</a><span>, in § 2</span>
    <li><a href="#enumdef-correctiontype">CorrectionType</a><span>, in § 2</span>
-   <li><a href="#dom-proofreader-create">create()</a><span>, in § 2</span>
+   <li><a href="#dom-proofreader-create">create()</a><span>, in § 2.1</span>
+   <li><a href="#create-a-proofreader-object">create a proofreader object</a><span>, in § 2.1</span>
    <li><a href="#createmonitor">CreateMonitor</a><span>, in § 3.1</span>
    <li><a href="#callbackdef-createmonitorcallback">CreateMonitorCallback</a><span>, in § 3.1</span>
-   <li><a href="#dom-proofreader-create">create(options)</a><span>, in § 2</span>
+   <li><a href="#dom-proofreader-create">create(options)</a><span>, in § 2.1</span>
    <li><a href="#dom-availability-downloadable">"downloadable"</a><span>, in § 3.1</span>
    <li><a href="#dom-availability-downloading">"downloading"</a><span>, in § 3.1</span>
+   <li><a href="#download-the-proofreader-model">download the proofreader model</a><span>, in § 2.1</span>
    <li><a href="#dom-proofreadcorrection-endindex">endIndex</a><span>, in § 2</span>
+   <li><a href="#proofreader-expected-input-languages">expected input languages</a><span>, in § 2.4</span>
    <li>
     expectedInputLanguages
     <ul>
-     <li><a href="#dom-proofreader-expectedinputlanguages">attribute for Proofreader</a><span>, in § 2</span>
+     <li><a href="#dom-proofreader-expectedinputlanguages">attribute for Proofreader</a><span>, in § 2.4</span>
      <li><a href="#dom-proofreadercreatecoreoptions-expectedinputlanguages">dict-member for ProofreaderCreateCoreOptions</a><span>, in § 2</span>
     </ul>
    <li><a href="#dom-proofreadcorrection-explanation">explanation</a><span>, in § 2</span>
+   <li><a href="#get-the-language-availabilities-partition">get the language availabilities partition</a><span>, in § 2.3</span>
    <li><a href="#dom-correctiontype-grammar">"grammar"</a><span>, in § 2</span>
+   <li><a href="#proofreader-include-correction-explanations">include correction explanations</a><span>, in § 2.4</span>
    <li>
     includeCorrectionExplanations
     <ul>
      <li><a href="#dom-proofreader-includecorrectionexplanations">attribute for Proofreader</a><span>, in § 2</span>
      <li><a href="#dom-proofreadercreatecoreoptions-includecorrectionexplanations">dict-member for ProofreaderCreateCoreOptions</a><span>, in § 2</span>
     </ul>
+   <li><a href="#proofreader-include-correction-type">include correction type</a><span>, in § 2.4</span>
    <li>
     includeCorrectionTypes
     <ul>
-     <li><a href="#dom-proofreader-includecorrectiontypes">attribute for Proofreader</a><span>, in § 2</span>
+     <li><a href="#dom-proofreader-includecorrectiontypes">attribute for Proofreader</a><span>, in § 2.4</span>
      <li><a href="#dom-proofreadercreatecoreoptions-includecorrectiontypes">dict-member for ProofreaderCreateCoreOptions</a><span>, in § 2</span>
     </ul>
+   <li><a href="#initialize-the-proofreader-model">initialize the proofreader model</a><span>, in § 2.1</span>
+   <li><a href="#language-availabilities-double-input-languages">input languages</a><span>, in § 2.3</span>
+   <li><a href="#language-availabilities-double">language availabilities double</a><span>, in § 2.3</span>
+   <li><a href="#language-availabilities-partition">language availabilities partition</a><span>, in § 2.3</span>
+   <li><a href="#dom-proofreader-measureinputusage">measureInputUsage(input, options)</a><span>, in § 2.4</span>
    <li><a href="#dom-proofreadercreateoptions-monitor">monitor</a><span>, in § 2</span>
    <li><a href="#dom-createmonitor-ondownloadprogress">ondownloadprogress</a><span>, in § 3.1</span>
-   <li>
-    outputLanguage
-    <ul>
-     <li><a href="#dom-proofreader-outputlanguage">attribute for Proofreader</a><span>, in § 2</span>
-     <li><a href="#dom-proofreadercreatecoreoptions-outputlanguage">dict-member for ProofreaderCreateCoreOptions</a><span>, in § 2</span>
-    </ul>
    <li><a href="#dictdef-proofreadcorrection">ProofreadCorrection</a><span>, in § 2</span>
    <li><a href="#proofreader">Proofreader</a><span>, in § 2</span>
    <li><a href="#dictdef-proofreadercreatecoreoptions">ProofreaderCreateCoreOptions</a><span>, in § 2</span>
    <li><a href="#dictdef-proofreadercreateoptions">ProofreaderCreateOptions</a><span>, in § 2</span>
+   <li><a href="#proofreader-language-availabilities-double">proofreader language availabilities double</a><span>, in § 2.2</span>
+   <li><a href="#proofreader-non-language-options-availability">proofreader non-language options availability</a><span>, in § 2.2</span>
    <li><a href="#dictdef-proofreaderproofreadoptions">ProofreaderProofreadOptions</a><span>, in § 2</span>
-   <li><a href="#dom-proofreader-proofread">proofread(input)</a><span>, in § 2</span>
-   <li><a href="#dom-proofreader-proofread">proofread(input, options)</a><span>, in § 2</span>
+   <li><a href="#dom-proofreader-proofread">proofread(input)</a><span>, in § 2.4</span>
+   <li><a href="#dom-proofreader-proofread">proofread(input, options)</a><span>, in § 2.4</span>
    <li><a href="#dictdef-proofreadresult">ProofreadResult</a><span>, in § 2</span>
    <li><a href="#dom-correctiontype-punctuation">"punctuation"</a><span>, in § 2</span>
    <li>
@@ -950,8 +1327,10 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     </ul>
    <li><a href="#dom-correctiontype-spelling">"spelling"</a><span>, in § 2</span>
    <li><a href="#dom-proofreadcorrection-startindex">startIndex</a><span>, in § 2</span>
+   <li><a href="#dom-proofreader-type">type</a><span>, in § 2.4</span>
    <li><a href="#dom-proofreadcorrection-types">types</a><span>, in § 2</span>
    <li><a href="#dom-availability-unavailable">"unavailable"</a><span>, in § 3.1</span>
+   <li><a href="#validate-and-canonicalize-proofreader-options">validate and canonicalize proofreader options</a><span>, in § 2.1</span>
   </ul>
   <h3 class="heading no-num no-ref settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
@@ -962,9 +1341,45 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <li><span class="dfn-paneled" id="2bc0cdf4">EventTarget</span>
     </ul>
    <li>
+    <a data-link-type="biblio">[ECMA-402]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="0e5dca01">LookupMatchingLocaleByBestFit</span>
+     <li><span class="dfn-paneled" id="93e4c9ae">Unicode canonicalized locale identifier</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[ECMASCRIPT]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="a5f015e3">realm</span>
+     <li><span class="dfn-paneled" id="4ad913ae">surrounding agent</span>
+    </ul>
+   <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="f0951476">EventHandler</span>
+     <li><span class="dfn-paneled" id="b78d6a64">event loop</span>
+     <li><span class="dfn-paneled" id="a72449dd">in parallel</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[INFRA]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="a3b18719">append</span>
+     <li><span class="dfn-paneled" id="77b4c09a">assert</span>
+     <li><span class="dfn-paneled" id="36858240">boolean</span>
+     <li><span class="dfn-paneled" id="7b0d918d">break</span>
+     <li><span class="dfn-paneled" id="1243a891">exist</span>
+     <li><span class="dfn-paneled" id="16d07e10">for each</span>
+     <li><span class="dfn-paneled" id="860300d4">implementation-defined</span>
+     <li><span class="dfn-paneled" id="6b815fdd">is empty</span>
+     <li><span class="dfn-paneled" id="c88f3887">item</span>
+     <li><span class="dfn-paneled" id="31db57e6">keys</span>
+     <li><span class="dfn-paneled" id="3fca5a9e">map</span>
+     <li><span class="dfn-paneled" id="692595fe">ordered set</span>
+     <li><span class="dfn-paneled" id="167d1cb0">replace</span>
+     <li><span class="dfn-paneled" id="15e48c39">set</span>
+     <li><span class="dfn-paneled" id="0698d556">string</span>
+     <li><span class="dfn-paneled" id="984221ca">struct</span>
+     <li><span class="dfn-paneled" id="5eb733b4">union</span>
+     <li><span class="dfn-paneled" id="12d6b9a8">values</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
@@ -972,12 +1387,31 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <li><span class="dfn-paneled" id="8855a9aa">DOMString</span>
      <li><span class="dfn-paneled" id="889e932f">Exposed</span>
      <li><span class="dfn-paneled" id="dcf5fafa">FrozenArray</span>
+     <li><span class="dfn-paneled" id="34443090">OperationError</span>
      <li><span class="dfn-paneled" id="bdbd19d1">Promise</span>
      <li><span class="dfn-paneled" id="b75bb3bd">SecureContext</span>
      <li><span class="dfn-paneled" id="5372cca8">boolean</span>
+     <li><span class="dfn-paneled" id="c537c824">creating a frozen array</span>
      <li><span class="dfn-paneled" id="9cce47fd">sequence</span>
+     <li><span class="dfn-paneled" id="4013a022">this</span>
      <li><span class="dfn-paneled" id="5f90bbfb">undefined</span>
      <li><span class="dfn-paneled" id="f14b47b8">unsigned long long</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[WRITING-ASSISTANCE-APIS]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="8c74a154">can support</span>
+     <li><span class="dfn-paneled" id="20c21e08">compute AI model availability</span>
+     <li><span class="dfn-paneled" id="a68d4447">create an AI model object</span>
+     <li><span class="dfn-paneled" id="b4092a37">currently supports</span>
+     <li><span class="dfn-paneled" id="4c784101">details</span>
+     <li><span class="dfn-paneled" id="fbddf9da">DOMException error information</span>
+     <li><span class="dfn-paneled" id="8f0df616">get an aggregated AI model result</span>
+     <li><span class="dfn-paneled" id="43e66b65">measure AI model input usage</span>
+     <li><span class="dfn-paneled" id="6d1bc646">minimum availability</span>
+     <li><span class="dfn-paneled" id="cb847257">name</span>
+     <li><span class="dfn-paneled" id="79717951">supports</span>
+     <li><span class="dfn-paneled" id="814c5352">validate and canonicalize language tags</span>
     </ul>
   </ul>
   <h2 class="heading no-num no-ref settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -985,29 +1419,37 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
   <dl>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
+   <dt id="biblio-ecma-402">[ECMA-402]
+   <dd><a href="https://tc39.es/ecma402/"><cite>ECMAScript Internationalization API Specification</cite></a>. URL: <a href="https://tc39.es/ecma402/">https://tc39.es/ecma402/</a>
+   <dt id="biblio-ecmascript">[ECMASCRIPT]
+   <dd><a href="https://tc39.es/ecma262/multipage/"><cite>ECMAScript Language Specification</cite></a>. URL: <a href="https://tc39.es/ecma262/multipage/">https://tc39.es/ecma262/multipage/</a>
    <dt id="biblio-html">[HTML]
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
+   <dt id="biblio-infra">[INFRA]
+   <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
    <dt id="biblio-webidl">[WEBIDL]
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
+   <dt id="biblio-writing-assistance-apis">[WRITING-ASSISTANCE-APIS]
+   <dd><a href="https://webmachinelearning.github.io/writing-assistance-apis/"><cite>Writing Assistance APIs</cite></a>. Draft Community Group Report. URL: <a href="https://webmachinelearning.github.io/writing-assistance-apis/">https://webmachinelearning.github.io/writing-assistance-apis/</a>
   </dl>
   <h2 class="heading no-num no-ref settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
 <c- b>interface</c-> <a href="#proofreader"><code><c- g>Proofreader</c-></code></a> {
-    <c- b>static</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#proofreader"><c- n>Proofreader</c-></a>> <a href="#dom-proofreader-create"><code><c- g>create</c-></code></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreadercreateoptions"><c- n>ProofreaderCreateOptions</c-></a> <a href="#dom-proofreader-create-options-options"><code><c- g>options</c-></code></a> = {});
-    <c- b>static</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-availability"><c- n>Availability</c-></a>> <a href="#dom-proofreader-availability"><code><c- g>availability</c-></code></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreadercreatecoreoptions"><c- n>ProofreaderCreateCoreOptions</c-></a> <a href="#dom-proofreader-availability-options-options"><code><c- g>options</c-></code></a> = {});
+    <c- b>static</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#proofreader"><c- n>Proofreader</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-proofreader-create"><c- g>create</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreadercreateoptions"><c- n>ProofreaderCreateOptions</c-></a> <a href="#dom-proofreader-create-options-options"><code><c- g>options</c-></code></a> = {});
+    <c- b>static</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-availability"><c- n>Availability</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-proofreader-availability"><c- g>availability</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreadercreatecoreoptions"><c- n>ProofreaderCreateCoreOptions</c-></a> <a href="#dom-proofreader-availability-options-options"><code><c- g>options</c-></code></a> = {});
 
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-proofreadresult"><c- n>ProofreadResult</c-></a>> <a href="#dom-proofreader-proofread"><code><c- g>proofread</c-></code></a>(
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-proofreadresult"><c- n>ProofreadResult</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-proofreader-proofread"><c- g>proofread</c-></a>(
         <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-proofreader-proofread-input-options-input"><code><c- g>input</c-></code></a>,
         <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-proofreaderproofreadoptions"><c- n>ProofreaderProofreadOptions</c-></a> <a href="#dom-proofreader-proofread-input-options-options"><code><c- g>options</c-></code></a> = {}
     );
 
-    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-readonly data-type="boolean" href="#dom-proofreader-includecorrectiontypes"><code><c- g>includeCorrectionTypes</c-></code></a>;
+    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="boolean" href="#dom-proofreader-includecorrectiontypes"><c- g>includeCorrectionTypes</c-></a>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-readonly data-type="boolean" href="#dom-proofreader-includecorrectionexplanations"><code><c- g>includeCorrectionExplanations</c-></code></a>;
 
-    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-frozen-array"><c- b>FrozenArray</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>>? <a data-readonly data-type="FrozenArray<DOMString>?" href="#dom-proofreader-expectedinputlanguages"><code><c- g>expectedInputLanguages</c-></code></a>;
-    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>? <a data-readonly data-type="DOMString?" href="#dom-proofreader-outputlanguage"><code><c- g>outputLanguage</c-></code></a>;
+    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-frozen-array"><c- b>FrozenArray</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="FrozenArray<DOMString>?" href="#dom-proofreader-expectedinputlanguages"><c- g>expectedInputLanguages</c-></a>;
+    <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="DOMString?" href="#dom-proofreader-correctionexplanationlanguage"><c- g>correctionExplanationLanguage</c-></a>;
 };
 
 <c- b>dictionary</c-> <a href="#dictdef-proofreadercreatecoreoptions"><code><c- g>ProofreaderCreateCoreOptions</c-></code></a> {
@@ -1015,7 +1457,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-default="false" data-type="boolean" href="#dom-proofreadercreatecoreoptions-includecorrectionexplanations"><code><c- g>includeCorrectionExplanations</c-></code></a> = <c- b>false</c->;
 
     <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString>" href="#dom-proofreadercreatecoreoptions-expectedinputlanguages"><code><c- g>expectedInputLanguages</c-></code></a>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-proofreadercreatecoreoptions-outputlanguage"><code><c- g>outputLanguage</c-></code></a>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-proofreadercreatecoreoptions-correctionexplanationlanguage"><code><c- g>correctionExplanationLanguage</c-></code></a>;
 };
 
 <c- b>dictionary</c-> <a href="#dictdef-proofreadercreateoptions"><code><c- g>ProofreaderCreateOptions</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-proofreadercreatecoreoptions"><c- n>ProofreaderCreateCoreOptions</c-></a> {
@@ -1257,27 +1699,68 @@ function parseHTML(markup) {
 "use strict";
 {
 let dfnPanelData = {
+"0698d556": {"dfnID":"0698d556","dfnText":"string","external":true,"refSections":[{"refs":[{"id":"ref-for-string"}],"title":"2.4. The Proofreader class"}],"url":"https://infra.spec.whatwg.org/#string"},
+"0e5dca01": {"dfnID":"0e5dca01","dfnText":"LookupMatchingLocaleByBestFit","external":true,"refSections":[{"refs":[{"id":"ref-for-sec-lookupmatchinglocalebybestfit"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-sec-lookupmatchinglocalebybestfit\u2460"},{"id":"ref-for-sec-lookupmatchinglocalebybestfit\u2461"}],"title":"2.3. Language availability"}],"url":"https://tc39.es/ecma402/#sec-lookupmatchinglocalebybestfit"},
+"1243a891": {"dfnID":"1243a891","dfnText":"exist","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"}],"title":"2.1. Creation"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
+"12d6b9a8": {"dfnID":"12d6b9a8","dfnText":"values","external":true,"refSections":[{"refs":[{"id":"ref-for-map-getting-the-values"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#map-getting-the-values"},
+"15e48c39": {"dfnID":"15e48c39","dfnText":"set","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-set"},{"id":"ref-for-ordered-set\u2460"},{"id":"ref-for-ordered-set\u2461"},{"id":"ref-for-ordered-set\u2462"},{"id":"ref-for-ordered-set\u2463"},{"id":"ref-for-ordered-set\u2464"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#ordered-set"},
+"167d1cb0": {"dfnID":"167d1cb0","dfnText":"replace","external":true,"refSections":[{"refs":[{"id":"ref-for-list-replace"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#list-replace"},
+"16d07e10": {"dfnID":"16d07e10","dfnText":"for each","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"},{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
+"20c21e08": {"dfnID":"20c21e08","dfnText":"compute AI model availability","external":true,"refSections":[{"refs":[{"id":"ref-for-compute-ai-model-availability"}],"title":"2.2. Availability"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#compute-ai-model-availability"},
 "2bc0cdf4": {"dfnID":"2bc0cdf4","dfnText":"EventTarget","external":true,"refSections":[{"refs":[{"id":"ref-for-eventtarget"}],"title":"3.1. Common APIs"}],"url":"https://dom.spec.whatwg.org/#eventtarget"},
+"31db57e6": {"dfnID":"31db57e6","dfnText":"keys","external":true,"refSections":[{"refs":[{"id":"ref-for-map-getting-the-keys"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#map-getting-the-keys"},
+"34443090": {"dfnID":"34443090","dfnText":"OperationError","external":true,"refSections":[{"refs":[{"id":"ref-for-operationerror"}],"title":"2.1. Creation"}],"url":"https://webidl.spec.whatwg.org/#operationerror"},
+"36858240": {"dfnID":"36858240","dfnText":"boolean","external":true,"refSections":[{"refs":[{"id":"ref-for-boolean"},{"id":"ref-for-boolean\u2460"}],"title":"2.4. The Proofreader class"}],"url":"https://infra.spec.whatwg.org/#boolean"},
+"3fca5a9e": {"dfnID":"3fca5a9e","dfnText":"map","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-map"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#ordered-map"},
+"4013a022": {"dfnID":"4013a022","dfnText":"this","external":true,"refSections":[{"refs":[{"id":"ref-for-this"},{"id":"ref-for-this\u2460"},{"id":"ref-for-this\u2461"},{"id":"ref-for-this\u2462"},{"id":"ref-for-this\u2463"},{"id":"ref-for-this\u2464"},{"id":"ref-for-this\u2465"},{"id":"ref-for-this\u2466"},{"id":"ref-for-this\u2467"},{"id":"ref-for-this\u2468"},{"id":"ref-for-this\u2460\u24ea"},{"id":"ref-for-this\u2460\u2460"}],"title":"2.4. The Proofreader class"}],"url":"https://webidl.spec.whatwg.org/#this"},
+"43e66b65": {"dfnID":"43e66b65","dfnText":"measure AI model input usage","external":true,"refSections":[{"refs":[{"id":"ref-for-measure-ai-model-input-usage"}],"title":"2.4. The Proofreader class"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#measure-ai-model-input-usage"},
+"4ad913ae": {"dfnID":"4ad913ae","dfnText":"surrounding agent","external":true,"refSections":[{"refs":[{"id":"ref-for-surrounding-agent"}],"title":"2.1. Creation"}],"url":"https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#surrounding-agent"},
+"4c784101": {"dfnID":"4c784101","dfnText":"details","external":true,"refSections":[{"refs":[{"id":"ref-for-domexception-error-information-details"}],"title":"2.1. Creation"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information-details"},
 "5372cca8": {"dfnID":"5372cca8","dfnText":"boolean","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-boolean"},{"id":"ref-for-idl-boolean\u2460"},{"id":"ref-for-idl-boolean\u2461"},{"id":"ref-for-idl-boolean\u2462"}],"title":"2. The proofreader API"}],"url":"https://webidl.spec.whatwg.org/#idl-boolean"},
+"5eb733b4": {"dfnID":"5eb733b4","dfnText":"union","external":true,"refSections":[{"refs":[{"id":"ref-for-set-union"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#set-union"},
 "5f90bbfb": {"dfnID":"5f90bbfb","dfnText":"undefined","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-undefined"}],"title":"3.1. Common APIs"}],"url":"https://webidl.spec.whatwg.org/#idl-undefined"},
-"8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"},{"id":"ref-for-idl-DOMString\u2461"},{"id":"ref-for-idl-DOMString\u2462"},{"id":"ref-for-idl-DOMString\u2463"},{"id":"ref-for-idl-DOMString\u2464"},{"id":"ref-for-idl-DOMString\u2465"},{"id":"ref-for-idl-DOMString\u2466"}],"title":"2. The proofreader API"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
+"692595fe": {"dfnID":"692595fe","dfnText":"ordered set","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-set"},{"id":"ref-for-ordered-set\u2460"},{"id":"ref-for-ordered-set\u2461"},{"id":"ref-for-ordered-set\u2462"},{"id":"ref-for-ordered-set\u2463"},{"id":"ref-for-ordered-set\u2464"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#ordered-set"},
+"6b815fdd": {"dfnID":"6b815fdd","dfnText":"is empty","external":true,"refSections":[{"refs":[{"id":"ref-for-list-is-empty"}],"title":"2.1. Creation"}],"url":"https://infra.spec.whatwg.org/#list-is-empty"},
+"6d1bc646": {"dfnID":"6d1bc646","dfnText":"minimum availability","external":true,"refSections":[{"refs":[{"id":"ref-for-availability-minimum-availability"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-availability-minimum-availability\u2460"}],"title":"2.3. Language availability"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#availability-minimum-availability"},
+"77b4c09a": {"dfnID":"77b4c09a","dfnText":"assert","external":true,"refSections":[{"refs":[{"id":"ref-for-assert"},{"id":"ref-for-assert\u2460"},{"id":"ref-for-assert\u2461"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-assert\u2462"},{"id":"ref-for-assert\u2463"},{"id":"ref-for-assert\u2464"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-assert\u2465"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#assert"},
+"79717951": {"dfnID":"79717951","dfnText":"supports","external":true,"refSections":[{"refs":[{"id":"ref-for-model-availability-currently-supports"},{"id":"ref-for-model-availability-currently-supports\u2460"},{"id":"ref-for-model-availability-currently-supports\u2461"},{"id":"ref-for-model-availability-currently-supports\u2462"},{"id":"ref-for-model-availability-currently-supports\u2463"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-model-availability-currently-supports\u2464"},{"id":"ref-for-model-availability-currently-supports\u2465"},{"id":"ref-for-model-availability-currently-supports\u2466"}],"title":"2.3. Language availability"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports"},
+"7b0d918d": {"dfnID":"7b0d918d","dfnText":"break","external":true,"refSections":[{"refs":[{"id":"ref-for-iteration-break"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#iteration-break"},
+"814c5352": {"dfnID":"814c5352","dfnText":"validate and canonicalize language tags","external":true,"refSections":[{"refs":[{"id":"ref-for-validate-and-canonicalize-language-tags"},{"id":"ref-for-validate-and-canonicalize-language-tags\u2460"}],"title":"2.1. Creation"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#validate-and-canonicalize-language-tags"},
+"860300d4": {"dfnID":"860300d4","dfnText":"implementation-defined","external":true,"refSections":[{"refs":[{"id":"ref-for-implementation-defined"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#implementation-defined"},
+"8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"},{"id":"ref-for-idl-DOMString\u2461"},{"id":"ref-for-idl-DOMString\u2462"},{"id":"ref-for-idl-DOMString\u2463"},{"id":"ref-for-idl-DOMString\u2464"},{"id":"ref-for-idl-DOMString\u2465"},{"id":"ref-for-idl-DOMString\u2466"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-idl-DOMString\u2467"}],"title":"2.4. The Proofreader class"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-Exposed\u2460"}],"title":"3.1. Common APIs"}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
+"8c74a154": {"dfnID":"8c74a154","dfnText":"can support","external":true,"refSections":[{"refs":[{"id":"ref-for-model-availability-currently-supports"},{"id":"ref-for-model-availability-currently-supports\u2460"},{"id":"ref-for-model-availability-currently-supports\u2461"},{"id":"ref-for-model-availability-currently-supports\u2462"},{"id":"ref-for-model-availability-currently-supports\u2463"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-model-availability-currently-supports\u2464"},{"id":"ref-for-model-availability-currently-supports\u2465"},{"id":"ref-for-model-availability-currently-supports\u2466"}],"title":"2.3. Language availability"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports"},
+"8f0df616": {"dfnID":"8f0df616","dfnText":"get an aggregated AI model result","external":true,"refSections":[{"refs":[{"id":"ref-for-get-an-aggregated-ai-model-result"}],"title":"2.4. The Proofreader class"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#get-an-aggregated-ai-model-result"},
+"93e4c9ae": {"dfnID":"93e4c9ae","dfnText":"Unicode canonicalized locale identifier","external":true,"refSections":[{"refs":[{"id":"ref-for-sec-language-tags"},{"id":"ref-for-sec-language-tags\u2460"},{"id":"ref-for-sec-language-tags\u2461"},{"id":"ref-for-sec-language-tags\u2462"}],"title":"2.3. Language availability"}],"url":"https://tc39.es/ecma402/#sec-language-tags"},
+"984221ca": {"dfnID":"984221ca","dfnText":"struct","external":true,"refSections":[{"refs":[{"id":"ref-for-struct"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#struct"},
 "9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"},{"id":"ref-for-idl-sequence\u2461"}],"title":"2. The proofreader API"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
+"a3b18719": {"dfnID":"a3b18719","dfnText":"append","external":true,"refSections":[{"refs":[{"id":"ref-for-set-append"},{"id":"ref-for-set-append\u2460"},{"id":"ref-for-set-append\u2461"},{"id":"ref-for-set-append\u2462"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#set-append"},
+"a5f015e3": {"dfnID":"a5f015e3","dfnText":"realm","external":true,"refSections":[{"refs":[{"id":"ref-for-realm"}],"title":"2.1. Creation"}],"url":"https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#realm"},
+"a68d4447": {"dfnID":"a68d4447","dfnText":"create an AI model object","external":true,"refSections":[{"refs":[{"id":"ref-for-create-an-ai-model-object"}],"title":"2.1. Creation"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#create-an-ai-model-object"},
+"a72449dd": {"dfnID":"a72449dd","dfnText":"in parallel","external":true,"refSections":[{"refs":[{"id":"ref-for-in-parallel"},{"id":"ref-for-in-parallel\u2460"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-in-parallel\u2461"},{"id":"ref-for-in-parallel\u2462"},{"id":"ref-for-in-parallel\u2463"}],"title":"2.2. Availability"}],"url":"https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel"},
+"b4092a37": {"dfnID":"b4092a37","dfnText":"currently supports","external":true,"refSections":[{"refs":[{"id":"ref-for-model-availability-currently-supports"},{"id":"ref-for-model-availability-currently-supports\u2460"},{"id":"ref-for-model-availability-currently-supports\u2461"},{"id":"ref-for-model-availability-currently-supports\u2462"},{"id":"ref-for-model-availability-currently-supports\u2463"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-model-availability-currently-supports\u2464"},{"id":"ref-for-model-availability-currently-supports\u2465"},{"id":"ref-for-model-availability-currently-supports\u2466"}],"title":"2.3. Language availability"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports"},
 "b75bb3bd": {"dfnID":"b75bb3bd","dfnText":"SecureContext","external":true,"refSections":[{"refs":[{"id":"ref-for-SecureContext"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-SecureContext\u2460"}],"title":"3.1. Common APIs"}],"url":"https://webidl.spec.whatwg.org/#SecureContext"},
+"b78d6a64": {"dfnID":"b78d6a64","dfnText":"event loop","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-agent-event-loop"}],"title":"2.1. Creation"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop"},
 "bdbd19d1": {"dfnID":"bdbd19d1","dfnText":"Promise","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-promise"},{"id":"ref-for-idl-promise\u2460"},{"id":"ref-for-idl-promise\u2461"}],"title":"2. The proofreader API"}],"url":"https://webidl.spec.whatwg.org/#idl-promise"},
+"c537c824": {"dfnID":"c537c824","dfnText":"creating a frozen array","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-create-frozen-array"}],"title":"2.1. Creation"}],"url":"https://webidl.spec.whatwg.org/#dfn-create-frozen-array"},
+"c88f3887": {"dfnID":"c88f3887","dfnText":"item","external":true,"refSections":[{"refs":[{"id":"ref-for-struct-item"}],"title":"2.3. Language availability"}],"url":"https://infra.spec.whatwg.org/#struct-item"},
 "callbackdef-createmonitorcallback": {"dfnID":"callbackdef-createmonitorcallback","dfnText":"CreateMonitorCallback","external":false,"refSections":[{"refs":[{"id":"ref-for-callbackdef-createmonitorcallback"}],"title":"2. The proofreader API"}],"url":"#callbackdef-createmonitorcallback"},
+"cb847257": {"dfnID":"cb847257","dfnText":"name","external":true,"refSections":[{"refs":[{"id":"ref-for-domexception-error-information-name"}],"title":"2.1. Creation"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information-name"},
 "cca3cdb2": {"dfnID":"cca3cdb2","dfnText":"AbortSignal","external":true,"refSections":[{"refs":[{"id":"ref-for-abortsignal"},{"id":"ref-for-abortsignal\u2460"}],"title":"2. The proofreader API"}],"url":"https://dom.spec.whatwg.org/#abortsignal"},
+"compute-language-availability": {"dfnID":"compute-language-availability","dfnText":"compute language availability","external":false,"refSections":[{"refs":[{"id":"ref-for-compute-language-availability"},{"id":"ref-for-compute-language-availability\u2460"}],"title":"2.2. Availability"}],"url":"#compute-language-availability"},
+"compute-proofreader-options-availability": {"dfnID":"compute-proofreader-options-availability","dfnText":"compute proofreader options availability","external":false,"refSections":[{"refs":[{"id":"ref-for-compute-proofreader-options-availability"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-compute-proofreader-options-availability\u2460"}],"title":"2.2. Availability"}],"url":"#compute-proofreader-options-availability"},
+"create-a-proofreader-object": {"dfnID":"create-a-proofreader-object","dfnText":"create a proofreader object","external":false,"refSections":[{"refs":[{"id":"ref-for-create-a-proofreader-object"}],"title":"2.1. Creation"}],"url":"#create-a-proofreader-object"},
 "createmonitor": {"dfnID":"createmonitor","dfnText":"CreateMonitor","external":false,"refSections":[{"refs":[{"id":"ref-for-createmonitor"}],"title":"3.1. Common APIs"}],"url":"#createmonitor"},
-"dcf5fafa": {"dfnID":"dcf5fafa","dfnText":"FrozenArray","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-frozen-array"}],"title":"2. The proofreader API"}],"url":"https://webidl.spec.whatwg.org/#idl-frozen-array"},
+"dcf5fafa": {"dfnID":"dcf5fafa","dfnText":"FrozenArray","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-frozen-array"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-idl-frozen-array\u2460"}],"title":"2.4. The Proofreader class"}],"url":"https://webidl.spec.whatwg.org/#idl-frozen-array"},
 "dictdef-proofreadcorrection": {"dfnID":"dictdef-proofreadcorrection","dfnText":"ProofreadCorrection","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-proofreadcorrection"}],"title":"2. The proofreader API"}],"url":"#dictdef-proofreadcorrection"},
-"dictdef-proofreadercreatecoreoptions": {"dfnID":"dictdef-proofreadercreatecoreoptions","dfnText":"ProofreaderCreateCoreOptions","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-proofreadercreatecoreoptions"},{"id":"ref-for-dictdef-proofreadercreatecoreoptions\u2460"}],"title":"2. The proofreader API"}],"url":"#dictdef-proofreadercreatecoreoptions"},
-"dictdef-proofreadercreateoptions": {"dfnID":"dictdef-proofreadercreateoptions","dfnText":"ProofreaderCreateOptions","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-proofreadercreateoptions"}],"title":"2. The proofreader API"}],"url":"#dictdef-proofreadercreateoptions"},
+"dictdef-proofreadercreatecoreoptions": {"dfnID":"dictdef-proofreadercreatecoreoptions","dfnText":"ProofreaderCreateCoreOptions","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-proofreadercreatecoreoptions"},{"id":"ref-for-dictdef-proofreadercreatecoreoptions\u2460"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-dictdef-proofreadercreatecoreoptions\u2461"},{"id":"ref-for-dictdef-proofreadercreatecoreoptions\u2462"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-dictdef-proofreadercreatecoreoptions\u2463"}],"title":"2.2. Availability"}],"url":"#dictdef-proofreadercreatecoreoptions"},
+"dictdef-proofreadercreateoptions": {"dfnID":"dictdef-proofreadercreateoptions","dfnText":"ProofreaderCreateOptions","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-proofreadercreateoptions"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-dictdef-proofreadercreateoptions\u2460"},{"id":"ref-for-dictdef-proofreadercreateoptions\u2461"}],"title":"2.1. Creation"}],"url":"#dictdef-proofreadercreateoptions"},
 "dictdef-proofreaderproofreadoptions": {"dfnID":"dictdef-proofreaderproofreadoptions","dfnText":"ProofreaderProofreadOptions","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-proofreaderproofreadoptions"}],"title":"2. The proofreader API"}],"url":"#dictdef-proofreaderproofreadoptions"},
 "dictdef-proofreadresult": {"dfnID":"dictdef-proofreadresult","dfnText":"ProofreadResult","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-proofreadresult"}],"title":"2. The proofreader API"}],"url":"#dictdef-proofreadresult"},
-"dom-availability-available": {"dfnID":"dom-availability-available","dfnText":"\"available\"","external":false,"refSections":[],"url":"#dom-availability-available"},
-"dom-availability-downloadable": {"dfnID":"dom-availability-downloadable","dfnText":"\"downloadable\"","external":false,"refSections":[],"url":"#dom-availability-downloadable"},
-"dom-availability-downloading": {"dfnID":"dom-availability-downloading","dfnText":"\"downloading\"","external":false,"refSections":[],"url":"#dom-availability-downloading"},
-"dom-availability-unavailable": {"dfnID":"dom-availability-unavailable","dfnText":"\"unavailable\"","external":false,"refSections":[],"url":"#dom-availability-unavailable"},
+"dom-availability-available": {"dfnID":"dom-availability-available","dfnText":"\"available\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-availability-available"},{"id":"ref-for-dom-availability-available\u2460"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-dom-availability-available\u2461"},{"id":"ref-for-dom-availability-available\u2462"},{"id":"ref-for-dom-availability-available\u2463"},{"id":"ref-for-dom-availability-available\u2464"},{"id":"ref-for-dom-availability-available\u2465"},{"id":"ref-for-dom-availability-available\u2466"},{"id":"ref-for-dom-availability-available\u2467"}],"title":"2.3. Language availability"}],"url":"#dom-availability-available"},
+"dom-availability-downloadable": {"dfnID":"dom-availability-downloadable","dfnText":"\"downloadable\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-availability-downloadable"},{"id":"ref-for-dom-availability-downloadable\u2460"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-dom-availability-downloadable\u2461"},{"id":"ref-for-dom-availability-downloadable\u2462"},{"id":"ref-for-dom-availability-downloadable\u2463"},{"id":"ref-for-dom-availability-downloadable\u2464"},{"id":"ref-for-dom-availability-downloadable\u2465"},{"id":"ref-for-dom-availability-downloadable\u2466"}],"title":"2.3. Language availability"}],"url":"#dom-availability-downloadable"},
+"dom-availability-downloading": {"dfnID":"dom-availability-downloading","dfnText":"\"downloading\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-availability-downloading"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-dom-availability-downloading\u2460"},{"id":"ref-for-dom-availability-downloading\u2461"},{"id":"ref-for-dom-availability-downloading\u2462"},{"id":"ref-for-dom-availability-downloading\u2463"},{"id":"ref-for-dom-availability-downloading\u2464"},{"id":"ref-for-dom-availability-downloading\u2465"}],"title":"2.3. Language availability"}],"url":"#dom-availability-downloading"},
+"dom-availability-unavailable": {"dfnID":"dom-availability-unavailable","dfnText":"\"unavailable\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-availability-unavailable"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-dom-availability-unavailable\u2460"}],"title":"2.3. Language availability"}],"url":"#dom-availability-unavailable"},
 "dom-correctiontype-capitalization": {"dfnID":"dom-correctiontype-capitalization","dfnText":"\"capitalization\"","external":false,"refSections":[],"url":"#dom-correctiontype-capitalization"},
 "dom-correctiontype-grammar": {"dfnID":"dom-correctiontype-grammar","dfnText":"\"grammar\"","external":false,"refSections":[],"url":"#dom-correctiontype-grammar"},
 "dom-correctiontype-punctuation": {"dfnID":"dom-correctiontype-punctuation","dfnText":"\"punctuation\"","external":false,"refSections":[],"url":"#dom-correctiontype-punctuation"},
@@ -1289,31 +1772,48 @@ let dfnPanelData = {
 "dom-proofreadcorrection-explanation": {"dfnID":"dom-proofreadcorrection-explanation","dfnText":"explanation","external":false,"refSections":[],"url":"#dom-proofreadcorrection-explanation"},
 "dom-proofreadcorrection-startindex": {"dfnID":"dom-proofreadcorrection-startindex","dfnText":"startIndex","external":false,"refSections":[],"url":"#dom-proofreadcorrection-startindex"},
 "dom-proofreadcorrection-types": {"dfnID":"dom-proofreadcorrection-types","dfnText":"types","external":false,"refSections":[],"url":"#dom-proofreadcorrection-types"},
-"dom-proofreader-availability": {"dfnID":"dom-proofreader-availability","dfnText":"availability","external":false,"refSections":[],"url":"#dom-proofreader-availability"},
+"dom-proofreader-availability": {"dfnID":"dom-proofreader-availability","dfnText":"availability(options)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreader-availability"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-dom-proofreader-availability\u2460"}],"title":"2.2. Availability"}],"url":"#dom-proofreader-availability"},
 "dom-proofreader-availability-options-options": {"dfnID":"dom-proofreader-availability-options-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-proofreader-availability-options-options"},
-"dom-proofreader-create": {"dfnID":"dom-proofreader-create","dfnText":"create","external":false,"refSections":[],"url":"#dom-proofreader-create"},
+"dom-proofreader-correctionexplanationlanguage": {"dfnID":"dom-proofreader-correctionexplanationlanguage","dfnText":"correctionExplanationLanguage","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreader-correctionexplanationlanguage"}],"title":"2. The proofreader API"}],"url":"#dom-proofreader-correctionexplanationlanguage"},
+"dom-proofreader-create": {"dfnID":"dom-proofreader-create","dfnText":"create(options)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreader-create"}],"title":"2. The proofreader API"}],"url":"#dom-proofreader-create"},
 "dom-proofreader-create-options-options": {"dfnID":"dom-proofreader-create-options-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-proofreader-create-options-options"},
-"dom-proofreader-expectedinputlanguages": {"dfnID":"dom-proofreader-expectedinputlanguages","dfnText":"expectedInputLanguages","external":false,"refSections":[],"url":"#dom-proofreader-expectedinputlanguages"},
+"dom-proofreader-expectedinputlanguages": {"dfnID":"dom-proofreader-expectedinputlanguages","dfnText":"expectedInputLanguages","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreader-expectedinputlanguages"}],"title":"2. The proofreader API"}],"url":"#dom-proofreader-expectedinputlanguages"},
 "dom-proofreader-includecorrectionexplanations": {"dfnID":"dom-proofreader-includecorrectionexplanations","dfnText":"includeCorrectionExplanations","external":false,"refSections":[],"url":"#dom-proofreader-includecorrectionexplanations"},
-"dom-proofreader-includecorrectiontypes": {"dfnID":"dom-proofreader-includecorrectiontypes","dfnText":"includeCorrectionTypes","external":false,"refSections":[],"url":"#dom-proofreader-includecorrectiontypes"},
-"dom-proofreader-outputlanguage": {"dfnID":"dom-proofreader-outputlanguage","dfnText":"outputLanguage","external":false,"refSections":[],"url":"#dom-proofreader-outputlanguage"},
-"dom-proofreader-proofread": {"dfnID":"dom-proofreader-proofread","dfnText":"proofread","external":false,"refSections":[],"url":"#dom-proofreader-proofread"},
+"dom-proofreader-includecorrectiontypes": {"dfnID":"dom-proofreader-includecorrectiontypes","dfnText":"includeCorrectionTypes","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreader-includecorrectiontypes"}],"title":"2. The proofreader API"}],"url":"#dom-proofreader-includecorrectiontypes"},
+"dom-proofreader-measureinputusage": {"dfnID":"dom-proofreader-measureinputusage","dfnText":"measureInputUsage(input, options)","external":false,"refSections":[],"url":"#dom-proofreader-measureinputusage"},
+"dom-proofreader-proofread": {"dfnID":"dom-proofreader-proofread","dfnText":"proofread(input, options)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreader-proofread"}],"title":"2. The proofreader API"}],"url":"#dom-proofreader-proofread"},
 "dom-proofreader-proofread-input-options-input": {"dfnID":"dom-proofreader-proofread-input-options-input","dfnText":"input","external":false,"refSections":[],"url":"#dom-proofreader-proofread-input-options-input"},
 "dom-proofreader-proofread-input-options-options": {"dfnID":"dom-proofreader-proofread-input-options-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-proofreader-proofread-input-options-options"},
-"dom-proofreadercreatecoreoptions-expectedinputlanguages": {"dfnID":"dom-proofreadercreatecoreoptions-expectedinputlanguages","dfnText":"expectedInputLanguages","external":false,"refSections":[],"url":"#dom-proofreadercreatecoreoptions-expectedinputlanguages"},
-"dom-proofreadercreatecoreoptions-includecorrectionexplanations": {"dfnID":"dom-proofreadercreatecoreoptions-includecorrectionexplanations","dfnText":"includeCorrectionExplanations","external":false,"refSections":[],"url":"#dom-proofreadercreatecoreoptions-includecorrectionexplanations"},
-"dom-proofreadercreatecoreoptions-includecorrectiontypes": {"dfnID":"dom-proofreadercreatecoreoptions-includecorrectiontypes","dfnText":"includeCorrectionTypes","external":false,"refSections":[],"url":"#dom-proofreadercreatecoreoptions-includecorrectiontypes"},
-"dom-proofreadercreatecoreoptions-outputlanguage": {"dfnID":"dom-proofreadercreatecoreoptions-outputlanguage","dfnText":"outputLanguage","external":false,"refSections":[],"url":"#dom-proofreadercreatecoreoptions-outputlanguage"},
+"dom-proofreader-type": {"dfnID":"dom-proofreader-type","dfnText":"type","external":false,"refSections":[],"url":"#dom-proofreader-type"},
+"dom-proofreadercreatecoreoptions-correctionexplanationlanguage": {"dfnID":"dom-proofreadercreatecoreoptions-correctionexplanationlanguage","dfnText":"correctionExplanationLanguage","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreadercreatecoreoptions-correctionexplanationlanguage"},{"id":"ref-for-dom-proofreadercreatecoreoptions-correctionexplanationlanguage\u2460"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-dom-proofreadercreatecoreoptions-correctionexplanationlanguage\u2461"},{"id":"ref-for-dom-proofreadercreatecoreoptions-correctionexplanationlanguage\u2462"}],"title":"2.2. Availability"}],"url":"#dom-proofreadercreatecoreoptions-correctionexplanationlanguage"},
+"dom-proofreadercreatecoreoptions-expectedinputlanguages": {"dfnID":"dom-proofreadercreatecoreoptions-expectedinputlanguages","dfnText":"expectedInputLanguages","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreadercreatecoreoptions-expectedinputlanguages"},{"id":"ref-for-dom-proofreadercreatecoreoptions-expectedinputlanguages\u2460"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-dom-proofreadercreatecoreoptions-expectedinputlanguages\u2461"}],"title":"2.2. Availability"}],"url":"#dom-proofreadercreatecoreoptions-expectedinputlanguages"},
+"dom-proofreadercreatecoreoptions-includecorrectionexplanations": {"dfnID":"dom-proofreadercreatecoreoptions-includecorrectionexplanations","dfnText":"includeCorrectionExplanations","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreadercreatecoreoptions-includecorrectionexplanations"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-dom-proofreadercreatecoreoptions-includecorrectionexplanations\u2460"}],"title":"2.2. Availability"}],"url":"#dom-proofreadercreatecoreoptions-includecorrectionexplanations"},
+"dom-proofreadercreatecoreoptions-includecorrectiontypes": {"dfnID":"dom-proofreadercreatecoreoptions-includecorrectiontypes","dfnText":"includeCorrectionTypes","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-proofreadercreatecoreoptions-includecorrectiontypes"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-dom-proofreadercreatecoreoptions-includecorrectiontypes\u2460"}],"title":"2.2. Availability"}],"url":"#dom-proofreadercreatecoreoptions-includecorrectiontypes"},
 "dom-proofreadercreateoptions-monitor": {"dfnID":"dom-proofreadercreateoptions-monitor","dfnText":"monitor","external":false,"refSections":[],"url":"#dom-proofreadercreateoptions-monitor"},
 "dom-proofreadercreateoptions-signal": {"dfnID":"dom-proofreadercreateoptions-signal","dfnText":"signal","external":false,"refSections":[],"url":"#dom-proofreadercreateoptions-signal"},
 "dom-proofreaderproofreadoptions-signal": {"dfnID":"dom-proofreaderproofreadoptions-signal","dfnText":"signal","external":false,"refSections":[],"url":"#dom-proofreaderproofreadoptions-signal"},
 "dom-proofreadresult-correctedinput": {"dfnID":"dom-proofreadresult-correctedinput","dfnText":"correctedInput","external":false,"refSections":[],"url":"#dom-proofreadresult-correctedinput"},
 "dom-proofreadresult-corrections": {"dfnID":"dom-proofreadresult-corrections","dfnText":"corrections","external":false,"refSections":[],"url":"#dom-proofreadresult-corrections"},
-"enumdef-availability": {"dfnID":"enumdef-availability","dfnText":"Availability","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-availability"}],"title":"2. The proofreader API"}],"url":"#enumdef-availability"},
+"download-the-proofreader-model": {"dfnID":"download-the-proofreader-model","dfnText":"download the proofreader model","external":false,"refSections":[{"refs":[{"id":"ref-for-download-the-proofreader-model"}],"title":"2.1. Creation"}],"url":"#download-the-proofreader-model"},
+"enumdef-availability": {"dfnID":"enumdef-availability","dfnText":"Availability","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-availability"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-enumdef-availability\u2460"},{"id":"ref-for-enumdef-availability\u2461"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-enumdef-availability\u2462"}],"title":"2.3. Language availability"}],"url":"#enumdef-availability"},
 "enumdef-correctiontype": {"dfnID":"enumdef-correctiontype","dfnText":"CorrectionType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-correctiontype"}],"title":"2. The proofreader API"}],"url":"#enumdef-correctiontype"},
 "f0951476": {"dfnID":"f0951476","dfnText":"EventHandler","external":true,"refSections":[{"refs":[{"id":"ref-for-eventhandler"}],"title":"3.1. Common APIs"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler"},
 "f14b47b8": {"dfnID":"f14b47b8","dfnText":"unsigned long long","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-unsigned-long-long"},{"id":"ref-for-idl-unsigned-long-long\u2460"}],"title":"2. The proofreader API"}],"url":"https://webidl.spec.whatwg.org/#idl-unsigned-long-long"},
-"proofreader": {"dfnID":"proofreader","dfnText":"Proofreader","external":false,"refSections":[{"refs":[{"id":"ref-for-proofreader"}],"title":"2. The proofreader API"}],"url":"#proofreader"},
+"fbddf9da": {"dfnID":"fbddf9da","dfnText":"DOMException error information","external":true,"refSections":[{"refs":[{"id":"ref-for-domexception-error-information"}],"title":"2.1. Creation"}],"url":"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information"},
+"get-the-language-availabilities-partition": {"dfnID":"get-the-language-availabilities-partition","dfnText":"get the language availabilities partition","external":false,"refSections":[{"refs":[{"id":"ref-for-get-the-language-availabilities-partition"},{"id":"ref-for-get-the-language-availabilities-partition\u2460"}],"title":"2.2. Availability"}],"url":"#get-the-language-availabilities-partition"},
+"initialize-the-proofreader-model": {"dfnID":"initialize-the-proofreader-model","dfnText":"initialize the proofreader model","external":false,"refSections":[{"refs":[{"id":"ref-for-initialize-the-proofreader-model"}],"title":"2.1. Creation"}],"url":"#initialize-the-proofreader-model"},
+"language-availabilities-double": {"dfnID":"language-availabilities-double","dfnText":"language availabilities double","external":false,"refSections":[{"refs":[{"id":"ref-for-language-availabilities-double"},{"id":"ref-for-language-availabilities-double\u2460"}],"title":"2.2. Availability"}],"url":"#language-availabilities-double"},
+"language-availabilities-double-correction-explanation-languages": {"dfnID":"language-availabilities-double-correction-explanation-languages","dfnText":"correction explanation languages","external":false,"refSections":[{"refs":[{"id":"ref-for-language-availabilities-double-correction-explanation-languages"},{"id":"ref-for-language-availabilities-double-correction-explanation-languages\u2460"}],"title":"2.2. Availability"}],"url":"#language-availabilities-double-correction-explanation-languages"},
+"language-availabilities-double-input-languages": {"dfnID":"language-availabilities-double-input-languages","dfnText":"input languages","external":false,"refSections":[{"refs":[{"id":"ref-for-language-availabilities-double-input-languages"},{"id":"ref-for-language-availabilities-double-input-languages\u2460"},{"id":"ref-for-language-availabilities-double-input-languages\u2461"},{"id":"ref-for-language-availabilities-double-input-languages\u2462"}],"title":"2.2. Availability"}],"url":"#language-availabilities-double-input-languages"},
+"language-availabilities-partition": {"dfnID":"language-availabilities-partition","dfnText":"language availabilities partition","external":false,"refSections":[{"refs":[{"id":"ref-for-language-availabilities-partition"},{"id":"ref-for-language-availabilities-partition\u2460"},{"id":"ref-for-language-availabilities-partition\u2461"}],"title":"2.3. Language availability"}],"url":"#language-availabilities-partition"},
+"proofreader": {"dfnID":"proofreader","dfnText":"Proofreader","external":false,"refSections":[{"refs":[{"id":"ref-for-proofreader"}],"title":"2. The proofreader API"},{"refs":[{"id":"ref-for-proofreader\u2460"},{"id":"ref-for-proofreader\u2461"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-proofreader\u2462"}],"title":"2.2. Availability"},{"refs":[{"id":"ref-for-proofreader\u2463"},{"id":"ref-for-proofreader\u2464"},{"id":"ref-for-proofreader\u2465"},{"id":"ref-for-proofreader\u2466"},{"id":"ref-for-proofreader\u2467"}],"title":"2.4. The Proofreader class"}],"url":"#proofreader"},
+"proofreader-correction-explanation-language": {"dfnID":"proofreader-correction-explanation-language","dfnText":"correction explanation language","external":false,"refSections":[{"refs":[{"id":"ref-for-proofreader-correction-explanation-language"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-proofreader-correction-explanation-language\u2460"},{"id":"ref-for-proofreader-correction-explanation-language\u2461"},{"id":"ref-for-proofreader-correction-explanation-language\u2462"}],"title":"2.4. The Proofreader class"}],"url":"#proofreader-correction-explanation-language"},
+"proofreader-expected-input-languages": {"dfnID":"proofreader-expected-input-languages","dfnText":"expected input languages","external":false,"refSections":[{"refs":[{"id":"ref-for-proofreader-expected-input-languages"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-proofreader-expected-input-languages\u2460"}],"title":"2.4. The Proofreader class"}],"url":"#proofreader-expected-input-languages"},
+"proofreader-include-correction-explanations": {"dfnID":"proofreader-include-correction-explanations","dfnText":"include correction explanations","external":false,"refSections":[{"refs":[{"id":"ref-for-proofreader-include-correction-explanations"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-proofreader-include-correction-explanations\u2460"},{"id":"ref-for-proofreader-include-correction-explanations\u2461"},{"id":"ref-for-proofreader-include-correction-explanations\u2462"}],"title":"2.4. The Proofreader class"}],"url":"#proofreader-include-correction-explanations"},
+"proofreader-include-correction-type": {"dfnID":"proofreader-include-correction-type","dfnText":"include correction type","external":false,"refSections":[{"refs":[{"id":"ref-for-proofreader-include-correction-type"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-proofreader-include-correction-type\u2460"},{"id":"ref-for-proofreader-include-correction-type\u2461"},{"id":"ref-for-proofreader-include-correction-type\u2462"}],"title":"2.4. The Proofreader class"}],"url":"#proofreader-include-correction-type"},
+"proofreader-language-availabilities-double": {"dfnID":"proofreader-language-availabilities-double","dfnText":"proofreader language availabilities double","external":false,"refSections":[{"refs":[{"id":"ref-for-proofreader-language-availabilities-double"},{"id":"ref-for-proofreader-language-availabilities-double\u2460"}],"title":"2.2. Availability"}],"url":"#proofreader-language-availabilities-double"},
+"proofreader-non-language-options-availability": {"dfnID":"proofreader-non-language-options-availability","dfnText":"proofreader non-language options availability","external":false,"refSections":[{"refs":[{"id":"ref-for-proofreader-non-language-options-availability"}],"title":"2.2. Availability"}],"url":"#proofreader-non-language-options-availability"},
+"validate-and-canonicalize-proofreader-options": {"dfnID":"validate-and-canonicalize-proofreader-options","dfnText":"validate and canonicalize proofreader options","external":false,"refSections":[{"refs":[{"id":"ref-for-validate-and-canonicalize-proofreader-options"}],"title":"2.1. Creation"},{"refs":[{"id":"ref-for-validate-and-canonicalize-proofreader-options\u2460"}],"title":"2.2. Availability"}],"url":"#validate-and-canonicalize-proofreader-options"},
 };
 
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -1703,20 +2203,75 @@ function genLinkingSyntaxes(dfn) {
 {
 let refsData = {
 "#callbackdef-createmonitorcallback": {"displayText":"CreateMonitorCallback","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"CreateMonitorCallback","type":"callback","url":"#callbackdef-createmonitorcallback"},
+"#compute-language-availability": {"displayText":"compute language availability","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"compute language availability","type":"dfn","url":"#compute-language-availability"},
+"#compute-proofreader-options-availability": {"displayText":"compute proofreader options availability","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"compute proofreader options availability","type":"dfn","url":"#compute-proofreader-options-availability"},
+"#create-a-proofreader-object": {"displayText":"create a proofreader object","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"create a proofreader object","type":"dfn","url":"#create-a-proofreader-object"},
 "#createmonitor": {"displayText":"CreateMonitor","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"CreateMonitor","type":"interface","url":"#createmonitor"},
 "#dictdef-proofreadcorrection": {"displayText":"ProofreadCorrection","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"ProofreadCorrection","type":"dictionary","url":"#dictdef-proofreadcorrection"},
 "#dictdef-proofreadercreatecoreoptions": {"displayText":"ProofreaderCreateCoreOptions","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"ProofreaderCreateCoreOptions","type":"dictionary","url":"#dictdef-proofreadercreatecoreoptions"},
 "#dictdef-proofreadercreateoptions": {"displayText":"ProofreaderCreateOptions","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"ProofreaderCreateOptions","type":"dictionary","url":"#dictdef-proofreadercreateoptions"},
 "#dictdef-proofreaderproofreadoptions": {"displayText":"ProofreaderProofreadOptions","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"ProofreaderProofreadOptions","type":"dictionary","url":"#dictdef-proofreaderproofreadoptions"},
 "#dictdef-proofreadresult": {"displayText":"ProofreadResult","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"ProofreadResult","type":"dictionary","url":"#dictdef-proofreadresult"},
+"#dom-availability-available": {"displayText":"\"available\"","export":true,"for_":["Availability"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"\"available\"","type":"enum-value","url":"#dom-availability-available"},
+"#dom-availability-downloadable": {"displayText":"\"downloadable\"","export":true,"for_":["Availability"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"\"downloadable\"","type":"enum-value","url":"#dom-availability-downloadable"},
+"#dom-availability-downloading": {"displayText":"\"downloading\"","export":true,"for_":["Availability"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"\"downloading\"","type":"enum-value","url":"#dom-availability-downloading"},
+"#dom-availability-unavailable": {"displayText":"\"unavailable\"","export":true,"for_":["Availability"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"\"unavailable\"","type":"enum-value","url":"#dom-availability-unavailable"},
+"#dom-proofreader-availability": {"displayText":"availability(options)","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"availability(options)","type":"method","url":"#dom-proofreader-availability"},
+"#dom-proofreader-correctionexplanationlanguage": {"displayText":"correctionExplanationLanguage","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"correctionExplanationLanguage","type":"attribute","url":"#dom-proofreader-correctionexplanationlanguage"},
+"#dom-proofreader-create": {"displayText":"create(options)","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"create(options)","type":"method","url":"#dom-proofreader-create"},
+"#dom-proofreader-expectedinputlanguages": {"displayText":"expectedInputLanguages","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"expectedInputLanguages","type":"attribute","url":"#dom-proofreader-expectedinputlanguages"},
+"#dom-proofreader-includecorrectiontypes": {"displayText":"includeCorrectionTypes","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"includeCorrectionTypes","type":"attribute","url":"#dom-proofreader-includecorrectiontypes"},
+"#dom-proofreader-proofread": {"displayText":"proofread(input, options)","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"proofread(input, options)","type":"method","url":"#dom-proofreader-proofread"},
+"#dom-proofreadercreatecoreoptions-correctionexplanationlanguage": {"displayText":"correctionExplanationLanguage","export":true,"for_":["ProofreaderCreateCoreOptions"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"correctionExplanationLanguage","type":"dict-member","url":"#dom-proofreadercreatecoreoptions-correctionexplanationlanguage"},
+"#dom-proofreadercreatecoreoptions-expectedinputlanguages": {"displayText":"expectedInputLanguages","export":true,"for_":["ProofreaderCreateCoreOptions"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"expectedInputLanguages","type":"dict-member","url":"#dom-proofreadercreatecoreoptions-expectedinputlanguages"},
+"#dom-proofreadercreatecoreoptions-includecorrectionexplanations": {"displayText":"includeCorrectionExplanations","export":true,"for_":["ProofreaderCreateCoreOptions"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"includeCorrectionExplanations","type":"dict-member","url":"#dom-proofreadercreatecoreoptions-includecorrectionexplanations"},
+"#dom-proofreadercreatecoreoptions-includecorrectiontypes": {"displayText":"includeCorrectionTypes","export":true,"for_":["ProofreaderCreateCoreOptions"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"includeCorrectionTypes","type":"dict-member","url":"#dom-proofreadercreatecoreoptions-includecorrectiontypes"},
+"#download-the-proofreader-model": {"displayText":"download the proofreader model","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"download the proofreader model","type":"dfn","url":"#download-the-proofreader-model"},
 "#enumdef-availability": {"displayText":"Availability","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"Availability","type":"enum","url":"#enumdef-availability"},
 "#enumdef-correctiontype": {"displayText":"CorrectionType","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"CorrectionType","type":"enum","url":"#enumdef-correctiontype"},
+"#get-the-language-availabilities-partition": {"displayText":"get the language availabilities partition","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"get the language availabilities partition","type":"dfn","url":"#get-the-language-availabilities-partition"},
+"#initialize-the-proofreader-model": {"displayText":"initialize the proofreader model","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"initialize the proofreader model","type":"dfn","url":"#initialize-the-proofreader-model"},
+"#language-availabilities-double": {"displayText":"language availabilities double","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"language availabilities double","type":"dfn","url":"#language-availabilities-double"},
+"#language-availabilities-double-correction-explanation-languages": {"displayText":"correction explanation languages","export":true,"for_":["language availabilities double"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"correction explanation languages","type":"dfn","url":"#language-availabilities-double-correction-explanation-languages"},
+"#language-availabilities-double-input-languages": {"displayText":"input languages","export":true,"for_":["language availabilities double"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"input languages","type":"dfn","url":"#language-availabilities-double-input-languages"},
+"#language-availabilities-partition": {"displayText":"language availabilities partition","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"language availabilities partition","type":"dfn","url":"#language-availabilities-partition"},
 "#proofreader": {"displayText":"Proofreader","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"Proofreader","type":"interface","url":"#proofreader"},
+"#proofreader-correction-explanation-language": {"displayText":"correction explanation language","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"correction explanation language","type":"dfn","url":"#proofreader-correction-explanation-language"},
+"#proofreader-expected-input-languages": {"displayText":"expected input languages","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"expected input languages","type":"dfn","url":"#proofreader-expected-input-languages"},
+"#proofreader-include-correction-explanations": {"displayText":"include correction explanations","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"include correction explanations","type":"dfn","url":"#proofreader-include-correction-explanations"},
+"#proofreader-include-correction-type": {"displayText":"include correction type","export":true,"for_":["Proofreader"],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"include correction type","type":"dfn","url":"#proofreader-include-correction-type"},
+"#proofreader-language-availabilities-double": {"displayText":"proofreader language availabilities double","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"proofreader language availabilities double","type":"dfn","url":"#proofreader-language-availabilities-double"},
+"#proofreader-non-language-options-availability": {"displayText":"proofreader non-language options availability","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"proofreader non-language options availability","type":"dfn","url":"#proofreader-non-language-options-availability"},
+"#validate-and-canonicalize-proofreader-options": {"displayText":"validate and canonicalize proofreader options","export":true,"for_":[],"level":"","normative":true,"shortname":"proofreader","spec":"proofreader","status":"local","text":"validate and canonicalize proofreader options","type":"dfn","url":"#validate-and-canonicalize-proofreader-options"},
 "https://dom.spec.whatwg.org/#abortsignal": {"displayText":"AbortSignal","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"AbortSignal","type":"interface","url":"https://dom.spec.whatwg.org/#abortsignal"},
 "https://dom.spec.whatwg.org/#eventtarget": {"displayText":"EventTarget","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"EventTarget","type":"interface","url":"https://dom.spec.whatwg.org/#eventtarget"},
+"https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel": {"displayText":"in parallel","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"in parallel","type":"dfn","url":"https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop": {"displayText":"event loop","export":true,"for_":["agent"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"event loop","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop"},
 "https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler": {"displayText":"EventHandler","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"EventHandler","type":"typedef","url":"https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler"},
+"https://infra.spec.whatwg.org/#assert": {"displayText":"assert","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"assert","type":"dfn","url":"https://infra.spec.whatwg.org/#assert"},
+"https://infra.spec.whatwg.org/#boolean": {"displayText":"boolean","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"boolean","type":"dfn","url":"https://infra.spec.whatwg.org/#boolean"},
+"https://infra.spec.whatwg.org/#implementation-defined": {"displayText":"implementation-defined","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"implementation-defined","type":"dfn","url":"https://infra.spec.whatwg.org/#implementation-defined"},
+"https://infra.spec.whatwg.org/#iteration-break": {"displayText":"break","export":true,"for_":["iteration"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"break","type":"dfn","url":"https://infra.spec.whatwg.org/#iteration-break"},
+"https://infra.spec.whatwg.org/#list-is-empty": {"displayText":"is empty","export":true,"for_":["list","stack","queue","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"is empty","type":"dfn","url":"https://infra.spec.whatwg.org/#list-is-empty"},
+"https://infra.spec.whatwg.org/#list-iterate": {"displayText":"for each","export":true,"for_":["list","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"for each","type":"dfn","url":"https://infra.spec.whatwg.org/#list-iterate"},
+"https://infra.spec.whatwg.org/#list-replace": {"displayText":"replace","export":true,"for_":["list"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"replace","type":"dfn","url":"https://infra.spec.whatwg.org/#list-replace"},
+"https://infra.spec.whatwg.org/#map-exists": {"displayText":"exist","export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"exist","type":"dfn","url":"https://infra.spec.whatwg.org/#map-exists"},
+"https://infra.spec.whatwg.org/#map-getting-the-keys": {"displayText":"keys","export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"keys","type":"dfn","url":"https://infra.spec.whatwg.org/#map-getting-the-keys"},
+"https://infra.spec.whatwg.org/#map-getting-the-values": {"displayText":"values","export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"values","type":"dfn","url":"https://infra.spec.whatwg.org/#map-getting-the-values"},
+"https://infra.spec.whatwg.org/#ordered-map": {"displayText":"map","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"map","type":"dfn","url":"https://infra.spec.whatwg.org/#ordered-map"},
+"https://infra.spec.whatwg.org/#ordered-set": {"displayText":"set","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"set","type":"dfn","url":"https://infra.spec.whatwg.org/#ordered-set"},
+"https://infra.spec.whatwg.org/#set-append": {"displayText":"append","export":true,"for_":["set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"append","type":"dfn","url":"https://infra.spec.whatwg.org/#set-append"},
+"https://infra.spec.whatwg.org/#set-union": {"displayText":"union","export":true,"for_":["set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"union","type":"dfn","url":"https://infra.spec.whatwg.org/#set-union"},
+"https://infra.spec.whatwg.org/#string": {"displayText":"string","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"string","type":"dfn","url":"https://infra.spec.whatwg.org/#string"},
+"https://infra.spec.whatwg.org/#struct": {"displayText":"struct","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"struct","type":"dfn","url":"https://infra.spec.whatwg.org/#struct"},
+"https://infra.spec.whatwg.org/#struct-item": {"displayText":"item","export":true,"for_":["struct","tuple"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"item","type":"dfn","url":"https://infra.spec.whatwg.org/#struct-item"},
+"https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#realm": {"displayText":"realm","export":true,"for_":["ECMAScript"],"level":"1","normative":true,"shortname":"ecmascript","spec":"ecmascript","status":"current","text":"realm","type":"dfn","url":"https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#realm"},
+"https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#surrounding-agent": {"displayText":"surrounding agent","export":true,"for_":["ECMAScript"],"level":"1","normative":true,"shortname":"ecmascript","spec":"ecmascript","status":"current","text":"surrounding agent","type":"dfn","url":"https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#surrounding-agent"},
+"https://tc39.es/ecma402/#sec-language-tags": {"displayText":"Unicode canonicalized locale identifier","export":true,"for_":[],"level":"402","normative":true,"shortname":"ecma","spec":"ecma-402","status":"anchor-block","text":"unicode canonicalized locale identifier","type":"dfn","url":"https://tc39.es/ecma402/#sec-language-tags"},
+"https://tc39.es/ecma402/#sec-lookupmatchinglocalebybestfit": {"displayText":"LookupMatchingLocaleByBestFit","export":true,"for_":[],"level":"402","normative":true,"shortname":"ecma","spec":"ecma-402","status":"anchor-block","text":"LookupMatchingLocaleByBestFit","type":"abstract-op","url":"https://tc39.es/ecma402/#sec-lookupmatchinglocalebybestfit"},
 "https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
 "https://webidl.spec.whatwg.org/#SecureContext": {"displayText":"SecureContext","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecureContext","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#SecureContext"},
+"https://webidl.spec.whatwg.org/#dfn-create-frozen-array": {"displayText":"creating a frozen array","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"creating a frozen array","type":"dfn","url":"https://webidl.spec.whatwg.org/#dfn-create-frozen-array"},
 "https://webidl.spec.whatwg.org/#idl-DOMString": {"displayText":"DOMString","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "https://webidl.spec.whatwg.org/#idl-boolean": {"displayText":"boolean","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"boolean","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-boolean"},
 "https://webidl.spec.whatwg.org/#idl-frozen-array": {"displayText":"FrozenArray","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"FrozenArray","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-frozen-array"},
@@ -1724,6 +2279,18 @@ let refsData = {
 "https://webidl.spec.whatwg.org/#idl-sequence": {"displayText":"sequence","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"sequence","type":"dfn","url":"https://webidl.spec.whatwg.org/#idl-sequence"},
 "https://webidl.spec.whatwg.org/#idl-undefined": {"displayText":"undefined","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"undefined","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-undefined"},
 "https://webidl.spec.whatwg.org/#idl-unsigned-long-long": {"displayText":"unsigned long long","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"unsigned long long","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-unsigned-long-long"},
+"https://webidl.spec.whatwg.org/#operationerror": {"displayText":"OperationError","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"OperationError","type":"exception","url":"https://webidl.spec.whatwg.org/#operationerror"},
+"https://webidl.spec.whatwg.org/#this": {"displayText":"this","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"this","type":"dfn","url":"https://webidl.spec.whatwg.org/#this"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#availability-minimum-availability": {"displayText":"minimum availability","export":true,"for_":["Availability"],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"minimum availability","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#availability-minimum-availability"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#compute-ai-model-availability": {"displayText":"compute AI model availability","export":true,"for_":[],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"compute ai model availability","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#compute-ai-model-availability"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#create-an-ai-model-object": {"displayText":"create an AI model object","export":true,"for_":[],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"create an ai model object","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#create-an-ai-model-object"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information": {"displayText":"DOMException error information","export":true,"for_":[],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"domexception error information","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information-details": {"displayText":"details","export":true,"for_":["DOMException error information"],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"details","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information-details"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information-name": {"displayText":"name","export":true,"for_":["DOMException error information"],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"name","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#domexception-error-information-name"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#get-an-aggregated-ai-model-result": {"displayText":"get an aggregated AI model result","export":true,"for_":[],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"get an aggregated ai model result","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#get-an-aggregated-ai-model-result"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#measure-ai-model-input-usage": {"displayText":"measure AI model input usage","export":true,"for_":[],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"measure ai model input usage","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#measure-ai-model-input-usage"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports": {"displayText":"can support","export":true,"for_":["model availability"],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"can support","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#model-availability-currently-supports"},
+"https://webmachinelearning.github.io/writing-assistance-apis/#validate-and-canonicalize-language-tags": {"displayText":"validate and canonicalize language tags","export":true,"for_":[],"level":"1","normative":true,"shortname":"writing-assistance-apis","spec":"writing-assistance-apis","status":"current","text":"validate and canonicalize language tags","type":"dfn","url":"https://webmachinelearning.github.io/writing-assistance-apis/#validate-and-canonicalize-language-tags"},
 };
 
 function mkRefHint(link, ref) {
@@ -1925,5 +2492,92 @@ window.addEventListener("resize", () => {
     // Hide any open ref hint.
     hideAllRefHints();
 });
+}
+</script>
+<script>/* Boilerplate: script-var-click-highlighting */
+"use strict";
+{
+/*
+Color-choosing design:
+
+* Colors are ordered by goodness.
+* On clicking a var, give it the earliest color
+    with the lowest usage in the algorithm.
+* On re-clicking, re-use the var's most recent color
+    if that's not currently being used elsewhere.
+*/
+
+const COLOR_COUNT = 7;
+
+document.addEventListener("click", e=>{
+    if(e.target.nodeName == "VAR") {
+        highlightSameAlgoVars(e.target);
+    }
+});
+
+function highlightSameAlgoVars(v) {
+    // Find the algorithm container.
+    let algoContainer = findAlgoContainer(v);
+
+    // Not highlighting document-global vars,
+    // too likely to be unrelated.
+    if(algoContainer == null) return;
+
+    const varName = nameFromVar(v);
+    if(!v.hasAttribute("data-var-color")) {
+        const newColor = chooseHighlightColor(algoContainer, v);
+        for(const el of algoContainer.querySelectorAll("var")) {
+            if(nameFromVar(el) == varName) {
+                el.setAttribute("data-var-color", newColor);
+                el.setAttribute("data-var-last-color", newColor);
+            }
+        }
+    } else {
+        for(const el of algoContainer.querySelectorAll("var")) {
+            if(nameFromVar(el) == varName) {
+                el.removeAttribute("data-var-color");
+            }
+        }
+    }
+}
+function findAlgoContainer(el) {
+    while(el != document.body) {
+        if(el.hasAttribute("data-algorithm")) return el;
+        el = el.parentNode;
+    }
+    return null;
+}
+function nameFromVar(el) {
+    return el.textContent.replace(/(\s|\xa0)+/g, " ").trim();
+}
+function colorCountsFromContainer(container) {
+    const namesFromColor = Array.from({length:COLOR_COUNT}, x=>new Set());
+    for(let v of container.querySelectorAll("var[data-var-color]")) {
+        let color = +v.getAttribute("data-var-color");
+        namesFromColor[color].add(nameFromVar(v));
+    }
+
+    return namesFromColor.map(x=>x.size);
+}
+function leastUsedColor(colors) {
+    // Find the earliest color with the lowest count.
+    let minCount = Infinity;
+    let minColor = null;
+    for(var i = 0; i < colors.length; i++) {
+        if(colors[i] < minCount) {
+            minColor = i;
+            minCount = colors[i];
+        }
+    }
+    return minColor;
+}
+function chooseHighlightColor(container, v) {
+    const colorCounts = colorCountsFromContainer(container);
+    if(v.hasAttribute("data-var-last-color")) {
+        let color = +v.getAttribute("data-var-last-color");
+        if(colorCounts[color] == 0) return color;
+    }
+    return leastUsedColor(colorCounts);
+}
 }
 </script>
